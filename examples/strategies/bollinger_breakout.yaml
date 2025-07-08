@@ -1,0 +1,36 @@
+name: Bollinger Band Breakout
+description: Trend following strategy using Bollinger Band breakouts with volume confirmation
+
+entry_rules:
+  - name: Upper Band Breakout
+    operator: and
+    conditions:
+      - left: close
+        operator: cross_above
+        right: bb_upper
+      - left: volume
+        operator: >
+        right: volume_sma_20
+
+exit_rules:
+  - name: Return to Middle Band
+    operator: or
+    conditions:
+      - left: close
+        operator: cross_below
+        right: bb_middle
+      - left: position_days
+        operator: >
+        right: 10
+
+position_sizing:
+  method: volatility
+  size: 1.0
+  max_position: 0.20
+
+risk_management:
+  stop_loss: 2.0
+  stop_loss_type: atr
+  take_profit: 4.0
+  take_profit_type: atr
+  max_positions: 5

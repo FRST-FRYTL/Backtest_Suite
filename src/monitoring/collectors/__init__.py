@@ -1,0 +1,1 @@
+"""Collectors module for monitoring system."""

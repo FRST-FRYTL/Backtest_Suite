@@ -1,0 +1,88 @@
+{
+  "enabled": true,
+  "log_level": "INFO",
+  "metric_retention_days": 30,
+  "alert_history_days": 7,
+  "alerts": {
+    "enabled": true,
+    "email_enabled": false,
+    "webhook_enabled": false,
+    "email_recipients": [],
+    "webhook_urls": [],
+    "drawdown_threshold": 0.10,
+    "position_size_threshold": 0.25,
+    "win_rate_threshold": 0.30,
+    "max_alerts_per_minute": 10,
+    "alert_cooldown_seconds": 60
+  },
+  "collectors": {
+    "collection_interval_seconds": 1.0,
+    "buffer_size": 1000,
+    "persist_to_disk": true,
+    "persistence_path": "data/metrics",
+    "performance_metrics": [
+      "total_return",
+      "sharpe_ratio",
+      "win_rate",
+      "profit_factor",
+      "max_drawdown",
+      "current_drawdown",
+      "volatility"
+    ],
+    "position_metrics": [
+      "open_positions",
+      "position_sizes",
+      "exposure",
+      "pnl"
+    ],
+    "system_metrics": [
+      "cpu_usage",
+      "memory_usage",
+      "latency",
+      "tick_rate"
+    ]
+  },
+  "dashboard": {
+    "enabled": true,
+    "host": "localhost",
+    "port": 8050,
+    "update_interval_ms": 1000,
+    "websocket_enabled": true,
+    "websocket_port": 8051,
+    "theme": "dark",
+    "show_charts": true,
+    "max_chart_points": 500,
+    "layout": {
+      "performance": {
+        "row": 0,
+        "col": 0,
+        "width": 6,
+        "height": 4
+      },
+      "positions": {
+        "row": 0,
+        "col": 6,
+        "width": 6,
+        "height": 4
+      },
+      "alerts": {
+        "row": 4,
+        "col": 0,
+        "width": 4,
+        "height": 3
+      },
+      "system": {
+        "row": 4,
+        "col": 4,
+        "width": 4,
+        "height": 3
+      },
+      "chart": {
+        "row": 4,
+        "col": 8,
+        "width": 4,
+        "height": 3
+      }
+    }
+  }
+}
