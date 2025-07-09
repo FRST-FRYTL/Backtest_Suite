@@ -6,6 +6,7 @@ from datetime import datetime
 from typing import Dict, List, Optional
 
 import pandas as pd
+import numpy as np
 
 from .position import Position
 from .order import Order, OrderType, OrderStatus
@@ -65,6 +66,43 @@ class Portfolio:
             pos.market_value() for pos in self.positions.values()
         )
         return self.cash + positions_value
+    
+    def get_total_value(self, data: Optional[pd.DataFrame] = None) -> float:
+        """
+        Calculate total portfolio value.
+        
+        Args:
+            data: Optional DataFrame with current prices
+            
+        Returns:
+            Total portfolio value
+        """
+        if data is not None:
+            # Update prices from data
+            prices = {symbol: data[symbol].iloc[-1] for symbol in data.columns}
+            self.update_prices(prices)
+        
+        return self.current_value()
+    
+    def get_position_weight(self, symbol: str) -> float:
+        """
+        Get position weight as percentage of portfolio.
+        
+        Args:
+            symbol: Symbol to check
+            
+        Returns:
+            Position weight (0-1)
+        """
+        total_value = self.current_value()
+        if total_value == 0:
+            return 0.0
+            
+        if symbol not in self.positions:
+            return 0.0
+            
+        position_value = self.positions[symbol].market_value()
+        return position_value / total_value
         
     def unrealized_pnl(self) -> float:
         """Calculate total unrealized P&L."""
