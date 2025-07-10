@@ -1,4 +1,4 @@
-#\!/usr/bin/env python3
+#!/usr/bin/env python3
 """
 Simple ML model test without full optimization
 """
@@ -125,8 +125,7 @@ def test_basic_models():
         print(f"    ✗ Error: {e}")
     
     print("\n" + "=" * 50)
-    print("Basic ML Model Testing Complete\!")
+    print("Basic ML Model Testing Complete!")
 
 if __name__ == "__main__":
     test_basic_models()
-EOF < /dev/null

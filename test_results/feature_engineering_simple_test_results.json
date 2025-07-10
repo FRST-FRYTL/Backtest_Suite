@@ -1,0 +1,134 @@
+{
+  "technical_indicators": {
+    "passed": 11,
+    "total": 11,
+    "success_rate": "100.0%",
+    "tests": [
+      {
+        "name": "SMA",
+        "success": true,
+        "message": "Generated 481 values"
+      },
+      {
+        "name": "EMA",
+        "success": true,
+        "message": "Generated 500 values"
+      },
+      {
+        "name": "RSI",
+        "success": true,
+        "message": "Valid range: 13.64 - 88.67"
+      },
+      {
+        "name": "Bollinger Bands",
+        "success": true,
+        "message": "Generated 3 band types"
+      },
+      {
+        "name": "ATR",
+        "success": true,
+        "message": "Average ATR: 1.0618"
+      },
+      {
+        "name": "VWAP",
+        "success": true,
+        "message": "Generated 500 values"
+      },
+      {
+        "name": "MACD",
+        "success": true,
+        "message": "Generated 3 components"
+      },
+      {
+        "name": "Stochastic",
+        "success": true,
+        "message": "Generated K and D lines"
+      },
+      {
+        "name": "OBV",
+        "success": true,
+        "message": "Generated 500 values"
+      },
+      {
+        "name": "Rolling VWAP",
+        "success": true,
+        "message": "Generated VWAP with std dev"
+      },
+      {
+        "name": "ADX",
+        "success": true,
+        "message": "Generated ADX with DI lines"
+      }
+    ]
+  },
+  "ml_features": {
+    "passed": 5,
+    "total": 5,
+    "success_rate": "100.0%",
+    "tests": [
+      {
+        "name": "Config 1",
+        "success": true,
+        "message": "Generated 57 features"
+      },
+      {
+        "name": "Config 2",
+        "success": true,
+        "message": "Generated 62 features"
+      },
+      {
+        "name": "Config 3",
+        "success": true,
+        "message": "Generated 62 features"
+      },
+      {
+        "name": "Config 4",
+        "success": true,
+        "message": "Generated 62 features"
+      },
+      {
+        "name": "Feature Categories",
+        "success": true,
+        "message": "Total 62 features"
+      }
+    ]
+  },
+  "real_data_tests": {
+    "passed": 6,
+    "total": 6,
+    "success_rate": "100.0%",
+    "tests": [
+      {
+        "name": "AAPL Indicators",
+        "success": true,
+        "message": "Valid indicators: 5/5"
+      },
+      {
+        "name": "AAPL ML Features",
+        "success": true,
+        "message": "Generated 63 ML features"
+      },
+      {
+        "name": "SPY Indicators",
+        "success": true,
+        "message": "Valid indicators: 5/5"
+      },
+      {
+        "name": "SPY ML Features",
+        "success": true,
+        "message": "Generated 63 ML features"
+      },
+      {
+        "name": "QQQ Indicators",
+        "success": true,
+        "message": "Valid indicators: 5/5"
+      },
+      {
+        "name": "QQQ ML Features",
+        "success": true,
+        "message": "Generated 63 ML features"
+      }
+    ]
+  },
+  "timestamp": "2025-07-10 09:52:37"
+}

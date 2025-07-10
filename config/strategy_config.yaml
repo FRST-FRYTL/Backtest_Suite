@@ -11,11 +11,12 @@ assets:
   - XLE   # Energy Select Sector SPDR
   - GLD   # SPDR Gold Trust
   - IWM   # iShares Russell 2000 ETF
+  - TLT   # iShares 20+ Year Treasury Bond ETF
 
 # Data settings
 data:
-  start_date: "2019-01-01"  # 5 years of data
-  end_date: "2024-01-01"
+  start_date: "2019-01-01"  # 5+ years of data
+  end_date: "2025-07-10"  # Updated to current date
   timeframes:
     - 1H    # 1 hour
     - 4H    # 4 hours
@@ -79,6 +80,7 @@ trading_costs:
       XLE: 0.0003   # 3 basis points
       GLD: 0.0002   # 2 basis points
       IWM: 0.0003   # 3 basis points
+      TLT: 0.0002   # 2 basis points
     
     # Spread multiplier based on volatility
     volatility_multiplier: 1.5

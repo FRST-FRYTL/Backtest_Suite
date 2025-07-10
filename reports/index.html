@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backtest Suite Reports Dashboard</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f9fc;
+            color: #333;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 36px;
+            font-weight: 600;
+        }
+        .header p {
+            margin: 10px 0 0;
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .section h2 {
+            margin-top: 0;
+            color: #667eea;
+            font-size: 28px;
+            border-bottom: 2px solid #f0f2f5;
+            padding-bottom: 15px;
+        }
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .report-card {
+            background: #f8f9fb;
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid #e1e4e8;
+        }
+        .report-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .report-card h3 {
+            margin: 0 0 10px;
+            color: #333;
+            font-size: 20px;
+        }
+        .report-card p {
+            margin: 0 0 15px;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .report-card a {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .report-card a:hover {
+            background: #5a67d8;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        .feature-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f2f5;
+            display: flex;
+            align-items: center;
+        }
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            background: #667eea;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+            font-weight: bold;
+        }
+        .timestamp {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f2f5;
+        }
+        .quick-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .quick-link {
+            padding: 10px 20px;
+            background: #f0f2f5;
+            border-radius: 20px;
+            text-decoration: none;
+            color: #667eea;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .quick-link:hover {
+            background: #e1e4e8;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Backtest Suite Reports Dashboard</h1>
+        <p>Comprehensive Trading Strategy Analysis & Performance Reports</p>
+    </div>
+
+    <div class="container">
+        <!-- Statistics Overview -->
+        <div class="section">
+            <h2>Performance Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <p class="stat-value">7</p>
+                    <p class="stat-label">Strategies Analyzed</p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-value">1.89</p>
+                    <p class="stat-label">Best Sharpe Ratio</p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-value">35.67%</p>
+                    <p class="stat-label">Best Total Return</p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-value">65.43%</p>
+                    <p class="stat-label">Best Win Rate</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="section">
+            <h2>Quick Access</h2>
+            <div class="quick-links">
+                <a href="summary/executive_summary_report.html" class="quick-link">📊 Executive Summary</a>
+                <a href="comparison/strategy_comparison_report.html" class="quick-link">🔄 Strategy Comparison</a>
+                <a href="performance/backtest_results.json" class="quick-link">📄 Raw Data (JSON)</a>
+                <a href="charts/" class="quick-link">📈 Performance Charts</a>
+                <a href="ml/" class="quick-link">🤖 ML Model Reports</a>
+            </div>
+        </div>
+
+        <!-- Individual Strategy Reports -->
+        <div class="section">
+            <h2>Individual Strategy Reports</h2>
+            <div class="report-grid">
+                <div class="report-card">
+                    <h3>Buy and Hold</h3>
+                    <p>Baseline passive investment strategy for benchmark comparison.</p>
+                    <a href="performance/BuyAndHold_performance_report.html">View Report</a>
+                </div>
+                <div class="report-card">
+                    <h3>SMA Crossover (20/50)</h3>
+                    <p>Classic trend-following strategy using simple moving average crossovers.</p>
+                    <a href="performance/SMA_20_50_performance_report.html">View Report</a>
+                </div>
+                <div class="report-card">
+                    <h3>RSI (14)</h3>
+                    <p>Mean reversion strategy based on Relative Strength Index signals.</p>
+                    <a href="performance/RSI_14_performance_report.html">View Report</a>
+                </div>
+                <div class="report-card">
+                    <h3>MACD</h3>
+                    <p>Momentum strategy using Moving Average Convergence Divergence.</p>
+                    <a href="performance/MACD_performance_report.html">View Report</a>
+                </div>
+                <div class="report-card">
+                    <h3>Bollinger Bands</h3>
+                    <p>Volatility-based strategy for identifying overbought/oversold conditions.</p>
+                    <a href="performance/BollingerBands_performance_report.html">View Report</a>
+                </div>
+                <div class="report-card">
+                    <h3>ML Random Forest</h3>
+                    <p>Machine learning ensemble method for predictive trading signals.</p>
+                    <a href="performance/ML_RandomForest_performance_report.html">View Report</a>
+                </div>
+                <div class="report-card">
+                    <h3>ML LSTM</h3>
+                    <p>Deep learning model for sequential pattern recognition in market data.</p>
+                    <a href="performance/ML_LSTM_performance_report.html">View Report</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparative Analysis -->
+        <div class="section">
+            <h2>Comparative Analysis</h2>
+            <div class="report-grid">
+                <div class="report-card">
+                    <h3>Strategy Comparison</h3>
+                    <p>Side-by-side comparison of all strategies with performance metrics and visualizations.</p>
+                    <a href="comparison/strategy_comparison_report.html">View Report</a>
+                </div>
+                <div class="report-card">
+                    <h3>Risk-Return Analysis</h3>
+                    <p>Scatter plot visualization of risk vs. return profiles for portfolio optimization.</p>
+                    <a href="charts/risk_return_scatter.png">View Chart</a>
+                </div>
+                <div class="report-card">
+                    <h3>Performance Rankings</h3>
+                    <p>Comprehensive ranking of strategies by multiple performance criteria.</p>
+                    <a href="charts/strategy_comparison.png">View Chart</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ML Reports -->
+        <div class="section">
+            <h2>Machine Learning Analysis</h2>
+            <div class="report-grid">
+                <div class="report-card">
+                    <h3>Feature Engineering</h3>
+                    <p>Analysis of technical indicators and feature importance for ML models.</p>
+                    <a href="output/">View Reports</a>
+                </div>
+                <div class="report-card">
+                    <h3>Model Performance</h3>
+                    <p>Detailed metrics on ML model accuracy, precision, recall, and F1 scores.</p>
+                    <a href="ml/">View Reports</a>
+                </div>
+                <div class="report-card">
+                    <h3>Regime Analysis</h3>
+                    <p>Market regime detection and adaptive strategy selection analysis.</p>
+                    <a href="output/">View Reports</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="section">
+            <h2>Report Features</h2>
+            <ul class="feature-list">
+                <li>
+                    <span class="feature-icon">✓</span>
+                    <span>Comprehensive performance metrics including Sharpe ratio, max drawdown, and win rate</span>
+                </li>
+                <li>
+                    <span class="feature-icon">✓</span>
+                    <span>Risk analysis with VaR, CVaR, beta, and alpha calculations</span>
+                </li>
+                <li>
+                    <span class="feature-icon">✓</span>
+                    <span>Machine learning model evaluation with confusion matrices and ROC curves</span>
+                </li>
+                <li>
+                    <span class="feature-icon">✓</span>
+                    <span>Interactive visualizations for strategy comparison and portfolio construction</span>
+                </li>
+                <li>
+                    <span class="feature-icon">✓</span>
+                    <span>Executive summaries with actionable portfolio recommendations</span>
+                </li>
+                <li>
+                    <span class="feature-icon">✓</span>
+                    <span>Raw data export in JSON format for custom analysis</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="timestamp">
+            Generated on: 2025-07-10 09:55:00
+        </div>
+    </div>
+</body>
+</html>

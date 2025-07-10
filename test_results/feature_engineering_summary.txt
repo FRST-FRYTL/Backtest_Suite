@@ -1,0 +1,39 @@
+FEATURE ENGINEERING TEST SUMMARY
+============================================================
+
+Test Date: 2025-07-10 09:52:37
+
+TECHNICAL_INDICATORS:
+  Passed: 11/11 (100.0%)
+  Tests:
+    [PASS] SMA: Generated 481 values
+    [PASS] EMA: Generated 500 values
+    [PASS] RSI: Valid range: 13.64 - 88.67
+    [PASS] Bollinger Bands: Generated 3 band types
+    [PASS] ATR: Average ATR: 1.0618
+    [PASS] VWAP: Generated 500 values
+    [PASS] MACD: Generated 3 components
+    [PASS] Stochastic: Generated K and D lines
+    [PASS] OBV: Generated 500 values
+    [PASS] Rolling VWAP: Generated VWAP with std dev
+    [PASS] ADX: Generated ADX with DI lines
+
+ML_FEATURES:
+  Passed: 5/5 (100.0%)
+  Tests:
+    [PASS] Config 1: Generated 57 features
+    [PASS] Config 2: Generated 62 features
+    [PASS] Config 3: Generated 62 features
+    [PASS] Config 4: Generated 62 features
+    [PASS] Feature Categories: Total 62 features
+
+REAL_DATA_TESTS:
+  Passed: 6/6 (100.0%)
+  Tests:
+    [PASS] AAPL Indicators: Valid indicators: 5/5
+    [PASS] AAPL ML Features: Generated 63 ML features
+    [PASS] SPY Indicators: Valid indicators: 5/5
+    [PASS] SPY ML Features: Generated 63 ML features
+    [PASS] QQQ Indicators: Valid indicators: 5/5
+    [PASS] QQQ ML Features: Generated 63 ML features
+

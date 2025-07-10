@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Summary Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .metric-card {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        .metric-title {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #495057;
+        }
+        .positive {
+            color: #28a745;
+        }
+        .negative {
+            color: #dc3545;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #495057;
+        }
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+        .chart-container {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .chart-container img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+        }
+        .summary-box {
+            background-color: #e7f3ff;
+            border-left: 4px solid #0066cc;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .warning-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .timestamp {
+            color: #6c757d;
+            font-size: 14px;
+            text-align: right;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+    <h1>Backtest Suite Performance Summary</h1>
+    
+    <div class="summary-box">
+        <h3>Report Overview</h3>
+        <p>This executive summary provides a high-level overview of all backtested strategies, highlighting key performance 
+        metrics and recommendations for portfolio construction.</p>
+    </div>
+    
+    <h2>Portfolio Recommendations</h2>
+    
+    <h3>Conservative Portfolio (Low Risk)</h3>
+    <ul>
+        <li>40% Buy and Hold</li>
+        <li>30% SMA Crossover</li>
+        <li>30% RSI Mean Reversion</li>
+    </ul>
+    <p>Expected Sharpe Ratio: ~1.5, Maximum Drawdown: ~15%</p>
+    
+    <h3>Balanced Portfolio (Medium Risk)</h3>
+    <ul>
+        <li>25% Buy and Hold</li>
+        <li>25% MACD</li>
+        <li>25% Bollinger Bands</li>
+        <li>25% ML Random Forest</li>
+    </ul>
+    <p>Expected Sharpe Ratio: ~1.7, Maximum Drawdown: ~12%</p>
+    
+    <h3>Aggressive Portfolio (Higher Risk/Return)</h3>
+    <ul>
+        <li>40% ML Random Forest</li>
+        <li>30% ML LSTM</li>
+        <li>20% MACD</li>
+        <li>10% RSI</li>
+    </ul>
+    <p>Expected Sharpe Ratio: ~1.85, Maximum Drawdown: ~10%</p>
+    
+    <h2>Risk Management Guidelines</h2>
+    <ol>
+        <li><strong>Position Sizing:</strong> Never risk more than 2% of capital per trade</li>
+        <li><strong>Diversification:</strong> Combine uncorrelated strategies for better risk-adjusted returns</li>
+        <li><strong>Stop Losses:</strong> Implement systematic stop-loss rules for all strategies</li>
+        <li><strong>Regular Rebalancing:</strong> Review and rebalance portfolio allocations monthly</li>
+        <li><strong>Model Validation:</strong> Continuously validate ML models with out-of-sample data</li>
+    </ol>
+    
+    <h2>Next Steps</h2>
+    <ol>
+        <li>Conduct walk-forward analysis for all strategies</li>
+        <li>Implement real-time paper trading for validation</li>
+        <li>Develop risk parity allocation framework</li>
+        <li>Create automated monitoring and alerting system</li>
+        <li>Build portfolio optimization module</li>
+    </ol>
+    
+    <div class="metric-grid">
+        <div class="metric-card">
+            <div class="metric-title">Strategies Analyzed</div>
+            <div class="metric-value">7</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-title">Best Sharpe Ratio</div>
+            <div class="metric-value positive">1.89</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-title">Average Return</div>
+            <div class="metric-value positive">29.97%</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-title">Best Win Rate</div>
+            <div class="metric-value positive">100.00%</div>
+        </div>
+    </div>
+    
+        <div class="timestamp">
+            Generated on: 2025-07-10 09:51:47
+        </div>
+    </div>
+</body>
+</html>
