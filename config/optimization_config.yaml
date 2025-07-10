@@ -1,0 +1,245 @@
+# Optimization Configuration for 5-Loop ML System
+
+general:
+  results_dir: "optimization_results"
+  random_seed: 42
+  n_optimization_rounds: 3  # Number of complete 5-loop cycles
+  
+  early_stopping:
+    enabled: true
+    min_improvement: 0.01  # Minimum improvement per round (1%)
+    patience: 2  # Number of rounds without improvement before stopping
+
+# Default parameters (starting point for optimization)
+default_parameters:
+  feature_engineering:
+    use_sma: true
+    sma_periods: 20
+    use_rsi: true
+    rsi_period: 14
+    n_lags: 3
+    rolling_window: 10
+    
+  model_architecture:
+    type: "random_forest"
+    random_forest:
+      n_estimators: 100
+      max_depth: 10
+    training:
+      validation_split: 0.2
+      learning_rate: 0.01
+      
+  regime_detection:
+    method: "volatility"
+    n_regimes: 3
+    lookback_period: 20
+    
+  risk_management:
+    position_sizing:
+      method: "volatility_adjusted"
+      base_position_size: 0.5
+    stop_loss:
+      enabled: true
+      method: "atr"
+      
+  integration:
+    ensemble_method: "voting"
+    signal_generation:
+      signal_aggregation: "weighted_average"
+      signal_threshold: 0.5
+
+# Loop 1: Feature Engineering Optimization
+feature_optimization:
+  n_trials: 100
+  timeout: 3600  # 1 hour
+  
+  search_space:
+    technical_indicators:
+      - "sma"
+      - "ema"
+      - "rsi"
+      - "macd"
+      - "bollinger"
+      - "atr"
+      - "adx"
+    
+    feature_engineering_methods:
+      - "price_patterns"
+      - "volume_features"
+      - "microstructure"
+      - "seasonality"
+    
+    feature_selection_methods:
+      - "kbest"
+      - "mutual_info"
+      - "rfe"
+      - "tree_based"
+      - "pca"
+      - "none"
+    
+    preprocessing_methods:
+      - "standard"
+      - "robust"
+      - "minmax"
+      - "none"
+
+# Loop 2: Model Architecture Optimization
+architecture_optimization:
+  n_trials: 100
+  timeout: 7200  # 2 hours
+  
+  model_types:
+    - "random_forest"
+    - "xgboost"
+    - "lightgbm"
+    - "neural_network"
+    - "ensemble"
+  
+  hyperparameter_ranges:
+    n_estimators: [50, 500]
+    max_depth: [3, 20]
+    learning_rate: [0.001, 0.3]
+    n_layers: [2, 5]
+    units_per_layer: [32, 256]
+    dropout_rate: [0.0, 0.5]
+
+# Loop 3: Market Regime Optimization
+regime_optimization:
+  n_trials: 100
+  timeout: 3600  # 1 hour
+  
+  detection_methods:
+    - "hmm"
+    - "clustering"
+    - "volatility"
+    - "trend"
+    - "ensemble"
+  
+  regime_parameters:
+    n_regimes: [2, 5]
+    lookback_period: [10, 100]
+    min_regime_length: [5, 20]
+  
+  strategy_types:
+    - "trend_following"
+    - "mean_reversion"
+    - "breakout"
+    - "momentum"
+    - "neutral"
+
+# Loop 4: Risk Management Optimization
+risk_optimization:
+  n_trials: 100
+  timeout: 3600  # 1 hour
+  
+  position_sizing_methods:
+    - "fixed"
+    - "kelly"
+    - "volatility_adjusted"
+    - "risk_parity"
+    - "dynamic"
+  
+  stop_loss_methods:
+    - "fixed"
+    - "atr"
+    - "volatility"
+    - "trailing"
+    - "dynamic"
+  
+  risk_limits:
+    max_position_size: [0.5, 1.0]
+    max_portfolio_risk: [0.02, 0.10]
+    max_drawdown_limit: [0.10, 0.30]
+    var_confidence: [0.90, 0.99]
+
+# Loop 5: Integration & Ensemble Optimization
+integration_optimization:
+  n_trials: 100
+  timeout: 3600  # 1 hour
+  
+  ensemble_methods:
+    - "voting"
+    - "stacking"
+    - "blending"
+    - "dynamic"
+    - "hierarchical"
+  
+  signal_aggregation_methods:
+    - "average"
+    - "weighted_average"
+    - "majority_vote"
+    - "confidence_weighted"
+  
+  execution_parameters:
+    order_types: ["market", "limit", "adaptive"]
+    slippage_models: ["fixed", "linear", "square_root", "adaptive"]
+    execution_delays: [0, 5]
+
+# Performance evaluation metrics and thresholds
+performance_metrics:
+  primary_metric: "sharpe_ratio"  # Main optimization objective
+  
+  metric_weights:
+    sharpe_ratio: 0.30
+    total_return: 0.20
+    max_drawdown: 0.20
+    win_rate: 0.15
+    profit_factor: 0.15
+  
+  minimum_thresholds:
+    sharpe_ratio: 0.5
+    max_drawdown: -0.30
+    win_rate: 0.40
+    trades_per_year: 10
+
+# Optuna study configuration
+optuna_config:
+  sampler: "TPESampler"
+  pruner: "MedianPruner"
+  pruner_params:
+    n_startup_trials: 10
+    n_warmup_steps: 20
+    interval_steps: 5
+  
+  storage: "sqlite:///optimization.db"
+  load_if_exists: true
+
+# Backtesting parameters for optimization
+backtest_config:
+  initial_capital: 100000
+  commission: 0.001  # 0.1%
+  slippage: 0.0005  # 0.05%
+  data_frequency: "1D"
+  
+  validation:
+    method: "time_series_split"
+    n_splits: 5
+    test_size: 0.2
+    gap: 10  # Days between train and test
+
+# Resource management
+resource_config:
+  n_jobs: -1  # Use all CPU cores
+  memory_limit: "8GB"
+  gpu_enabled: false
+  
+  parallel_trials: true
+  n_parallel_trials: 4
+  
+  cache_enabled: true
+  cache_dir: ".optimization_cache"
+
+# Logging and monitoring
+logging_config:
+  level: "INFO"
+  log_trials: true
+  log_interval: 10  # Log every N trials
+  
+  save_intermediate_results: true
+  save_interval: 50  # Save every N trials
+  
+  visualizations:
+    plot_convergence: true
+    plot_importance: true
+    plot_parallel_coordinates: true
+    plot_optimization_history: true

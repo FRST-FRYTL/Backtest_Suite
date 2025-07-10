@@ -1,0 +1,323 @@
+"""
+Machine Learning Pipeline Configuration
+
+This configuration file defines settings for all ML agents
+in the backtesting system.
+"""
+
+# Pipeline Configuration
+pipeline:
+  name: "ML Backtesting Pipeline"
+  version: "1.0.0"
+  execution_order:
+    - data_engineering
+    - feature_analysis
+    - market_regime
+    - model_architecture
+    - training_orchestrator
+    - risk_modeling
+    - performance_analysis
+    - optimization
+    - visualization
+  
+  # Global settings
+  output_dir: "ml_output"
+  log_level: "INFO"
+  random_seed: 42
+  
+# Agent Configurations
+agents:
+  # Data Engineering Agent
+  data_engineering:
+    data_sources:
+      - type: "csv"
+        path: "data/market_data.csv"
+      - type: "api"
+        endpoint: "https://api.example.com/data"
+    
+    preprocessing_config:
+      fill_method: "forward"
+      remove_outliers: true
+      normalize: false
+      
+    validation_rules:
+      expected_types:
+        open: "float64"
+        high: "float64"
+        low: "float64"
+        close: "float64"
+        volume: "int64"
+      
+      value_ranges:
+        price_columns: ["open", "high", "low", "close"]
+        min_price: 0
+        max_price: 1000000
+    
+    # Data split configuration
+    split_config:
+      train_ratio: 0.7
+      val_ratio: 0.15
+      test_ratio: 0.15
+  
+  # Feature Analysis Agent
+  feature_analysis:
+    analysis_methods:
+      - correlation
+      - mutual_information
+      - random_forest
+      - permutation
+    
+    selection_criteria:
+      max_features: 50
+      min_importance: 0.01
+      correlation_threshold: 0.95
+    
+    target_variable: "returns"
+    task_type: "regression"
+  
+  # Model Architecture Agent
+  model_architecture:
+    task_type: "regression"
+    evaluation_metric: "mse"
+    model_types:
+      - random_forest
+      - xgboost
+      - lightgbm
+      - neural_network
+    
+    constraints:
+      max_training_time: 300  # seconds
+      max_model_size: 100     # MB
+      interpretability_required: false
+  
+  # Training Orchestrator Agent
+  training_orchestrator:
+    optimization_method: "optuna"  # optuna, grid_search, random_search
+    cv_strategy: "timeseries"      # timeseries, stratified, kfold
+    metric: "mse"
+    n_trials: 100
+    cv_folds: 5
+    
+    early_stopping:
+      enabled: true
+      patience: 10
+      min_delta: 0.0001
+    
+    resource_limits:
+      max_time_minutes: 60
+      max_memory_gb: 8
+      n_jobs: -1
+    
+    checkpoint_dir: "models/checkpoints"
+  
+  # Market Regime Agent
+  market_regime:
+    regime_method: "hmm"  # hmm, kmeans, gmm, dbscan
+    n_regimes: 4
+    
+    features_config:
+      returns: true
+      volatility: true
+      volume: true
+      microstructure: true
+    
+    lookback_windows: [5, 20, 60]
+    
+    regime_names:
+      - "Bull Market"
+      - "Bear Market"
+      - "High Volatility"
+      - "Low Volatility"
+  
+  # Risk Modeling Agent
+  risk_modeling:
+    risk_metrics:
+      - var
+      - cvar
+      - sharpe
+      - sortino
+      - max_drawdown
+    
+    confidence_levels: [0.95, 0.99]
+    lookback_period: 252
+    risk_free_rate: 0.02
+    target_return: 0.0
+    
+    stress_scenarios:
+      market_crash:
+        market: -0.20
+        volatility: 2.0
+      flash_crash:
+        market: -0.10
+        volatility: 3.0
+      liquidity_crisis:
+        market: -0.05
+        volatility: 1.5
+  
+  # Performance Analysis Agent
+  performance_analysis:
+    metrics:
+      - returns
+      - sharpe
+      - sortino
+      - calmar
+      - win_rate
+    
+    benchmark: "buy_and_hold"
+    
+    analysis_periods:
+      - daily
+      - weekly
+      - monthly
+      - yearly
+    
+    thresholds:
+      min_sharpe: 1.0
+      min_win_rate: 0.5
+      max_drawdown: 0.2
+    
+    transaction_costs:
+      commission: 0.001  # 0.1%
+      slippage: 0.0005   # 0.05%
+  
+  # Visualization Agent
+  visualization:
+    plot_types:
+      - performance
+      - risk
+      - features
+      - predictions
+      - regimes
+    
+    output_format: "static"  # static or interactive
+    style: "seaborn"
+    
+    color_schemes:
+      primary: "#1f77b4"
+      secondary: "#ff7f0e"
+      success: "#2ca02c"
+      danger: "#d62728"
+      warning: "#ff9800"
+      info: "#17a2b8"
+    
+    figure_settings:
+      dpi: 300
+      figsize: [12, 8]
+      save_format: "png"
+  
+  # Optimization Agent
+  optimization:
+    optimization_method: "optuna"  # optuna, scipy, genetic, grid_search
+    objective: "maximize_sharpe"
+    
+    constraints:
+      position_size:
+        min: 0.0
+        max: 1.0
+      leverage:
+        max: 2.0
+    
+    n_trials: 100
+    timeout: 3600  # seconds
+    n_jobs: -1
+    
+    multi_objective: false
+    objectives:
+      - return
+      - risk
+    
+    sampler: "tpe"  # tpe or cmaes for Optuna
+  
+  # Integration Agent
+  integration:
+    pipeline_config:
+      parallel_execution: false
+      save_intermediate_results: true
+      error_handling: "continue"  # continue or stop
+    
+    output_dir: "ml_output"
+    
+    agents_config:
+      # References to agent configurations above
+      data_engineering: ${agents.data_engineering}
+      feature_analysis: ${agents.feature_analysis}
+      model_architecture: ${agents.model_architecture}
+      training_orchestrator: ${agents.training_orchestrator}
+      market_regime: ${agents.market_regime}
+      risk_modeling: ${agents.risk_modeling}
+      performance_analysis: ${agents.performance_analysis}
+      visualization: ${agents.visualization}
+      optimization: ${agents.optimization}
+
+# Model Configurations
+models:
+  # Random Forest
+  random_forest:
+    n_estimators: 100
+    max_depth: 10
+    min_samples_split: 5
+    min_samples_leaf: 2
+    random_state: 42
+  
+  # XGBoost
+  xgboost:
+    n_estimators: 100
+    learning_rate: 0.1
+    max_depth: 5
+    subsample: 0.8
+    colsample_bytree: 0.8
+    random_state: 42
+  
+  # LightGBM
+  lightgbm:
+    n_estimators: 100
+    learning_rate: 0.1
+    num_leaves: 31
+    min_child_samples: 20
+    random_state: 42
+    verbose: -1
+  
+  # Neural Network
+  neural_network:
+    hidden_layer_sizes: [100, 50]
+    activation: "relu"
+    solver: "adam"
+    learning_rate_init: 0.001
+    max_iter: 1000
+    random_state: 42
+
+# Feature Engineering Templates
+feature_templates:
+  technical_indicators:
+    - name: "sma"
+      periods: [5, 10, 20, 50]
+    - name: "ema"
+      periods: [12, 26]
+    - name: "rsi"
+      period: 14
+    - name: "bollinger_bands"
+      period: 20
+      std_dev: 2
+    - name: "macd"
+      fast: 12
+      slow: 26
+      signal: 9
+  
+  price_features:
+    - returns
+    - log_returns
+    - volatility
+    - high_low_ratio
+    - close_to_close_returns
+  
+  volume_features:
+    - volume_ma
+    - volume_ratio
+    - dollar_volume
+    - volume_price_correlation
+  
+  market_microstructure:
+    - spread
+    - illiquidity
+    - price_impact
+    - order_flow_imbalance

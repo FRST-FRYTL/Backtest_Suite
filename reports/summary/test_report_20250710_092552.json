@@ -1,0 +1,65 @@
+{
+  "timestamp": "20250710_092552",
+  "tests_run": [
+    {
+      "test_name": "Data Availability",
+      "results": [
+        {
+          "asset": "SPY",
+          "status": "PASS",
+          "rows": 1258,
+          "date_range": "2019-01-02 00:00:00-05:00 to 2023-12-29 00:00:00-05:00"
+        },
+        {
+          "asset": "QQQ",
+          "status": "PASS",
+          "rows": 1258,
+          "date_range": "2019-01-02 00:00:00-05:00 to 2023-12-29 00:00:00-05:00"
+        },
+        {
+          "asset": "AAPL",
+          "status": "PASS",
+          "rows": 1258,
+          "date_range": "2019-01-02 00:00:00-05:00 to 2023-12-29 00:00:00-05:00"
+        },
+        {
+          "asset": "MSFT",
+          "status": "PASS",
+          "rows": 1258,
+          "date_range": "2019-01-02 00:00:00-05:00 to 2023-12-29 00:00:00-05:00"
+        }
+      ]
+    },
+    {
+      "test_name": "Strategy Execution",
+      "results": [
+        {
+          "strategy": "SMA Crossover",
+          "status": "FAIL",
+          "error": "Cannot index by location index with a non-integer key"
+        }
+      ]
+    },
+    {
+      "test_name": "Performance Metrics",
+      "results": [
+        {
+          "test": "Basic Metrics Calculation",
+          "status": "PASS",
+          "metrics": {
+            "annual_return": "1.4346",
+            "volatility": "0.3402",
+            "sharpe_ratio": "2.6204",
+            "max_return": "0.0651",
+            "min_return": "-0.0660"
+          }
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total_tests": 6,
+    "passed": 5,
+    "failed": 1
+  }
+}

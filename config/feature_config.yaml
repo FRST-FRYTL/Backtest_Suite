@@ -1,0 +1,209 @@
+# Feature Engineering Configuration for ML Trading System
+
+# Timeframes for multi-timeframe analysis
+timeframes:
+  - 1H   # Hourly
+  - 4H   # 4-hour
+  - D    # Daily
+  - W    # Weekly
+  - M    # Monthly
+
+# Lookback periods for rolling calculations
+lookback_periods:
+  short: [5, 10, 20]
+  medium: [30, 50, 100]
+  long: [150, 200, 250]
+  all: [5, 10, 20, 30, 50, 100, 150, 200]
+
+# Feature categories configuration
+feature_categories:
+  price_features:
+    enabled: true
+    features:
+      - returns
+      - log_returns
+      - price_ratios
+      - price_positions
+      - gap_features
+      - range_features
+    
+  technical_indicators:
+    enabled: true
+    indicators:
+      moving_averages:
+        - sma
+        - ema
+        - wma
+        - hull_ma
+      momentum:
+        - rsi
+        - stochastic
+        - williams_r
+        - roc
+      trend:
+        - macd
+        - adx
+        - aroon
+        - psar
+      volatility:
+        - bollinger_bands
+        - atr
+        - keltner_channels
+        - donchian_channels
+      volume:
+        - obv
+        - cmf
+        - mfi
+        - vwap
+        - volume_profile
+      
+  statistical_features:
+    enabled: true
+    features:
+      - rolling_mean
+      - rolling_std
+      - rolling_skew
+      - rolling_kurtosis
+      - rolling_min_max
+      - volatility_measures
+      - autocorrelation
+      
+  microstructure_features:
+    enabled: true
+    features:
+      - spread_proxy
+      - kyle_lambda
+      - amihud_illiquidity
+      - roll_measure
+      - volume_clock
+      - trade_intensity
+      
+  time_features:
+    enabled: true
+    features:
+      - hour_of_day
+      - day_of_week
+      - day_of_month
+      - month_of_year
+      - quarter
+      - trading_sessions
+      - cyclical_encoding
+      - end_of_period_indicators
+      
+  interaction_features:
+    enabled: true
+    max_interactions: 50
+    interaction_types:
+      - crossovers
+      - divergences
+      - combinations
+      - ratios
+      
+  lag_features:
+    enabled: true
+    lags: [1, 2, 3, 5, 10, 20]
+    max_lag_features: 100
+
+# Feature selection configuration
+feature_selection:
+  target_features: 100
+  methods:
+    - mutual_info
+    - random_forest
+    - lasso
+    - correlation
+    - multicollinearity
+  
+  thresholds:
+    variance_threshold: 0.01
+    correlation_threshold: 0.95
+    multicollinearity_threshold: 0.95
+    
+  stability_check:
+    enabled: true
+    n_iterations: 10
+    subsample_ratio: 0.8
+
+# Feature scaling configuration
+feature_scaling:
+  method: robust  # 'standard' or 'robust'
+  handle_outliers: true
+  outlier_threshold: 3  # Standard deviations
+
+# Feature engineering pipeline settings
+pipeline:
+  # Parallel processing
+  n_jobs: -1
+  
+  # Memory optimization
+  chunk_size: 10000
+  use_float32: true
+  
+  # Missing value handling
+  missing_value_strategy: forward_fill
+  max_missing_pct: 0.2
+  
+  # Feature validation
+  validate_features: true
+  remove_constant_features: true
+  remove_duplicate_features: true
+
+# Feature importance tracking
+feature_tracking:
+  track_importance: true
+  importance_history_size: 100
+  save_importance_plots: true
+  plot_top_n: 30
+
+# Advanced feature configurations
+advanced_features:
+  # Market regime features
+  regime_detection:
+    enabled: true
+    methods:
+      - hmm
+      - clustering
+      - rule_based
+    
+  # Sentiment features (if available)
+  sentiment:
+    enabled: false
+    sources:
+      - news
+      - social_media
+    
+  # Order flow features
+  order_flow:
+    enabled: false
+    features:
+      - order_imbalance
+      - trade_flow
+      - aggressive_trades
+      
+  # Alternative data features
+  alternative_data:
+    enabled: false
+    sources:
+      - google_trends
+      - weather_data
+      - economic_indicators
+
+# Feature storage configuration
+storage:
+  save_features: true
+  feature_format: parquet
+  compression: snappy
+  feature_cache_dir: data/features/
+  
+# Monitoring configuration
+monitoring:
+  track_feature_drift: true
+  drift_threshold: 0.1
+  alert_on_drift: true
+  
+# Performance optimization
+optimization:
+  use_gpu: false
+  optimize_memory: true
+  cache_computed_features: true
+  cache_expiry_hours: 24

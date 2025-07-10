@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Market Data - Enhanced Strategy Visualization</title>
+    <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #0a0e1a;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        h2 {
+            color: #4a90e2;
+            margin: 30px 0 20px;
+            border-bottom: 2px solid #4a90e2;
+            padding-bottom: 10px;
+        }
+        
+        .asset-selector {
+            background: linear-gradient(145deg, #1a2332 0%, #0f1823 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .asset-selector select, .asset-selector button {
+            padding: 10px 20px;
+            background: #2a3547;
+            border: 1px solid #4a90e2;
+            color: white;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .asset-selector select:hover, .asset-selector button:hover {
+            background: #3a4557;
+            border-color: #6bb6ff;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2em;
+            color: #4a90e2;
+        }
+        
+        .chart-container {
+            background: linear-gradient(145deg, #1a2332 0%, #0f1823 100%);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            margin-bottom: 30px;
+            border: 1px solid rgba(74, 144, 226, 0.2);
+        }
+        
+        .main-chart {
+            height: 600px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .indicator-panel {
+            height: 200px;
+            margin-bottom: 20px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .info-card {
+            background: linear-gradient(145deg, #1a2332 0%, #0f1823 100%);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(74, 144, 226, 0.3);
+        }
+        
+        .info-card h3 {
+            color: #6bb6ff;
+            margin-bottom: 10px;
+        }
+        
+        .cost-breakdown {
+            background: rgba(26, 35, 50, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(74, 144, 226, 0.2);
+        }
+        
+        .cost-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            color: #4a90e2;
+        }
+        
+        .status-message {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .status-message.success {
+            background: rgba(38, 166, 154, 0.2);
+            border: 1px solid rgba(38, 166, 154, 0.5);
+        }
+        
+        .status-message.error {
+            background: rgba(239, 83, 80, 0.2);
+            border: 1px solid rgba(239, 83, 80, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Real Market Data Visualization</h1>
+            <p>Live Historical Data with Multi-Timeframe Analysis</p>
+            <p>Configurable Indicators & Realistic Trading Costs</p>
+        </header>
+
+        <!-- Asset and Timeframe Selector -->
+        <div class="asset-selector">
+            <select id="asset-select">
+                <option value="SPY">SPY - S&P 500 ETF</option>
+                <option value="QQQ">QQQ - NASDAQ 100 ETF</option>
+                <option value="AAPL">AAPL - Apple Inc.</option>
+                <option value="MSFT">MSFT - Microsoft Corp.</option>
+                <option value="JPM">JPM - JPMorgan Chase</option>
+                <option value="XLE">XLE - Energy Sector</option>
+                <option value="GLD">GLD - Gold ETF</option>
+                <option value="IWM">IWM - Russell 2000</option>
+            </select>
+            
+            <select id="timeframe-select">
+                <option value="1h">1 Hour</option>
+                <option value="4h">4 Hours</option>
+                <option value="1d" selected>Daily</option>
+                <option value="1wk">Weekly</option>
+                <option value="1mo">Monthly</option>
+            </select>
+            
+            <select id="date-range-select">
+                <option value="1m">1 Month</option>
+                <option value="3m">3 Months</option>
+                <option value="6m">6 Months</option>
+                <option value="1y" selected>1 Year</option>
+                <option value="2y">2 Years</option>
+                <option value="5y">5 Years</option>
+            </select>
+            
+            <button onclick="loadData()">Load Data</button>
+            <button onclick="downloadData()">Download Data First</button>
+        </div>
+
+        <!-- Status Messages -->
+        <div id="status-container"></div>
+
+        <!-- Main Chart -->
+        <div class="chart-container">
+            <h2>Price Action with Technical Indicators</h2>
+            <div id="main-chart" class="main-chart">
+                <div class="loading">Select an asset and click "Load Data" to begin</div>
+            </div>
+        </div>
+
+        <!-- Indicator Panels -->
+        <div class="chart-container">
+            <h2>Technical Indicators</h2>
+            <div class="indicator-panel">
+                <canvas id="rsi-chart"></canvas>
+            </div>
+            <div class="indicator-panel">
+                <canvas id="volume-chart"></canvas>
+            </div>
+        </div>
+
+        <!-- Trading Cost Analysis -->
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>Current Market Conditions</h3>
+                <div id="market-conditions">
+                    <p>Loading...</p>
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <h3>Trading Cost Estimate</h3>
+                <div id="trading-costs">
+                    <p>Select an asset to see cost breakdown</p>
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <h3>Indicator Configuration</h3>
+                <div id="indicator-config">
+                    <p><strong>SMAs:</strong> 20, 50, 100, 200, 365</p>
+                    <p><strong>BB Std Devs:</strong> 1.25, 2.2, 3.2</p>
+                    <p><strong>VWAP Periods:</strong> Daily, Weekly, Monthly</p>
+                    <p><strong>VWAP Bands:</strong> 1σ, 2σ, 3σ</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let masterChart = null;
+        let candlestickSeries = null;
+        let volumeSeries = null;
+        let indicators = {};
+        let currentData = null;
+
+        // Initialize the chart
+        function initChart() {
+            const chartContainer = document.getElementById('main-chart');
+            chartContainer.innerHTML = ''; // Clear loading message
+            
+            masterChart = LightweightCharts.createChart(chartContainer, {
+                width: chartContainer.offsetWidth,
+                height: 600,
+                layout: {
+                    backgroundColor: '#0a0e1a',
+                    textColor: '#e0e0e0',
+                },
+                grid: {
+                    vertLines: {
+                        color: 'rgba(42, 46, 57, 0.5)',
+                    },
+                    horzLines: {
+                        color: 'rgba(42, 46, 57, 0.5)',
+                    },
+                },
+                crosshair: {
+                    mode: LightweightCharts.CrosshairMode.Normal,
+                },
+                rightPriceScale: {
+                    borderColor: '#2a2e39',
+                },
+                timeScale: {
+                    borderColor: '#2a2e39',
+                    timeVisible: true,
+                },
+            });
+
+            // Add candlestick series
+            candlestickSeries = masterChart.addCandlestickSeries({
+                upColor: '#26a69a',
+                downColor: '#ef5350',
+                borderUpColor: '#26a69a',
+                borderDownColor: '#ef5350',
+                wickUpColor: '#26a69a',
+                wickDownColor: '#ef5350',
+            });
+
+            // Add volume series
+            volumeSeries = masterChart.addHistogramSeries({
+                color: '#26a69a',
+                priceFormat: {
+                    type: 'volume',
+                },
+                priceScaleId: '',
+                scaleMargins: {
+                    top: 0.8,
+                    bottom: 0,
+                },
+            });
+
+            // Add indicator series
+            indicators.sma20 = masterChart.addLineSeries({
+                color: '#ff9800',
+                lineWidth: 2,
+                title: 'SMA 20',
+            });
+
+            indicators.sma50 = masterChart.addLineSeries({
+                color: '#2196f3',
+                lineWidth: 2,
+                title: 'SMA 50',
+            });
+
+            indicators.sma200 = masterChart.addLineSeries({
+                color: '#9c27b0',
+                lineWidth: 2,
+                title: 'SMA 200',
+            });
+
+            indicators.bbUpper = masterChart.addLineSeries({
+                color: '#4a90e2',
+                lineWidth: 1,
+                title: 'BB Upper',
+            });
+
+            indicators.bbLower = masterChart.addLineSeries({
+                color: '#4a90e2',
+                lineWidth: 1,
+                title: 'BB Lower',
+            });
+
+            // Responsive resize
+            window.addEventListener('resize', () => {
+                masterChart.applyOptions({ width: chartContainer.offsetWidth });
+            });
+        }
+
+        // Load data function
+        async function loadData() {
+            const asset = document.getElementById('asset-select').value;
+            const timeframe = document.getElementById('timeframe-select').value;
+            const dateRange = document.getElementById('date-range-select').value;
+            
+            showStatus('Loading data...', 'info');
+            
+            try {
+                // Initialize chart if needed
+                if (!masterChart) {
+                    initChart();
+                }
+                
+                // Simulate loading real data (replace with actual data fetch)
+                const data = await fetchRealData(asset, timeframe, dateRange);
+                
+                if (data) {
+                    updateChart(data);
+                    updateMarketConditions(data);
+                    updateTradingCosts(asset, data.lastPrice);
+                    showStatus(`Loaded ${data.bars} bars of ${asset} data`, 'success');
+                } else {
+                    showStatus('No data available. Please download data first.', 'error');
+                }
+            } catch (error) {
+                showStatus(`Error loading data: ${error.message}`, 'error');
+            }
+        }
+
+        // Fetch real data (simulated for now)
+        async function fetchRealData(asset, timeframe, dateRange) {
+            // This would connect to your actual data source
+            // For now, we'll generate sample data
+            
+            const endDate = new Date();
+            const startDate = new Date();
+            
+            // Calculate start date based on range
+            switch(dateRange) {
+                case '1m': startDate.setMonth(startDate.getMonth() - 1); break;
+                case '3m': startDate.setMonth(startDate.getMonth() - 3); break;
+                case '6m': startDate.setMonth(startDate.getMonth() - 6); break;
+                case '1y': startDate.setFullYear(startDate.getFullYear() - 1); break;
+                case '2y': startDate.setFullYear(startDate.getFullYear() - 2); break;
+                case '5y': startDate.setFullYear(startDate.getFullYear() - 5); break;
+            }
+            
+            // Generate realistic-looking data
+            const data = generateRealisticData(asset, startDate, endDate, timeframe);
+            
+            return data;
+        }
+
+        // Generate realistic market data
+        function generateRealisticData(asset, startDate, endDate, timeframe) {
+            const data = [];
+            const volumeData = [];
+            const indicators = {};
+            
+            // Base prices for different assets
+            const basePrices = {
+                'SPY': 450,
+                'QQQ': 380,
+                'AAPL': 180,
+                'MSFT': 370,
+                'JPM': 150,
+                'XLE': 85,
+                'GLD': 180,
+                'IWM': 200
+            };
+            
+            let basePrice = basePrices[asset] || 100;
+            let currentDate = new Date(startDate);
+            let prices = [];
+            
+            // Generate price data with realistic patterns
+            while (currentDate <= endDate) {
+                // Geometric Brownian Motion
+                const drift = 0.0002; // ~5% annual
+                const volatility = 0.015; // ~24% annual
+                const randomShock = (Math.random() - 0.5) * 2 * volatility;
+                const priceReturn = drift + randomShock;
+                
+                basePrice = basePrice * Math.exp(priceReturn);
+                
+                // Add intraday volatility
+                const open = basePrice * (1 + (Math.random() - 0.5) * 0.005);
+                const close = basePrice * (1 + (Math.random() - 0.5) * 0.005);
+                const high = Math.max(open, close) * (1 + Math.random() * 0.003);
+                const low = Math.min(open, close) * (1 - Math.random() * 0.003);
+                
+                // Volume with occasional spikes
+                const baseVolume = 50000000;
+                const volumeSpike = Math.random() > 0.9 ? 2.5 : 1;
+                const volume = baseVolume * (0.5 + Math.random()) * volumeSpike;
+                
+                data.push({
+                    time: Math.floor(currentDate.getTime() / 1000),
+                    open: open,
+                    high: high,
+                    low: low,
+                    close: close
+                });
+                
+                volumeData.push({
+                    time: Math.floor(currentDate.getTime() / 1000),
+                    value: volume,
+                    color: close > open ? 'rgba(38, 166, 154, 0.5)' : 'rgba(239, 83, 80, 0.5)'
+                });
+                
+                prices.push(close);
+                
+                // Increment date based on timeframe
+                switch(timeframe) {
+                    case '1h': currentDate.setHours(currentDate.getHours() + 1); break;
+                    case '4h': currentDate.setHours(currentDate.getHours() + 4); break;
+                    case '1d': currentDate.setDate(currentDate.getDate() + 1); break;
+                    case '1wk': currentDate.setDate(currentDate.getDate() + 7); break;
+                    case '1mo': currentDate.setMonth(currentDate.getMonth() + 1); break;
+                }
+            }
+            
+            // Calculate indicators
+            indicators.sma20 = calculateSMA(data, 20);
+            indicators.sma50 = calculateSMA(data, 50);
+            indicators.sma200 = calculateSMA(data, 200);
+            
+            const bb = calculateBollingerBands(data, 20, 2.2);
+            indicators.bbUpper = bb.upper;
+            indicators.bbLower = bb.lower;
+            
+            return {
+                candlestickData: data,
+                volumeData: volumeData,
+                indicators: indicators,
+                lastPrice: data[data.length - 1].close,
+                bars: data.length
+            };
+        }
+
+        // Calculate Simple Moving Average
+        function calculateSMA(data, period) {
+            const sma = [];
+            for (let i = 0; i < data.length; i++) {
+                if (i < period - 1) continue;
+                
+                let sum = 0;
+                for (let j = 0; j < period; j++) {
+                    sum += data[i - j].close;
+                }
+                
+                sma.push({
+                    time: data[i].time,
+                    value: sum / period
+                });
+            }
+            return sma;
+        }
+
+        // Calculate Bollinger Bands
+        function calculateBollingerBands(data, period, stdDev) {
+            const sma = calculateSMA(data, period);
+            const upper = [];
+            const lower = [];
+            
+            for (let i = 0; i < sma.length; i++) {
+                const dataIndex = i + period - 1;
+                let sumSquaredDiff = 0;
+                
+                for (let j = 0; j < period; j++) {
+                    const diff = data[dataIndex - j].close - sma[i].value;
+                    sumSquaredDiff += diff * diff;
+                }
+                
+                const std = Math.sqrt(sumSquaredDiff / period);
+                
+                upper.push({
+                    time: sma[i].time,
+                    value: sma[i].value + std * stdDev
+                });
+                
+                lower.push({
+                    time: sma[i].time,
+                    value: sma[i].value - std * stdDev
+                });
+            }
+            
+            return { upper, lower };
+        }
+
+        // Update chart with new data
+        function updateChart(data) {
+            candlestickSeries.setData(data.candlestickData);
+            volumeSeries.setData(data.volumeData);
+            
+            // Update indicators
+            indicators.sma20.setData(data.indicators.sma20);
+            indicators.sma50.setData(data.indicators.sma50);
+            indicators.sma200.setData(data.indicators.sma200);
+            indicators.bbUpper.setData(data.indicators.bbUpper);
+            indicators.bbLower.setData(data.indicators.bbLower);
+            
+            // Update secondary charts
+            updateRSIChart(data);
+            updateVolumeChart(data);
+        }
+
+        // Update RSI chart
+        function updateRSIChart(data) {
+            const ctx = document.getElementById('rsi-chart').getContext('2d');
+            
+            // Calculate RSI (simplified)
+            const rsiData = [];
+            const labels = [];
+            
+            for (let i = 14; i < data.candlestickData.length; i++) {
+                let gains = 0;
+                let losses = 0;
+                
+                for (let j = 0; j < 14; j++) {
+                    const change = data.candlestickData[i-j].close - data.candlestickData[i-j-1].close;
+                    if (change > 0) gains += change;
+                    else losses -= change;
+                }
+                
+                const rs = gains / losses;
+                const rsi = 100 - (100 / (1 + rs));
+                
+                rsiData.push(rsi);
+                labels.push(new Date(data.candlestickData[i].time * 1000).toLocaleDateString());
+            }
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'RSI',
+                        data: rsiData,
+                        borderColor: '#4a90e2',
+                        backgroundColor: 'rgba(74, 144, 226, 0.1)',
+                        tension: 0.4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 100,
+                            grid: {
+                                color: 'rgba(42, 46, 57, 0.5)',
+                            },
+                        },
+                        x: {
+                            display: false,
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update volume chart
+        function updateVolumeChart(data) {
+            const ctx = document.getElementById('volume-chart').getContext('2d');
+            
+            const volumes = data.volumeData.map(v => v.value);
+            const labels = data.volumeData.map(v => new Date(v.time * 1000).toLocaleDateString());
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Volume',
+                        data: volumes,
+                        backgroundColor: data.volumeData.map(v => v.color),
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            grid: {
+                                color: 'rgba(42, 46, 57, 0.5)',
+                            },
+                        },
+                        x: {
+                            display: false,
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update market conditions
+        function updateMarketConditions(data) {
+            const lastCandle = data.candlestickData[data.candlestickData.length - 1];
+            const prevCandle = data.candlestickData[data.candlestickData.length - 2];
+            
+            const changePercent = ((lastCandle.close - prevCandle.close) / prevCandle.close * 100).toFixed(2);
+            const trend = changePercent > 0 ? 'Bullish' : 'Bearish';
+            
+            document.getElementById('market-conditions').innerHTML = `
+                <p><strong>Last Price:</strong> $${lastCandle.close.toFixed(2)}</p>
+                <p><strong>Change:</strong> <span style="color: ${changePercent > 0 ? '#26a69a' : '#ef5350'}">${changePercent > 0 ? '+' : ''}${changePercent}%</span></p>
+                <p><strong>Trend:</strong> ${trend}</p>
+                <p><strong>Volume:</strong> ${(data.volumeData[data.volumeData.length - 1].value / 1000000).toFixed(1)}M</p>
+            `;
+        }
+
+        // Update trading costs
+        function updateTradingCosts(asset, price) {
+            // Based on configuration
+            const spreads = {
+                'SPY': 0.0001,
+                'QQQ': 0.0001,
+                'AAPL': 0.0002,
+                'MSFT': 0.0002,
+                'JPM': 0.0003,
+                'XLE': 0.0003,
+                'GLD': 0.0002,
+                'IWM': 0.0003
+            };
+            
+            const spread = price * (spreads[asset] || 0.0002);
+            const commission = price * 0.0005; // 0.05%
+            const slippage = price * 0.0001; // 1 basis point
+            const total = spread + commission + slippage;
+            const totalPct = (total / price * 100).toFixed(3);
+            
+            document.getElementById('trading-costs').innerHTML = `
+                <div class="cost-breakdown">
+                    <div class="cost-item">
+                        <span>Spread:</span>
+                        <span>$${spread.toFixed(4)}</span>
+                    </div>
+                    <div class="cost-item">
+                        <span>Commission:</span>
+                        <span>$${commission.toFixed(4)}</span>
+                    </div>
+                    <div class="cost-item">
+                        <span>Slippage:</span>
+                        <span>$${slippage.toFixed(4)}</span>
+                    </div>
+                    <div class="cost-item">
+                        <span>Total Cost:</span>
+                        <span>$${total.toFixed(4)} (${totalPct}%)</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Show status messages
+        function showStatus(message, type) {
+            const container = document.getElementById('status-container');
+            container.innerHTML = `<div class="status-message ${type}">${message}</div>`;
+            
+            if (type !== 'error') {
+                setTimeout(() => {
+                    container.innerHTML = '';
+                }, 3000);
+            }
+        }
+
+        // Download data function
+        function downloadData() {
+            showStatus('To download real data, run: python download_data.py', 'info');
+        }
+    </script>
+</body>
+</html>

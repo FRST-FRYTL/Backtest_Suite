@@ -1,0 +1,163 @@
+# Enhanced Monthly Contribution Strategy Configuration
+# Central configuration file for all strategy parameters
+
+# Assets to trade
+assets:
+  - SPY   # S&P 500 ETF
+  - QQQ   # NASDAQ 100 ETF
+  - AAPL  # Apple Inc.
+  - MSFT  # Microsoft Corp.
+  - JPM   # JPMorgan Chase
+  - XLE   # Energy Select Sector SPDR
+  - GLD   # SPDR Gold Trust
+  - IWM   # iShares Russell 2000 ETF
+
+# Data settings
+data:
+  start_date: "2019-01-01"  # 5 years of data
+  end_date: "2024-01-01"
+  timeframes:
+    - 1H    # 1 hour
+    - 4H    # 4 hours
+    - 1D    # Daily
+    - 1W    # Weekly
+    - 1M    # Monthly
+  
+# Technical indicators
+indicators:
+  # Simple Moving Averages
+  sma:
+    periods: [20, 50, 100, 200, 365]
+    
+  # Bollinger Bands
+  bollinger_bands:
+    period: 20
+    std_devs: [1.25, 2.2, 3.2]
+    
+  # VWAP (Volume Weighted Average Price)
+  vwap:
+    periods:
+      - daily
+      - weekly
+      - monthly
+      - yearly
+      - 5Y
+    std_devs: [1, 2, 3]
+    
+  # Rolling VWAP
+  rolling_vwap:
+    periods: [5, 10, 20, 50, 100, 200]
+    std_devs: [1, 2, 3]
+    
+  # RSI
+  rsi:
+    period: 14
+    oversold: 30
+    overbought: 70
+    
+  # ATR (Average True Range)
+  atr:
+    period: 14
+    
+# Trading costs and market microstructure
+trading_costs:
+  # Commission fees
+  commission:
+    fixed: 0.0  # Fixed fee per trade
+    percentage: 0.0005  # 0.05% (5 basis points)
+    minimum: 0.0  # Minimum commission
+    
+  # Spread model
+  spread:
+    # Base spread as percentage of price
+    base_spread_pct:
+      SPY: 0.0001   # 1 basis point
+      QQQ: 0.0001   # 1 basis point
+      AAPL: 0.0002  # 2 basis points
+      MSFT: 0.0002  # 2 basis points
+      JPM: 0.0003   # 3 basis points
+      XLE: 0.0003   # 3 basis points
+      GLD: 0.0002   # 2 basis points
+      IWM: 0.0003   # 3 basis points
+    
+    # Spread multiplier based on volatility
+    volatility_multiplier: 1.5
+    
+    # Spread multiplier based on volume
+    volume_impact:
+      low_volume_multiplier: 2.0  # When volume < 50% of average
+      high_volume_multiplier: 0.8  # When volume > 200% of average
+      
+  # Slippage model
+  slippage:
+    base_slippage_pct: 0.0001  # 1 basis point base slippage
+    size_impact: 0.00001  # Additional slippage per $10k traded
+    
+  # Market impact
+  market_impact:
+    linear: 0.0001  # Linear impact coefficient
+    square_root: 0.00001  # Square-root impact coefficient
+    
+# Strategy parameters
+strategy:
+  # Position sizing
+  position_sizing:
+    method: "kelly"
+    kelly_fraction: 0.3
+    max_position_pct: 0.2  # 20% max per position
+    min_position_size: 1000  # $1,000 minimum
+    
+  # Risk management
+  risk_management:
+    max_positions: 10
+    correlation_limit: 0.7
+    sector_limit: 0.3  # 30% max per sector
+    
+  # Entry rules
+  entry:
+    min_confluence_score: 0.75
+    reentry_delay_days: 5
+    
+  # Exit rules
+  exit:
+    profit_target_pct: 0.15  # 15% profit target
+    time_stop_days: 30  # Exit after 30 days
+    
+  # Stop loss
+  stop_loss:
+    type: "dynamic_atr"  # dynamic_atr or fixed
+    atr_multiplier: 2.0
+    min_stop_pct: 0.008  # 0.8% minimum
+    max_stop_pct: 0.04   # 4% maximum
+    
+# Optimization settings
+optimization:
+  # Parameter ranges for optimization
+  parameter_ranges:
+    confluence_threshold: [0.65, 0.85]
+    atr_multiplier: [1.5, 3.0]
+    kelly_fraction: [0.2, 0.4]
+    
+  # Optimization method
+  method: "grid_search"  # grid_search, random_search, bayesian
+  
+  # Performance metrics to optimize
+  objective: "sharpe_ratio"  # sharpe_ratio, total_return, calmar_ratio
+  
+  # Walk-forward analysis
+  walk_forward:
+    in_sample_periods: 12  # months
+    out_sample_periods: 3  # months
+    
+# Backtesting settings
+backtesting:
+  initial_capital: 10000
+  monthly_contribution: 500
+  rebalance_frequency: "quarterly"
+  
+# Reporting settings
+reporting:
+  generate_html: true
+  generate_pdf: false
+  include_trade_list: true
+  max_trades_shown: 1000
