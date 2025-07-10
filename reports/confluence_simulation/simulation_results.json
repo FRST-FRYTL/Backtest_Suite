@@ -1,0 +1,207 @@
+{
+  "iteration_1": {
+    "focus": "baseline",
+    "params": {},
+    "results": {
+      "SPY": {
+        "symbol": "SPY",
+        "total_return": 0.0,
+        "annual_return": 0.0,
+        "sharpe_ratio": 0,
+        "max_drawdown": 0.0,
+        "win_rate": 0,
+        "total_trades": 0,
+        "signals": 0,
+        "avg_confluence": 0
+      },
+      "QQQ": {
+        "symbol": "QQQ",
+        "total_return": 0.0,
+        "annual_return": 0.0,
+        "sharpe_ratio": 0,
+        "max_drawdown": 0.0,
+        "win_rate": 0,
+        "total_trades": 0,
+        "signals": 0,
+        "avg_confluence": 0
+      },
+      "AAPL": {
+        "symbol": "AAPL",
+        "total_return": -1.7027277311395084,
+        "annual_return": -0.263865235397176,
+        "sharpe_ratio": -0.4909614534241006,
+        "max_drawdown": -1.7027277311395306,
+        "win_rate": 0.0,
+        "total_trades": 2,
+        "signals": 2,
+        "avg_confluence": 0.8150000000000001
+      },
+      "GLD": {
+        "symbol": "GLD",
+        "total_return": 1.3592938986181524,
+        "annual_return": 0.20792946994581119,
+        "sharpe_ratio": 0.32155962830518,
+        "max_drawdown": -1.451228813210418,
+        "win_rate": 75.0,
+        "total_trades": 4,
+        "signals": 4,
+        "avg_confluence": 0.7991275375197929
+      },
+      "TLT": {
+        "symbol": "TLT",
+        "total_return": -0.8353112486290004,
+        "annual_return": -0.1289659248246977,
+        "sharpe_ratio": -0.7510922022135708,
+        "max_drawdown": -0.9782985549753256,
+        "win_rate": 0.0,
+        "total_trades": 1,
+        "signals": 1,
+        "avg_confluence": 0.8150000000000001
+      }
+    }
+  },
+  "iteration_2": {
+    "focus": "profit",
+    "params": {
+      "weights": {
+        "trend": 0.35,
+        "momentum": 0.3,
+        "volatility": 0.2,
+        "volume": 0.15
+      },
+      "entry_threshold": 0.65,
+      "position_size_pct": 0.25,
+      "profit_target_pct": 0.2,
+      "stop_loss_pct": 0.05
+    },
+    "results": {
+      "SPY": {
+        "symbol": "SPY",
+        "total_return": 4.784387361016007,
+        "annual_return": 0.7215848010091452,
+        "sharpe_ratio": 0.3271100754595994,
+        "max_drawdown": -5.128584612188034,
+        "win_rate": 59.09090909090909,
+        "total_trades": 22,
+        "signals": 57,
+        "avg_confluence": 0.6854649018528962
+      },
+      "QQQ": {
+        "symbol": "QQQ",
+        "total_return": 9.724756847614069,
+        "annual_return": 1.4380079410291735,
+        "sharpe_ratio": 0.5026097070374006,
+        "max_drawdown": -3.869783341075217,
+        "win_rate": 57.14285714285714,
+        "total_trades": 28,
+        "signals": 62,
+        "avg_confluence": 0.6806485601344151
+      },
+      "AAPL": {
+        "symbol": "AAPL",
+        "total_return": 2.890927734469817,
+        "annual_return": 0.4394131719113181,
+        "sharpe_ratio": 0.13010389389384974,
+        "max_drawdown": -11.124450324792829,
+        "win_rate": 43.24324324324324,
+        "total_trades": 37,
+        "signals": 68,
+        "avg_confluence": 0.689523699441578
+      },
+      "GLD": {
+        "symbol": "GLD",
+        "total_return": 11.279785196526282,
+        "annual_return": 1.6578606602033696,
+        "sharpe_ratio": 0.7116227411723991,
+        "max_drawdown": -3.576944163063271,
+        "win_rate": 57.14285714285714,
+        "total_trades": 29,
+        "signals": 63,
+        "avg_confluence": 0.6863136145448854
+      },
+      "TLT": {
+        "symbol": "TLT",
+        "total_return": -2.3639129887757404,
+        "annual_return": -0.3673699537970254,
+        "sharpe_ratio": -0.14261475731961537,
+        "max_drawdown": -5.403017661127968,
+        "win_rate": 47.61904761904761,
+        "total_trades": 21,
+        "signals": 45,
+        "avg_confluence": 0.6772326517622874
+      }
+    }
+  },
+  "iteration_3": {
+    "focus": "risk",
+    "params": {
+      "weights": {
+        "trend": 0.25,
+        "momentum": 0.2,
+        "volatility": 0.35,
+        "volume": 0.2
+      },
+      "entry_threshold": 0.8,
+      "position_size_pct": 0.15,
+      "profit_target_pct": 0.12,
+      "stop_loss_pct": 0.03
+    },
+    "results": {
+      "SPY": {
+        "symbol": "SPY",
+        "total_return": 0.0,
+        "annual_return": 0.0,
+        "sharpe_ratio": 0,
+        "max_drawdown": 0.0,
+        "win_rate": 0,
+        "total_trades": 0,
+        "signals": 0,
+        "avg_confluence": 0
+      },
+      "QQQ": {
+        "symbol": "QQQ",
+        "total_return": 0.0,
+        "annual_return": 0.0,
+        "sharpe_ratio": 0,
+        "max_drawdown": 0.0,
+        "win_rate": 0,
+        "total_trades": 0,
+        "signals": 0,
+        "avg_confluence": 0
+      },
+      "AAPL": {
+        "symbol": "AAPL",
+        "total_return": -1.2784160416636214,
+        "annual_return": -0.1977516133540913,
+        "sharpe_ratio": -0.49102379749542624,
+        "max_drawdown": -1.2784160416635992,
+        "win_rate": 0.0,
+        "total_trades": 2,
+        "signals": 2,
+        "avg_confluence": 0.8075
+      },
+      "GLD": {
+        "symbol": "GLD",
+        "total_return": 1.0114844180134197,
+        "annual_return": 0.15495117928796542,
+        "sharpe_ratio": 0.336828645836151,
+        "max_drawdown": -1.090429543319119,
+        "win_rate": 66.66666666666666,
+        "total_trades": 3,
+        "signals": 3,
+        "avg_confluence": 0.8075
+      },
+      "TLT": {
+        "symbol": "TLT",
+        "total_return": -0.4531408709423368,
+        "annual_return": -0.0698480051180339,
+        "sharpe_ratio": -0.5820660635617272,
+        "max_drawdown": -0.5608334652976243,
+        "win_rate": 0.0,
+        "total_trades": 1,
+        "signals": 1,
+        "avg_confluence": 0.8075
+      }
+    }
+  }
+}
