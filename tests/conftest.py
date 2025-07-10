@@ -12,7 +12,7 @@ import asyncio
 
 from src.backtesting import BacktestEngine, Portfolio
 from src.strategies import StrategyBuilder
-from src.data import DataFetcher, CacheManager
+from src.data import StockDataFetcher
 from src.indicators import RSI, BollingerBands, VWAP
 
 
@@ -155,7 +155,7 @@ def temp_cache_dir():
 @pytest.fixture
 def mock_data_fetcher():
     """Provide a mock data fetcher."""
-    fetcher = Mock(spec=DataFetcher)
+    fetcher = Mock(spec=StockDataFetcher)
     fetcher.fetch_stock_data = AsyncMock(return_value=generate_stock_data())
     fetcher.fetch_options_chain = AsyncMock(return_value=generate_options_chain())
     return fetcher
@@ -202,7 +202,8 @@ def backtest_engine():
 @pytest.fixture
 def cache_manager(temp_cache_dir):
     """Provide a cache manager with temporary directory."""
-    return CacheManager(cache_dir=temp_cache_dir)
+    # CacheManager removed - using temp directory directly
+    return temp_cache_dir
 
 
 @pytest.fixture

@@ -12,8 +12,8 @@ timeframes:
 lookback_periods:
   short: [5, 10, 20]
   medium: [30, 50, 100]
-  long: [150, 200, 250]
-  all: [5, 10, 20, 30, 50, 100, 150, 200]
+  long: [150, 200, 250, 365]
+  all: [5, 10, 20, 30, 50, 100, 150, 200, 365]
 
 # Feature categories configuration
 feature_categories:

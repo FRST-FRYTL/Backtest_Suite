@@ -32,7 +32,7 @@ indicators:
     
   # Bollinger Bands
   bollinger_bands:
-    period: 20
+    periods: [20, 50, 100, 200, 365]
     std_devs: [1.25, 2.2, 3.2]
     
   # VWAP (Volume Weighted Average Price)
@@ -47,7 +47,12 @@ indicators:
     
   # Rolling VWAP
   rolling_vwap:
-    periods: [5, 10, 20, 50, 100, 200]
+    periods:
+      - daily
+      - weekly
+      - monthly
+      - yearly
+      - 5Y
     std_devs: [1, 2, 3]
     
   # RSI

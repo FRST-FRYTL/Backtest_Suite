@@ -3,13 +3,29 @@
 from .builder import StrategyBuilder
 from .rules import Rule, Condition, LogicalOperator
 from .signals import SignalGenerator
-from .monthly_contribution_strategy import MonthlyContributionStrategy
+
+try:
+    from .monthly_contribution_strategy import MonthlyContributionStrategy
+    MONTHLY_STRATEGY_AVAILABLE = True
+except ImportError:
+    MONTHLY_STRATEGY_AVAILABLE = False
+
+try:
+    from .enhanced_confluence_engine import EnhancedConfluenceEngine
+    ENHANCED_CONFLUENCE_AVAILABLE = True
+except ImportError:
+    ENHANCED_CONFLUENCE_AVAILABLE = False
 
 __all__ = [
     "StrategyBuilder",
     "Rule",
     "Condition",
     "LogicalOperator",
-    "SignalGenerator",
-    "MonthlyContributionStrategy"
+    "SignalGenerator"
 ]
+
+if MONTHLY_STRATEGY_AVAILABLE:
+    __all__.append("MonthlyContributionStrategy")
+
+if ENHANCED_CONFLUENCE_AVAILABLE:
+    __all__.append("EnhancedConfluenceEngine")

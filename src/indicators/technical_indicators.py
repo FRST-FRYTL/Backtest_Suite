@@ -48,29 +48,26 @@ class TechnicalIndicators:
     def bollinger_bands(
         data: pd.Series,
         period: int = 20,
-        std_devs: List[float] = [2.0]
-    ) -> Dict[str, pd.Series]:
+        std_dev: float = 2.0
+    ) -> Tuple[pd.Series, pd.Series, pd.Series]:
         """
         Bollinger Bands.
         
         Args:
             data: Price series
             period: MA period
-            std_devs: List of standard deviations
+            std_dev: Standard deviation multiplier
             
         Returns:
-            Dict with middle, upper, and lower bands
+            Tuple of (upper_band, middle_band, lower_band)
         """
         middle = data.rolling(window=period).mean()
         std = data.rolling(window=period).std()
         
-        bands = {'middle': middle}
+        upper = middle + (std * std_dev)
+        lower = middle - (std * std_dev)
         
-        for std_dev in std_devs:
-            bands[f'upper_{std_dev}'] = middle + (std * std_dev)
-            bands[f'lower_{std_dev}'] = middle - (std * std_dev)
-            
-        return bands
+        return upper, middle, lower
     
     @staticmethod
     def atr(high: pd.Series, low: pd.Series, close: pd.Series, period: int = 14) -> pd.Series:
@@ -335,3 +332,269 @@ class TechnicalIndicators:
             'plus_di': plus_di,
             'minus_di': minus_di
         }
+    
+    @staticmethod
+    def true_vwap_with_bands(
+        high: pd.Series,
+        low: pd.Series,
+        close: pd.Series,
+        volume: pd.Series,
+        reset_period: str = 'D',
+        band_multipliers: List[float] = [1.0, 2.0, 3.0]
+    ) -> Dict[str, pd.Series]:
+        """
+        Enhanced True VWAP calculation with proper reset periods and bands.
+        
+        Args:
+            high: High prices
+            low: Low prices
+            close: Close prices
+            volume: Volume
+            reset_period: Reset frequency ('D', 'W', 'M', or None for no reset)
+            band_multipliers: Standard deviation multipliers for bands
+            
+        Returns:
+            Dict with VWAP, bands, and related metrics
+        """
+        typical_price = (high + low + close) / 3
+        vwap_series = pd.Series(index=typical_price.index, dtype=float)
+        vwap_std_series = pd.Series(index=typical_price.index, dtype=float)
+        
+        if reset_period:
+            # Ensure we have a proper datetime index
+            if not isinstance(typical_price.index, pd.DatetimeIndex):
+                logger.warning("Converting index to DatetimeIndex for VWAP calculation")
+                typical_price.index = pd.to_datetime(typical_price.index, utc=True).tz_localize(None)
+                volume.index = pd.to_datetime(volume.index, utc=True).tz_localize(None)
+            
+            # Group by reset frequency and calculate VWAP for each group
+            grouped = typical_price.groupby(pd.Grouper(freq=reset_period))
+            
+            for name, group in grouped:
+                if len(group) == 0:
+                    continue
+                    
+                group_volume = volume.loc[group.index]
+                group_tp = typical_price.loc[group.index]
+                
+                # Calculate cumulative VWAP
+                cumulative_tp_vol = (group_tp * group_volume).cumsum()
+                cumulative_vol = group_volume.cumsum()
+                
+                # Avoid division by zero
+                mask = cumulative_vol > 0
+                group_vwap = cumulative_tp_vol / cumulative_vol.where(mask, 1)
+                group_vwap = group_vwap.where(mask, np.nan)
+                
+                vwap_series.loc[group.index] = group_vwap
+                
+                # Calculate volume-weighted standard deviation
+                price_diff_sq = (group_tp - group_vwap) ** 2
+                cumulative_variance = (price_diff_sq * group_volume).cumsum() / cumulative_vol.where(mask, 1)
+                group_std = np.sqrt(cumulative_variance.where(mask, np.nan))
+                
+                vwap_std_series.loc[group.index] = group_std
+        else:
+            # Calculate VWAP for entire series without reset
+            cumulative_tp_vol = (typical_price * volume).cumsum()
+            cumulative_vol = volume.cumsum()
+            
+            mask = cumulative_vol > 0
+            vwap_series = cumulative_tp_vol / cumulative_vol.where(mask, 1)
+            vwap_series = vwap_series.where(mask, np.nan)
+            
+            # Calculate standard deviation
+            price_diff_sq = (typical_price - vwap_series) ** 2
+            cumulative_variance = (price_diff_sq * volume).cumsum() / cumulative_vol.where(mask, 1)
+            vwap_std_series = np.sqrt(cumulative_variance.where(mask, np.nan))
+        
+        # Create bands
+        result = {
+            'vwap': vwap_series,
+            'vwap_std': vwap_std_series,
+            'typical_price': typical_price
+        }
+        
+        for multiplier in band_multipliers:
+            result[f'vwap_upper_{multiplier}'] = vwap_series + (vwap_std_series * multiplier)
+            result[f'vwap_lower_{multiplier}'] = vwap_series - (vwap_std_series * multiplier)
+        
+        # Additional metrics
+        result['vwap_position'] = (typical_price - vwap_series) / vwap_std_series.where(vwap_std_series > 0, 1)
+        result['volume_ratio'] = volume / volume.rolling(window=20).mean()
+        
+        return result
+    
+    @staticmethod
+    def enhanced_rsi_with_divergence(
+        data: pd.Series,
+        period: int = 14,
+        price_data: Optional[pd.Series] = None
+    ) -> Dict[str, pd.Series]:
+        """
+        Enhanced RSI calculation with divergence detection.
+        
+        Args:
+            data: Price series for RSI calculation
+            period: RSI period
+            price_data: Price data for divergence analysis (optional)
+            
+        Returns:
+            Dict with RSI, divergence signals, and momentum analysis
+        """
+        # Calculate standard RSI
+        delta = data.diff()
+        gain = (delta.where(delta > 0, 0)).rolling(window=period).mean()
+        loss = (-delta.where(delta < 0, 0)).rolling(window=period).mean()
+        
+        rs = gain / loss
+        rsi = 100 - (100 / (1 + rs))
+        
+        result = {
+            'rsi': rsi,
+            'rsi_ema': rsi.ewm(span=9).mean(),  # Smoothed RSI
+        }
+        
+        # RSI momentum
+        result['rsi_momentum'] = rsi.diff()
+        result['rsi_acceleration'] = result['rsi_momentum'].diff()
+        
+        # Overbought/Oversold levels with dynamic thresholds
+        result['rsi_overbought'] = rsi > 70
+        result['rsi_oversold'] = rsi < 30
+        result['rsi_extreme_overbought'] = rsi > 80
+        result['rsi_extreme_oversold'] = rsi < 20
+        
+        # RSI divergence detection (if price data provided)
+        if price_data is not None:
+            result.update(TechnicalIndicators._detect_rsi_divergence(rsi, price_data))
+        
+        return result
+    
+    @staticmethod
+    def _detect_rsi_divergence(
+        rsi: pd.Series,
+        price: pd.Series,
+        lookback: int = 20
+    ) -> Dict[str, pd.Series]:
+        """
+        Detect RSI divergences with price action.
+        
+        Args:
+            rsi: RSI series
+            price: Price series
+            lookback: Lookback period for divergence detection
+            
+        Returns:
+            Dict with divergence signals
+        """
+        # Find local peaks and troughs
+        price_peaks = price.rolling(window=lookback, center=True).max() == price
+        price_troughs = price.rolling(window=lookback, center=True).min() == price
+        
+        rsi_peaks = rsi.rolling(window=lookback, center=True).max() == rsi
+        rsi_troughs = rsi.rolling(window=lookback, center=True).min() == rsi
+        
+        # Initialize divergence series
+        bullish_divergence = pd.Series(False, index=price.index)
+        bearish_divergence = pd.Series(False, index=price.index)
+        hidden_bullish_div = pd.Series(False, index=price.index)
+        hidden_bearish_div = pd.Series(False, index=price.index)
+        
+        # Detect regular divergences
+        for i in range(lookback, len(price) - lookback):
+            current_idx = price.index[i]
+            
+            # Bullish divergence: price makes lower low, RSI makes higher low
+            if price_troughs.iloc[i]:
+                prev_trough_indices = price.iloc[:i].where(price_troughs.iloc[:i]).dropna().index
+                if len(prev_trough_indices) > 0:
+                    prev_idx = prev_trough_indices[-1]
+                    if (price.loc[current_idx] < price.loc[prev_idx] and 
+                        rsi.loc[current_idx] > rsi.loc[prev_idx]):
+                        bullish_divergence.loc[current_idx] = True
+            
+            # Bearish divergence: price makes higher high, RSI makes lower high
+            if price_peaks.iloc[i]:
+                prev_peak_indices = price.iloc[:i].where(price_peaks.iloc[:i]).dropna().index
+                if len(prev_peak_indices) > 0:
+                    prev_idx = prev_peak_indices[-1]
+                    if (price.loc[current_idx] > price.loc[prev_idx] and 
+                        rsi.loc[current_idx] < rsi.loc[prev_idx]):
+                        bearish_divergence.loc[current_idx] = True
+        
+        return {
+            'bullish_divergence': bullish_divergence,
+            'bearish_divergence': bearish_divergence,
+            'hidden_bullish_divergence': hidden_bullish_div,
+            'hidden_bearish_divergence': hidden_bearish_div
+        }
+    
+    @staticmethod
+    def multi_timeframe_sma_alignment(
+        data_by_timeframe: Dict[str, pd.Series],
+        sma_periods: Dict[str, List[int]],
+        reference_timeframe: str = '1D'
+    ) -> Dict[str, pd.Series]:
+        """
+        Calculate SMA alignment across multiple timeframes.
+        
+        Args:
+            data_by_timeframe: Dict mapping timeframe to price series
+            sma_periods: Dict mapping timeframe to list of SMA periods
+            reference_timeframe: Reference timeframe for alignment
+            
+        Returns:
+            Dict with alignment scores and individual SMAs
+        """
+        result = {}
+        
+        # Calculate SMAs for each timeframe
+        sma_values = {}
+        for tf, data in data_by_timeframe.items():
+            sma_values[tf] = {}
+            periods = sma_periods.get(tf, [20, 50, 100, 200])
+            
+            for period in periods:
+                sma_key = f'sma_{period}_{tf}'
+                sma_values[tf][period] = TechnicalIndicators.sma(data, period)
+                result[sma_key] = sma_values[tf][period]
+        
+        # Calculate alignment scores
+        if reference_timeframe in data_by_timeframe:
+            ref_data = data_by_timeframe[reference_timeframe]
+            ref_index = ref_data.index
+            
+            # Timeframe alignment score
+            tf_alignment = pd.Series(0.0, index=ref_index)
+            
+            for idx in ref_index:
+                alignment_score = 0
+                total_weight = 0
+                
+                for tf, smas in sma_values.items():
+                    # Align timeframe data to reference
+                    tf_score = 0
+                    tf_count = 0
+                    
+                    for period, sma_series in smas.items():
+                        if idx in sma_series.index:
+                            price = data_by_timeframe[tf].loc[idx] if idx in data_by_timeframe[tf].index else None
+                            sma_val = sma_series.loc[idx]
+                            
+                            if price is not None and not pd.isna(sma_val) and not pd.isna(price):
+                                tf_score += 1 if price > sma_val else 0
+                                tf_count += 1
+                    
+                    if tf_count > 0:
+                        # Weight by timeframe importance (could be configurable)
+                        tf_weight = {'1M': 0.35, '1W': 0.25, '1D': 0.20, '4H': 0.15, '1H': 0.05}.get(tf, 0.1)
+                        alignment_score += (tf_score / tf_count) * tf_weight
+                        total_weight += tf_weight
+                
+                if total_weight > 0:
+                    tf_alignment.loc[idx] = alignment_score / total_weight
+            
+            result['timeframe_alignment'] = tf_alignment
+        
+        return result
