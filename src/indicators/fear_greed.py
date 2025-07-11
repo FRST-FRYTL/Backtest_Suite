@@ -9,7 +9,10 @@ import pandas as pd
 import aiohttp
 import requests
 
-from ..data.cache import DataCache
+try:
+    from ..data.cache import DataCache
+except ImportError:
+    from data.cache import DataCache
 
 
 class FearGreedIndex:

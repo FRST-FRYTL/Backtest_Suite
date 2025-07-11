@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Backtest Suite - Real World Results</title>
+    <style>
+        :root {
+            --primary: #1e3c72;
+            --secondary: #2a5298;
+            --success: #27ae60;
+            --danger: #e74c3c;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .metric-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 1rem 0;
+        }
+        
+        .metric-label {
+            color: #666;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .results-table {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin: 2rem 0;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+        
+        .positive { color: var(--success); font-weight: 600; }
+        .negative { color: var(--danger); font-weight: 600; }
+        
+        .note {
+            background: #fff3cd;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .report-structure {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+        
+        .report-structure h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .report-structure ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .report-structure li {
+            padding: 0.5rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+        
+        .report-structure li:before {
+            content: "📁";
+            position: absolute;
+            left: 0;
+        }
+        
+        .timestamp {
+            text-align: center;
+            color: #666;
+            padding: 2rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 ML Backtest Suite - Real World Results</h1>
+        <p>Analysis of Real Historical Market Data</p>
+    </div>
+    
+    <div class="container">
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">Average Return</div>
+                <div class="metric-value">238.7%</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Average Sharpe</div>
+                <div class="metric-value">1.10</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Average Win Rate</div>
+                <div class="metric-value">54.1%</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Assets Analyzed</div>
+                <div class="metric-value">5</div>
+            </div>
+        </div>
+        
+        <div class="results-table">
+            <h2>📊 Individual Asset Performance</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Total Return</th>
+                        <th>Sharpe Ratio</th>
+                        <th>Max Drawdown</th>
+                        <th>Win Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>SPY</strong></td>
+                        <td class="positive">26.71%</td>
+                        <td>1.90</td>
+                        <td class="">-9.97%</td>
+                        <td>56.2%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>QQQ</strong></td>
+                        <td class="positive">94.19%</td>
+                        <td>0.75</td>
+                        <td class="negative">-35.12%</td>
+                        <td>55.1%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AAPL</strong></td>
+                        <td class="positive">163.19%</td>
+                        <td>0.89</td>
+                        <td class="negative">-31.43%</td>
+                        <td>52.5%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MSFT</strong></td>
+                        <td class="positive">142.95%</td>
+                        <td>0.85</td>
+                        <td class="negative">-37.15%</td>
+                        <td>52.6%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>TSLA</strong></td>
+                        <td class="positive">766.27%</td>
+                        <td>1.14</td>
+                        <td class="negative">-73.63%</td>
+                        <td>53.7%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="note">
+            <h3>📝 Note on Results</h3>
+            <p>These results are based on actual historical market data. The ML models have been implemented 
+            and are ready for integration, but this simplified version shows baseline performance metrics 
+            to establish benchmarks for ML-enhanced strategies.</p>
+        </div>
+        
+        <div class="report-structure">
+            <h2>📂 Complete Report Structure (To Be Generated)</h2>
+            <ul>
+                <li>index.html - Master Dashboard (this file)</li>
+                <li>executive_summary.html - High-level overview</li>
+                <li>ml_models/ - ML model performance reports</li>
+                <li>backtesting/ - Detailed backtest analysis</li>
+                <li>feature_analysis/ - Feature importance and engineering</li>
+                <li>performance/ - Risk-adjusted metrics</li>
+                <li>market_analysis/ - Market regime and volatility</li>
+                <li>data/ - Raw results export</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="timestamp">
+        Generated on 2025-07-10 21:36:15
+    </div>
+</body>
+</html>

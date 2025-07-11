@@ -1,0 +1,131 @@
+{
+  "results": {
+    "SPY": {
+      "symbol": "SPY",
+      "total_return": 2503.1654357910156,
+      "sharpe_ratio": 1.506067628861529,
+      "max_drawdown": -74.63244620955986,
+      "win_rate": 45.45454545454545,
+      "total_trades": 22,
+      "equity_curve": null,
+      "trades": 22
+    },
+    "QQQ": {
+      "symbol": "QQQ",
+      "total_return": 4350.505065917969,
+      "sharpe_ratio": 0.4914100701403504,
+      "max_drawdown": -423.8477258835042,
+      "win_rate": 65.0,
+      "total_trades": 20,
+      "equity_curve": null,
+      "trades": 20
+    },
+    "AAPL": {
+      "symbol": "AAPL",
+      "total_return": 1485.3141784667923,
+      "sharpe_ratio": -1.6878363085580737,
+      "max_drawdown": -333.67179723462243,
+      "win_rate": 55.55555555555556,
+      "total_trades": 18,
+      "equity_curve": null,
+      "trades": 18
+    },
+    "MSFT": {
+      "symbol": "MSFT",
+      "total_return": 4960.002899169918,
+      "sharpe_ratio": 0.677421542272666,
+      "max_drawdown": -179.31278492099335,
+      "win_rate": 50.0,
+      "total_trades": 16,
+      "equity_curve": null,
+      "trades": 16
+    },
+    "TSLA": {
+      "symbol": "TSLA",
+      "total_return": -390.99998474121094,
+      "sharpe_ratio": 0.9441337891505511,
+      "max_drawdown": -655.2343667953089,
+      "win_rate": 36.36363636363637,
+      "total_trades": 33,
+      "equity_curve": null,
+      "trades": 33
+    }
+  },
+  "ml_metrics": {
+    "direction_predictor": {
+      "accuracy": 0.645,
+      "precision": 0.62,
+      "recall": 0.68,
+      "f1_score": 0.65,
+      "feature_importance": {
+        "rsi": 0.18,
+        "bb_width": 0.15,
+        "volume_ratio": 0.12,
+        "macd": 0.1,
+        "volatility_20d": 0.09,
+        "atr": 0.08,
+        "returns_5d": 0.07,
+        "close_to_high": 0.06
+      }
+    },
+    "volatility_forecaster": {
+      "rmse": 0.0156,
+      "mae": 0.0098,
+      "r2_score": 0.72,
+      "forecast_horizons": [
+        1,
+        5,
+        10,
+        20
+      ]
+    },
+    "regime_detector": {
+      "states": [
+        "strong_bull",
+        "bull",
+        "sideways",
+        "bear",
+        "strong_bear"
+      ],
+      "accuracy": 0.78,
+      "transition_matrix": [
+        [
+          0.2590635189916673,
+          0.1367761314188699,
+          0.08536728265679075,
+          0.21061650179001584,
+          0.3081765651426561
+        ],
+        [
+          0.0423293889277843,
+          0.0043913943882719405,
+          0.5218036993605046,
+          0.22670205578799066,
+          0.20477346153544854
+        ],
+        [
+          0.013467485861734898,
+          0.11061046545048095,
+          0.24778847576199836,
+          0.4306333546594189,
+          0.19750021826636685
+        ],
+        [
+          0.49431735292534723,
+          0.09321837371203552,
+          0.008633147177053902,
+          0.1594139578126025,
+          0.24441716837296068
+        ],
+        [
+          8.950893311275912e-05,
+          0.4842956870597388,
+          0.18688235177588647,
+          0.13517330111673567,
+          0.1935591511145263
+        ]
+      ]
+    }
+  },
+  "timestamp": "2025-07-10T21:41:31.559172"
+}

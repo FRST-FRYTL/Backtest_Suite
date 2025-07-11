@@ -1,3 +1,4 @@
+from src.ml.models.regime_detection import MarketRegime
 """
 ML-enhanced trading strategy that integrates machine learning models with the backtesting engine.
 
@@ -19,7 +20,7 @@ from ..ml.models import (
     EnsembleModel,
     MarketRegime
 )
-from ..indicators.technical_indicators import SMA, RSI, BollingerBands, ATR
+from ..indicators.technical_indicators import TechnicalIndicators
 
 
 @dataclass
@@ -87,8 +88,8 @@ class MLStrategy(Strategy):
         self.confidence_threshold = confidence_threshold
         self.regime_filter = regime_filter
         self.allowed_regimes = allowed_regimes or [
-            MarketRegime.BULLISH,
-            MarketRegime.NEUTRAL
+            MarketRegime.BULL,
+            MarketRegime.SIDEWAYS
         ]
         self.volatility_scaling = volatility_scaling
         self.max_volatility_multiplier = max_volatility_multiplier

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Trading Strategy - Realistic Backtest Results</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --bg: #ecf0f1;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .metrics-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .metric-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin: 1rem 0;
+        }
+        
+        .metric-label {
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+        
+        .positive { color: var(--success); }
+        .negative { color: var(--danger); }
+        .neutral { color: var(--secondary); }
+        
+        .results-table {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin: 2rem 0;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin: 2rem 0;
+        }
+        
+        .ml-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+        
+        .ml-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .feature-item {
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 3rem;
+            color: #7f8c8d;
+        }
+        
+        .disclaimer {
+            background: #fff3cd;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border-left: 4px solid #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🤖 Machine Learning Trading Strategy</h1>
+        <p>Realistic Backtest Results on Historical Data (2020-2023)</p>
+    </div>
+    
+    <div class="container">
+        <!-- Summary Metrics -->
+        <div class="metrics-summary">
+            <div class="metric-card">
+                <div class="metric-label">Average Annual Return</div>
+                <div class="metric-value positive">2.5%</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Average Sharpe Ratio</div>
+                <div class="metric-value neutral">-0.23</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Win Rate</div>
+                <div class="metric-value neutral">66.7%</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Total Trades</div>
+                <div class="metric-value neutral">7</div>
+            </div>
+        </div>
+        
+        <!-- Detailed Results Table -->
+        <div class="results-table">
+            <h2>📊 Detailed Performance by Asset</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Total Return</th>
+                        <th>Annual Return</th>
+                        <th>Sharpe Ratio</th>
+                        <th>Max Drawdown</th>
+                        <th>Win Rate</th>
+                        <th>Trades</th>
+                        <th>Avg Hold Days</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>SPY</strong></td>
+                        <td class="negative">-2.3%</td>
+                        <td class="negative">-2.0%</td>
+                        <td>1.04</td>
+                        <td class="negative">-104.2%</td>
+                        <td>33.3%</td>
+                        <td>3</td>
+                        <td>11.3</td>
+                    </tr>
+                    <tr>
+                        <td><strong>QQQ</strong></td>
+                        <td class="positive">5.1%</td>
+                        <td class="positive">4.4%</td>
+                        <td>-1.06</td>
+                        <td class="negative">-104.3%</td>
+                        <td>100.0%</td>
+                        <td>1</td>
+                        <td>13.0</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AAPL</strong></td>
+                        <td class="positive">5.8%</td>
+                        <td class="positive">5.0%</td>
+                        <td>-1.09</td>
+                        <td class="negative">-101.4%</td>
+                        <td>100.0%</td>
+                        <td>1</td>
+                        <td>14.0</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MSFT</strong></td>
+                        <td class="negative">-3.1%</td>
+                        <td class="negative">-2.7%</td>
+                        <td>-0.94</td>
+                        <td class="negative">-100.0%</td>
+                        <td>0.0%</td>
+                        <td>1</td>
+                        <td>1.0</td>
+                    </tr>
+                    <tr>
+                        <td><strong>TSLA</strong></td>
+                        <td class="positive">8.9%</td>
+                        <td class="positive">7.7%</td>
+                        <td>0.89</td>
+                        <td class="negative">-100.0%</td>
+                        <td>100.0%</td>
+                        <td>1</td>
+                        <td>3.0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- ML Strategy Details -->
+        <div class="ml-section">
+            <h2>🧠 Machine Learning Strategy Components</h2>
+            <div class="ml-features">
+                <div class="feature-item">
+                    <h4>Technical Indicators</h4>
+                    <p>RSI, MACD, Bollinger Bands</p>
+                </div>
+                <div class="feature-item">
+                    <h4>ML Confidence</h4>
+                    <p>60-70% threshold</p>
+                </div>
+                <div class="feature-item">
+                    <h4>Risk Management</h4>
+                    <p>2% stop loss, 5% take profit</p>
+                </div>
+                <div class="feature-item">
+                    <h4>Position Sizing</h4>
+                    <p>95% capital utilization</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Performance Chart -->
+        <div class="chart-container">
+            <h2>📈 Performance Comparison</h2>
+            <div id="performanceChart"></div>
+        </div>
+        
+        <!-- Risk Metrics Chart -->
+        <div class="chart-container">
+            <h2>⚠️ Risk Analysis</h2>
+            <div id="riskChart"></div>
+        </div>
+        
+        <!-- Disclaimer -->
+        <div class="disclaimer">
+            <h3>⚠️ Important Disclaimer</h3>
+            <p>These results are based on historical backtesting and do not guarantee future performance. 
+            The ML signals are generated using technical indicators with realistic confidence thresholds. 
+            Transaction costs and slippage have been included. Past performance is not indicative of future results.</p>
+        </div>
+    </div>
+    
+    <script>
+        // Performance comparison chart
+        var symbols = ["SPY", "QQQ", "AAPL", "MSFT", "TSLA"];
+        var annual_returns = [-2.008204482985909, 4.424851351995418, 5.032231776514617, -2.7385838344423763, 7.733968098309596];
+        var sharpe_ratios = [1.0385718328789544, -1.056045927396207, -1.0935839412941264, -0.9375030543593115, 0.8900752515200437];
+        
+        var trace1 = {
+            x: symbols,
+            y: annual_returns,
+            name: 'Annual Return (%)',
+            type: 'bar',
+            marker: {
+                color: annual_returns.map(v => v > 0 ? 'rgba(39, 174, 96, 0.8)' : 'rgba(231, 76, 60, 0.8)')
+            }
+        };
+        
+        var trace2 = {
+            x: symbols,
+            y: sharpe_ratios,
+            name: 'Sharpe Ratio',
+            type: 'scatter',
+            mode: 'lines+markers',
+            yaxis: 'y2',
+            line: { color: 'rgba(52, 152, 219, 1)', width: 2 },
+            marker: { size: 8 }
+        };
+        
+        var layout1 = {
+            title: 'Annual Returns vs Sharpe Ratios',
+            xaxis: { title: 'Asset' },
+            yaxis: { title: 'Annual Return (%)' },
+            yaxis2: {
+                title: 'Sharpe Ratio',
+                overlaying: 'y',
+                side: 'right'
+            },
+            hovermode: 'x unified',
+            showlegend: true
+        };
+        
+        Plotly.newPlot('performanceChart', [trace1, trace2], layout1);
+        
+        // Risk metrics chart
+        var max_drawdowns = [-104.22603970746181, -104.30373115269053, -101.42667493485114, -100.04745349607322, -100.04742965366754];
+        var win_rates = [33.33333333333333, 100.0, 100.0, 0.0, 100.0];
+        
+        var trace3 = {
+            x: symbols,
+            y: max_drawdowns,
+            name: 'Max Drawdown (%)',
+            type: 'bar',
+            marker: { color: 'rgba(231, 76, 60, 0.8)' }
+        };
+        
+        var trace4 = {
+            x: symbols,
+            y: win_rates,
+            name: 'Win Rate (%)',
+            type: 'scatter',
+            mode: 'lines+markers',
+            yaxis: 'y2',
+            line: { color: 'rgba(46, 204, 113, 1)', width: 2 },
+            marker: { size: 8 }
+        };
+        
+        var layout2 = {
+            title: 'Risk Metrics Analysis',
+            xaxis: { title: 'Asset' },
+            yaxis: { 
+                title: 'Max Drawdown (%)',
+                autorange: 'reversed'
+            },
+            yaxis2: {
+                title: 'Win Rate (%)',
+                overlaying: 'y',
+                side: 'right',
+                range: [0, 100]
+            },
+            hovermode: 'x unified',
+            showlegend: true
+        };
+        
+        Plotly.newPlot('riskChart', [trace3, trace4], layout2);
+    </script>
+    
+    <div class="footer">
+        <p>Generated on 2025-07-10 21:52:07</p>
+        <p>ML Backtest Suite v2.0 - Realistic Returns Edition</p>
+    </div>
+</body>
+</html>

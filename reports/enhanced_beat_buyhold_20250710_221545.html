@@ -1,0 +1,269 @@
+
+    <html>
+    <head>
+        <title>Beat Buy-and-Hold - Enhanced Strategy Results</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
+            .container { max-width: 1200px; margin: 0 auto; background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+            h1 { color: #2c3e50; text-align: center; }
+            h2 { color: #34495e; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+            .summary { background-color: #ecf0f1; padding: 20px; border-radius: 5px; margin: 20px 0; }
+            .success { color: #27ae60; font-weight: bold; font-size: 24px; }
+            table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+            th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+            th { background-color: #3498db; color: white; font-weight: bold; }
+            tr:hover { background-color: #f5f5f5; }
+            .winner { background-color: #d5f4e6; }
+            .loser { background-color: #ffeaa7; }
+            .metric { display: inline-block; margin: 10px 20px; }
+            .metric-label { font-weight: bold; color: #7f8c8d; }
+            .metric-value { font-size: 20px; color: #2c3e50; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🚀 Beat Buy-and-Hold Strategy Results</h1>
+            
+            <div class="summary">
+                <h2>Executive Summary</h2>
+                <div class="success">Success Rate: 8.3% (1/12 tests)</div>
+                <div class="metric">
+                    <span class="metric-label">Avg Sharpe Improvement:</span>
+                    <span class="metric-value">-77.2%</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Best Sharpe Ratio:</span>
+                    <span class="metric-value">1.67</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Avg Win Rate:</span>
+                    <span class="metric-value">11.6%</span>
+                </div>
+            </div>
+            
+            <h2>Detailed Performance Comparison</h2>
+            <table>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Timeframe</th>
+                    <th>Strategy Return</th>
+                    <th>B&H Return</th>
+                    <th>Strategy Sharpe</th>
+                    <th>B&H Sharpe</th>
+                    <th>Improvement</th>
+                    <th>Max DD</th>
+                    <th>Sortino</th>
+                    <th>Win Rate</th>
+                    <th>Trades</th>
+                    <th>Result</th>
+                </tr>
+    
+            <tr class="loser">
+                <td><strong>AAPL</strong></td>
+                <td>1D</td>
+                <td>3.81%</td>
+                <td>163.19%</td>
+                <td><strong>0.140</strong></td>
+                <td>0.891</td>
+                <td>-84.2%</td>
+                <td>-17.91%</td>
+                <td>0.12</td>
+                <td>19.0%</td>
+                <td>182</td>
+                <td>❌</td>
+            </tr>
+        
+            <tr class="loser">
+                <td><strong>AAPL</strong></td>
+                <td>1W</td>
+                <td>0.00%</td>
+                <td>164.92%</td>
+                <td><strong>0.000</strong></td>
+                <td>2.109</td>
+                <td>-100.0%</td>
+                <td>0.00%</td>
+                <td>nan</td>
+                <td>0.0%</td>
+                <td>0</td>
+                <td>❌</td>
+            </tr>
+        
+            <tr class="loser">
+                <td><strong>MSFT</strong></td>
+                <td>1D</td>
+                <td>27.53%</td>
+                <td>142.95%</td>
+                <td><strong>0.617</strong></td>
+                <td>0.846</td>
+                <td>-27.1%</td>
+                <td>-17.61%</td>
+                <td>0.67</td>
+                <td>22.9%</td>
+                <td>155</td>
+                <td>❌</td>
+            </tr>
+        
+            <tr class="loser">
+                <td><strong>MSFT</strong></td>
+                <td>1W</td>
+                <td>0.00%</td>
+                <td>147.64%</td>
+                <td><strong>0.000</strong></td>
+                <td>2.128</td>
+                <td>-100.0%</td>
+                <td>0.00%</td>
+                <td>nan</td>
+                <td>0.0%</td>
+                <td>0</td>
+                <td>❌</td>
+            </tr>
+        
+            <tr class="loser">
+                <td><strong>SPY</strong></td>
+                <td>1D</td>
+                <td>17.53%</td>
+                <td>55.81%</td>
+                <td><strong>0.527</strong></td>
+                <td>0.605</td>
+                <td>-13.0%</td>
+                <td>-17.81%</td>
+                <td>0.53</td>
+                <td>27.5%</td>
+                <td>174</td>
+                <td>❌</td>
+            </tr>
+        
+            <tr class="winner">
+                <td><strong>SPY</strong></td>
+                <td>1W</td>
+                <td>1.33%</td>
+                <td>56.84%</td>
+                <td><strong>1.668</strong></td>
+                <td>1.527</td>
+                <td>9.2%</td>
+                <td>-0.04%</td>
+                <td>5.46</td>
+                <td>1.9%</td>
+                <td>6</td>
+                <td>✅</td>
+            </tr>
+        
+            <tr class="loser">
+                <td><strong>QQQ</strong></td>
+                <td>1D</td>
+                <td>24.26%</td>
+                <td>94.19%</td>
+                <td><strong>0.552</strong></td>
+                <td>0.748</td>
+                <td>-26.2%</td>
+                <td>-21.36%</td>
+                <td>0.56</td>
+                <td>27.3%</td>
+                <td>177</td>
+                <td>❌</td>
+            </tr>
+        
+            <tr class="loser">
+                <td><strong>QQQ</strong></td>
+                <td>1W</td>
+                <td>0.00%</td>
+                <td>94.66%</td>
+                <td><strong>0.000</strong></td>
+                <td>1.811</td>
+                <td>-100.0%</td>
+                <td>0.00%</td>
+                <td>nan</td>
+                <td>0.0%</td>
+                <td>0</td>
+                <td>❌</td>
+            </tr>
+        
+            <tr class="loser">
+                <td><strong>TSLA</strong></td>
+                <td>1D</td>
+                <td>-8.83%</td>
+                <td>766.27%</td>
+                <td><strong>0.011</strong></td>
+                <td>1.136</td>
+                <td>-99.0%</td>
+                <td>-42.00%</td>
+                <td>0.01</td>
+                <td>20.2%</td>
+                <td>59</td>
+                <td>❌</td>
+            </tr>
+        
+            <tr class="loser">
+                <td><strong>TSLA</strong></td>
+                <td>1W</td>
+                <td>0.00%</td>
+                <td>694.61%</td>
+                <td><strong>0.000</strong></td>
+                <td>2.307</td>
+                <td>-100.0%</td>
+                <td>0.00%</td>
+                <td>nan</td>
+                <td>0.0%</td>
+                <td>0</td>
+                <td>❌</td>
+            </tr>
+        
+            <tr class="loser">
+                <td><strong>GLD</strong></td>
+                <td>1D</td>
+                <td>-11.90%</td>
+                <td>32.80%</td>
+                <td><strong>-0.461</strong></td>
+                <td>0.533</td>
+                <td>-186.5%</td>
+                <td>-15.83%</td>
+                <td>-0.33</td>
+                <td>19.9%</td>
+                <td>110</td>
+                <td>❌</td>
+            </tr>
+        
+            <tr class="loser">
+                <td><strong>GLD</strong></td>
+                <td>1W</td>
+                <td>0.00%</td>
+                <td>29.20%</td>
+                <td><strong>0.000</strong></td>
+                <td>1.070</td>
+                <td>-100.0%</td>
+                <td>0.00%</td>
+                <td>nan</td>
+                <td>0.0%</td>
+                <td>0</td>
+                <td>❌</td>
+            </tr>
+        
+            </table>
+            
+            <div class="summary">
+                <h2>Strategy Features</h2>
+                <ul>
+                    <li><strong>Market Regime Detection:</strong> Adapts strategy based on market conditions (bull/bear, high/low volatility)</li>
+                    <li><strong>Multi-Factor Scoring:</strong> Combines 9+ technical indicators with dynamic weighting</li>
+                    <li><strong>Risk Management:</strong> Dynamic position sizing based on volatility and Kelly criterion</li>
+                    <li><strong>Advanced Indicators:</strong> RSI, MACD, Stochastic, ADX, CMF, Williams %R, and more</li>
+                    <li><strong>Transaction Costs:</strong> Realistic modeling with 0.1% commission and 0.05% slippage</li>
+                </ul>
+                
+                <h2>Key Success Factors</h2>
+                <ul>
+                    <li>Regime-adaptive strategy weights</li>
+                    <li>Strong exit signals to preserve capital</li>
+                    <li>Position sizing based on confidence and volatility</li>
+                    <li>Multiple timeframe confirmation</li>
+                    <li>Volume and momentum confirmation</li>
+                </ul>
+            </div>
+            
+            <p style="text-align: center; color: #7f8c8d; margin-top: 40px;">
+                Generated: 2025-07-10 22:15:45
+            </p>
+        </div>
+    </body>
+    </html>
+    

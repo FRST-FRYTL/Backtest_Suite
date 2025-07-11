@@ -6,8 +6,12 @@ from typing import Dict, List, Optional, Tuple
 import pandas as pd
 import numpy as np
 
-from ..data.fetcher import StockDataFetcher
-from ..data.cache import DataCache
+try:
+    from ..data.fetcher import StockDataFetcher
+    from ..data.cache import DataCache
+except ImportError:
+    from data.fetcher import StockDataFetcher
+    from data.cache import DataCache
 
 
 class MaxPain:

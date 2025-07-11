@@ -57,6 +57,12 @@ backtest run -d data/AAPL.csv -s examples/strategies/rsi_mean_reversion.yaml -o 
 
 # Optimize strategy parameters
 backtest optimize -d data/AAPL.csv -s examples/strategies/rsi_mean_reversion.yaml -p examples/parameter_optimization.yaml -o optimization_results/
+
+# Run batch backtests
+backtest batch -s SPY,QQQ,AAPL -S strategies/ -c 100000 -o batch_results/
+
+# List available indicators
+backtest indicators
 ```
 
 ### Python Usage
@@ -168,6 +174,267 @@ Test categories:
 - Integration tests for strategies
 - Performance benchmarks
 - Edge case handling
+
+## Comprehensive Command Reference
+
+### CLI Commands
+
+#### Data Management
+```bash
+# Fetch single stock data
+backtest fetch -s AAPL -S 2023-01-01 -E 2023-12-31 -o data/AAPL.csv
+
+# Fetch with specific interval (1m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo)
+backtest fetch -s SPY -S 2023-01-01 -E 2023-12-31 -i 1h -o data/SPY_hourly.csv
+
+# Bulk download multiple assets (5 years of data)
+python download_data.py
+
+# Export daily data in specific format
+python export_daily_data.py
+```
+
+#### Backtesting
+```bash
+# Basic backtest
+backtest run -d data/AAPL.csv -s examples/strategies/rsi_mean_reversion.yaml -o results/
+
+# Backtest with custom capital and commission
+backtest run -d data/SPY.csv -s strategy.yaml -c 50000 --commission 0.001 -o results/
+
+# Batch backtest multiple symbols and strategies
+backtest batch -s SPY,QQQ,AAPL,MSFT -S examples/strategies/ -c 100000 -o batch_results/
+
+# Run without generating charts
+backtest run -d data/AAPL.csv -s strategy.yaml --no-chart -o results/
+```
+
+#### Strategy Optimization
+```bash
+# Grid search optimization
+backtest optimize -d data/SPY.csv -s strategy.yaml -p params.yaml -m grid -o opt_results/
+
+# Random search optimization
+backtest optimize -d data/SPY.csv -s strategy.yaml -p params.yaml -m random -o opt_results/
+
+# Differential evolution optimization
+backtest optimize -d data/SPY.csv -s strategy.yaml -p params.yaml -m differential -o opt_results/
+
+# Optimize with custom metric (sharpe, total_return, calmar, sortino)
+backtest optimize -d data/SPY.csv -s strategy.yaml -p params.yaml --metric sortino -o opt_results/
+```
+
+#### Information Commands
+```bash
+# List all available indicators
+backtest indicators
+```
+
+### Development Tools
+
+#### Code Quality
+```bash
+# Format code with Black
+black src/ tests/ examples/
+
+# Lint code with Flake8
+flake8 src/ tests/
+
+# Type checking with MyPy
+mypy src/
+
+# Sort imports
+isort src/ tests/
+
+# Run pre-commit hooks
+pre-commit run --all-files
+```
+
+#### Testing
+```bash
+# Run all tests
+pytest
+
+# Run with coverage report
+pytest --cov=src --cov-report=html --cov-report=term
+
+# Run specific test file
+pytest tests/test_indicators.py -v
+
+# Run tests in parallel
+pytest -n auto
+
+# Run only fast tests
+pytest -m "not slow"
+
+# Run integration tests
+pytest tests/integration/ -v
+
+# Run performance benchmarks
+pytest tests/test_performance_benchmarks.py -v
+```
+
+### Data Download Scripts
+
+```bash
+# Download 5 years of historical data for multiple assets
+python download_data.py
+
+# Alternative data download
+python run_data_download.py
+
+# Export data in specific format
+python export_daily_data.py
+```
+
+### ML and Feature Engineering
+
+```bash
+# ML integration examples
+python examples/ml_integration_example.py
+python examples/ml_optimization_example.py
+python examples/ml_backtest_example.py
+
+# Feature engineering
+python examples/feature_engineering_example.py
+python test_feature_engineering_pipeline.py
+
+# ML model testing
+python test_ml_models.py
+python test_ml_simple.py
+
+# ML report generation
+python test_ml_reports.py
+python test_all_ml_reports.py
+```
+
+### Strategy Execution
+
+```bash
+# Run all strategies
+python examples/strategies/execute_all_strategies.py
+python examples/strategies/run_all_strategies.py
+
+# Confluence strategy simulations
+python run_confluence_simulation.py
+python run_confluence_simulation_v2.py
+python test_enhanced_confluence.py
+
+# Specific strategy examples
+python examples/strategies/rolling_vwap_strategy_example.py
+python examples/strategies/monthly_contribution_research.py
+python examples/strategies/contribution_timing_strategy.py
+```
+
+### Report Generation
+
+```bash
+# Generate comprehensive performance report
+python generate_comprehensive_report.py
+
+# Generate backtest results
+python generate_backtest_results.py
+
+# Generate performance analysis reports
+python generate_performance_reports.py
+
+# Generate strategy reports
+python examples/reports/generate_report.py
+python examples/reports/monthly_contribution_strategy_report.py
+python examples/reports/strategy_summary_visual.py
+python examples/reports/strategy_dashboard.py
+```
+
+### Visualization and Monitoring
+
+```bash
+# Start report preview server (Codespaces/local)
+./preview-reports.sh
+# Or manually:
+cd reports && python -m http.server 8000
+
+# Run monitoring examples
+python examples/monitoring_example.py
+python examples/backtest_with_monitoring.py
+
+# Phase demos
+python examples/phase2_advanced_analytics_demo.py
+python examples/phase3_visualization_demo.py
+python examples/phase4_portfolio_risk_demo.py
+```
+
+### Validation and Testing
+
+```bash
+# Monte Carlo simulation
+python examples/validation/monte_carlo_simulation.py
+
+# Live paper trading simulation
+python examples/validation/live_paper_trading.py
+
+# Stress test scenarios
+python examples/backtests/stress_test_scenarios.py
+
+# Comprehensive test suite
+python comprehensive_test_suite.py
+python run_comprehensive_tests.py
+
+# Test all indicators
+python test_all_indicators.py
+```
+
+### Example Workflows
+
+#### Complete Backtest Workflow
+```bash
+# 1. Download data
+python download_data.py
+
+# 2. Run backtest
+backtest run -d data/SPY_1D_2020-01-01_2024-01-01.csv -s examples/strategies/rsi_mean_reversion.yaml -o results/
+
+# 3. Optimize parameters
+backtest optimize -d data/SPY_1D_2020-01-01_2024-01-01.csv -s examples/strategies/rsi_mean_reversion.yaml -p examples/parameter_optimization.yaml -o optimization/
+
+# 4. Generate reports
+python generate_comprehensive_report.py
+
+# 5. Preview results
+./preview-reports.sh
+```
+
+#### ML Integration Workflow
+```bash
+# 1. Test feature engineering
+python test_feature_engineering_pipeline.py
+
+# 2. Run ML backtest
+python examples/ml_backtest_example.py
+
+# 3. Generate ML reports
+python test_all_ml_reports.py
+
+# 4. Preview ML visualizations
+cd reports && python -m http.server 8000
+```
+
+#### Development Workflow
+```bash
+# 1. Format code
+black src/
+
+# 2. Run tests
+pytest -n auto
+
+# 3. Check types
+mypy src/
+
+# 4. Generate coverage
+pytest --cov=src --cov-report=html
+
+# 5. Preview coverage report
+cd htmlcov && python -m http.server 8001
+```
 
 ## Contributing
 

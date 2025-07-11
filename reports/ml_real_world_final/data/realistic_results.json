@@ -1,0 +1,171 @@
+{
+  "results": {
+    "SPY": {
+      "symbol": "SPY",
+      "total_return": -2.2917796188428596,
+      "annual_return": -2.008204482985909,
+      "sharpe_ratio": 1.0385718328789544,
+      "max_drawdown": -104.22603970746181,
+      "total_trades": 3,
+      "win_rate": 33.33333333333333,
+      "avg_days_held": 11.333333333333334,
+      "best_trade": 3.609679405104703,
+      "worst_trade": -2.5611532385099562,
+      "trades": [
+        {
+          "symbol": "SPY",
+          "entry_date": "2023-06-30 00:00:00-04:00",
+          "exit_date": "2023-07-18 00:00:00-04:00",
+          "entry_price": 431.5713378295899,
+          "exit_price": 442.63560539245606,
+          "position": "-1",
+          "shares": 220,
+          "pnl": -2431.704724966723,
+          "pnl_pct": -2.5611532385099562,
+          "days_held": 11
+        },
+        {
+          "symbol": "SPY",
+          "entry_date": "2023-07-28 00:00:00-04:00",
+          "exit_date": "2023-08-25 00:00:00-04:00",
+          "entry_price": 444.8510715942383,
+          "exit_price": 428.7773003082275,
+          "position": "-1",
+          "shares": 208,
+          "pnl": 3340.001083062758,
+          "pnl_pct": 3.609679405104703,
+          "days_held": 20
+        },
+        {
+          "symbol": "SPY",
+          "entry_date": "2023-12-08 00:00:00-05:00",
+          "exit_date": "2023-12-13 00:00:00-05:00",
+          "entry_price": 449.62480657958986,
+          "exit_price": 460.14808039855956,
+          "position": "-1",
+          "shares": 218,
+          "pnl": -2291.779618842862,
+          "pnl_pct": -2.3381162229735293,
+          "days_held": 3
+        }
+      ]
+    },
+    "QQQ": {
+      "symbol": "QQQ",
+      "total_return": 5.072758067264571,
+      "annual_return": 4.424851351995418,
+      "sharpe_ratio": -1.056045927396207,
+      "max_drawdown": -104.30373115269053,
+      "total_trades": 1,
+      "win_rate": 100.0,
+      "avg_days_held": 13.0,
+      "best_trade": 5.360554062730142,
+      "worst_trade": 5.360554062730142,
+      "trades": [
+        {
+          "symbol": "QQQ",
+          "entry_date": "2023-07-28 00:00:00-04:00",
+          "exit_date": "2023-08-16 00:00:00-04:00",
+          "entry_price": 378.52490678405763,
+          "exit_price": 358.2135631713867,
+          "position": "-1",
+          "shares": 250,
+          "pnl": 5072.758067264571,
+          "pnl_pct": 5.360554062730142,
+          "days_held": 13
+        }
+      ]
+    },
+    "AAPL": {
+      "symbol": "AAPL",
+      "total_return": 5.771503689137947,
+      "annual_return": 5.032231776514617,
+      "sharpe_ratio": -1.0935839412941264,
+      "max_drawdown": -101.42667493485114,
+      "total_trades": 1,
+      "win_rate": 100.0,
+      "avg_days_held": 14.0,
+      "best_trade": 6.085923776891566,
+      "worst_trade": 6.085923776891566,
+      "trades": [
+        {
+          "symbol": "AAPL",
+          "entry_date": "2023-07-17 00:00:00-04:00",
+          "exit_date": "2023-08-04 00:00:00-04:00",
+          "entry_price": 191.97095259094243,
+          "exit_price": 180.27605184173584,
+          "position": "-1",
+          "shares": 494,
+          "pnl": 5771.503689137957,
+          "pnl_pct": 6.085923776891566,
+          "days_held": 14
+        }
+      ]
+    },
+    "MSFT": {
+      "symbol": "MSFT",
+      "total_return": -3.123639253938526,
+      "annual_return": -2.7385838344423763,
+      "sharpe_ratio": -0.9375030543593115,
+      "max_drawdown": -100.04745349607322,
+      "total_trades": 1,
+      "win_rate": 0.0,
+      "avg_days_held": 1.0,
+      "best_trade": -3.2896171108155223,
+      "worst_trade": -3.2896171108155223,
+      "trades": [
+        {
+          "symbol": "MSFT",
+          "entry_date": "2023-06-14 00:00:00-04:00",
+          "exit_date": "2023-06-15 00:00:00-04:00",
+          "entry_price": 332.00871728515625,
+          "exit_price": 342.94146560668946,
+          "position": "-1",
+          "shares": 286,
+          "pnl": -3123.639253938527,
+          "pnl_pct": -3.2896171108155223,
+          "days_held": 1
+        }
+      ]
+    },
+    "TSLA": {
+      "symbol": "TSLA",
+      "total_return": 8.886606810416176,
+      "annual_return": 7.733968098309596,
+      "sharpe_ratio": 0.8900752515200437,
+      "max_drawdown": -100.04742965366754,
+      "total_trades": 1,
+      "win_rate": 100.0,
+      "avg_days_held": 3.0,
+      "best_trade": 9.363510586127665,
+      "worst_trade": 9.363510586127665,
+      "trades": [
+        {
+          "symbol": "TSLA",
+          "entry_date": "2023-07-17 00:00:00-04:00",
+          "exit_date": "2023-07-20 00:00:00-04:00",
+          "entry_price": 290.2348148803711,
+          "exit_price": 263.0314438934326,
+          "position": "-1",
+          "shares": 327,
+          "pnl": 8886.606810416168,
+          "pnl_pct": 9.363510586127665,
+          "days_held": 3
+        }
+      ]
+    }
+  },
+  "summary": {
+    "avg_annual_return": 2.488852581878269,
+    "avg_sharpe_ratio": -0.23169716773012938,
+    "avg_win_rate": 66.66666666666666,
+    "total_trades": 7
+  },
+  "config": {
+    "initial_capital": 100000,
+    "commission": 0.001,
+    "slippage": 0.0005,
+    "position_fraction": 0.95
+  },
+  "timestamp": "2025-07-10T21:52:07.458757"
+}

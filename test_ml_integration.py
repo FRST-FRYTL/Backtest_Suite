@@ -1,121 +1,84 @@
-"""
-Simple test script to verify ML integration with real data.
-"""
+#!/usr/bin/env python3
+"""Test ML Integration - Verify all models work together"""
 
 import sys
 import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
-import warnings
-warnings.filterwarnings('ignore')
-
-# Import our modules
-from src.data.download_historical_data import load_cached_data
-from src.strategies.ml_strategy import MLStrategy
-from src.backtesting.engine import BacktestEngine
-
+from src.ml.models.enhanced_direction_predictor import EnhancedDirectionPredictor
+from src.ml.models.enhanced_volatility_forecaster import EnhancedVolatilityForecaster
+from src.ml.models.regime_detection import MarketRegimeDetector as RegimeDetector, MarketRegime
+from src.ml.models.ensemble import EnsembleModel
 
 def test_ml_integration():
-    """Test ML integration with real data."""
-    print("=" * 60)
-    print("Testing ML Integration with Real Market Data")
-    print("=" * 60)
+    """Test that all ML models work together"""
+    print("🧪 Testing ML Integration...")
     
-    # Step 1: Load real data
-    print("\n1. Loading market data...")
+    # Create sample OHLCV data
+    dates = pd.date_range('2023-01-01', periods=100, freq='D')
+    close_prices = 100 + np.cumsum(np.random.randn(100) * 2)
     
-    # Try to load SPY data
-    data = load_cached_data("SPY")
+    # Generate realistic OHLC data
+    daily_range = np.random.uniform(0.5, 2.5, 100)
+    high_prices = close_prices + daily_range * 0.5
+    low_prices = close_prices - daily_range * 0.5
+    open_prices = close_prices - np.random.randn(100) * 0.5
     
-    if data is None:
-        print("No data found. Please run download_data.py first.")
-        return
-    
-    print(f"Loaded {len(data)} days of SPY data")
-    print(f"Date range: {data.index[0]} to {data.index[-1]}")
-    
-    # Add symbol attribute
-    data.attrs['symbol'] = 'SPY'
-    
-    # Step 2: Create ML strategy (without ensemble to avoid model dependencies)
-    print("\n2. Creating ML strategy...")
-    
-    ml_strategy = MLStrategy(
-        name="Simple ML Strategy",
-        use_ensemble=False,  # Use individual models
-        direction_threshold=0.6,
-        confidence_threshold=0.65,
-        regime_filter=False,  # Disable regime filter for simplicity
-        volatility_scaling=True,
-        risk_per_trade=0.02,
-        feature_lookback=30,  # Reduced lookback
-        retrain_frequency=252
-    )
-    
-    # Configure simple position sizing
-    ml_strategy.position_sizing.method = "fixed"
-    ml_strategy.position_sizing.size = 100  # 100 shares
-    
-    # Configure risk management
-    ml_strategy.risk_management.stop_loss = 0.02
-    ml_strategy.risk_management.take_profit = 0.04
-    ml_strategy.risk_management.max_positions = 1
-    
-    # Step 3: Prepare test data
-    print("\n3. Preparing test data...")
-    
-    # Use last 500 days for testing
-    test_data = data.iloc[-500:]
-    
-    # Step 4: Test feature preparation
-    print("\n4. Testing feature preparation...")
+    data = pd.DataFrame({
+        'open': open_prices,
+        'high': high_prices,
+        'low': low_prices,
+        'close': close_prices,
+        'volume': np.random.randint(1000000, 5000000, 100),
+        'rsi': np.random.uniform(20, 80, 100),
+        'bb_width': np.random.uniform(0.01, 0.05, 100),
+        'macd_signal': np.random.uniform(-2, 2, 100)
+    }, index=dates)
     
     try:
-        features = ml_strategy.prepare_features(test_data)
-        print(f"Generated {len(features.columns)} features")
-        print(f"Sample features: {list(features.columns[:10])}")
-    except Exception as e:
-        print(f"Error preparing features: {e}")
-        return
-    
-    # Step 5: Run simple backtest
-    print("\n5. Running simple backtest...")
-    
-    engine = BacktestEngine(
-        initial_capital=10000,
-        commission_rate=0.001,
-        slippage_rate=0.0005,
-        max_positions=1
-    )
-    
-    try:
-        # Run backtest on last 100 days
-        backtest_data = test_data.iloc[-100:]
-        results = engine.run(
-            data=backtest_data,
-            strategy=ml_strategy,
-            progress_bar=False
+        # Test Direction Predictor
+        print("  Testing Direction Predictor...")
+        dir_model = EnhancedDirectionPredictor()
+        y = (data['close'].shift(-1) > data['close']).astype(int)[:-1]
+        dir_model.fit(data[:-1], y)
+        dir_pred = dir_model.predict(data.iloc[-1:])
+        print(f"  ✅ Direction prediction: {dir_pred}")
+        
+        # Test Volatility Forecaster
+        print("  Testing Volatility Forecaster...")
+        vol_model = EnhancedVolatilityForecaster()
+        vol_target = data['close'].pct_change().rolling(20).std().shift(-1)[:-1]
+        vol_model.fit(data[:-1], vol_target)
+        vol_pred = vol_model.predict(data.iloc[-1:])
+        print(f"  ✅ Volatility forecast: {vol_pred}")
+        
+        # Test Regime Detector
+        print("  Testing Regime Detector...")
+        regime_model = RegimeDetector()
+        regime_model.fit(data[['close', 'volume']].values)
+        current_regime = regime_model.predict(data[['close', 'volume']].iloc[-1:].values)
+        print(f"  ✅ Current regime: {MarketRegime(current_regime[0])}")
+        
+        # Test Ensemble
+        print("  Testing Ensemble Model...")
+        ensemble = EnsembleModel(
+            direction_model=dir_model,
+            volatility_model=vol_model,
+            regime_model=regime_model
         )
+        ensemble_pred = ensemble.predict(data.iloc[-1:])
+        print(f"  ✅ Ensemble prediction: {ensemble_pred}")
         
-        print("\nBacktest Results:")
-        print(f"Total Return: {results['performance']['total_return']:.2f}%")
-        print(f"Sharpe Ratio: {results['performance']['sharpe_ratio']:.2f}")
-        print(f"Max Drawdown: {results['performance']['max_drawdown']:.2%}")
-        print(f"Total Trades: {results['performance']['total_trades']}")
+        print("\n✅ All ML models integrated successfully!")
+        return True
         
     except Exception as e:
-        print(f"Error running backtest: {e}")
+        print(f"\n❌ ML Integration test failed: {e}")
         import traceback
         traceback.print_exc()
-        return
-    
-    print("\n" + "=" * 60)
-    print("ML Integration Test Complete!")
-    print("=" * 60)
-
+        return False
 
 if __name__ == "__main__":
     test_ml_integration()

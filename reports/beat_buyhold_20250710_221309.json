@@ -1,0 +1,10 @@
+{
+  "timestamp": "20250710_221309",
+  "results": [
+    {
+      "symbol": "AAPL",
+      "strategy_return": 17.18138656683605,
+      "benchmark_return": 163.18932695701872,
+      "strategy_sharpe": 0.3025900624085659,
+      "benchmark_sharpe": 0.890728660896858,
+      "beats_benchmark": 

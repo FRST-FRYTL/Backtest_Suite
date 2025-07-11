@@ -17,9 +17,14 @@ from pathlib import Path
 from datetime import datetime
 import json
 
-from ..data.multi_timeframe_data_manager import Timeframe
-from ..analysis.enhanced_trade_tracker import TradeAnalysis, EnhancedTradeTracker
-from ..analysis.baseline_comparisons import BaselineResults
+try:
+    from ..data.multi_timeframe_data_manager import Timeframe
+    from ..analysis.enhanced_trade_tracker import TradeAnalysis, EnhancedTradeTracker
+    from ..analysis.baseline_comparisons import BaselineResults
+except ImportError:
+    from data.multi_timeframe_data_manager import Timeframe
+    from analysis.enhanced_trade_tracker import TradeAnalysis, EnhancedTradeTracker
+    from analysis.baseline_comparisons import BaselineResults
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

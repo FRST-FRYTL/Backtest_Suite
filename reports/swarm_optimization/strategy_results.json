@@ -1,0 +1,83 @@
+{
+  "strategy_name": "Swarm_ML_Confluence_Strategy",
+  "backtest_period": "2023-01-01 to 2024-01-01",
+  "assets_tested": [
+    "SPY",
+    "QQQ",
+    "AAPL",
+    "MSFT",
+    "TSLA"
+  ],
+  "aggregate_metrics": {
+    "average_return": 0.3397954368819914,
+    "average_sharpe": 1.478799406018168,
+    "average_win_rate": 0.5648773746675888,
+    "total_trades": 152
+  },
+  "per_asset_results": {
+    "SPY": {
+      "total_return": 0.4056442834895254,
+      "sharpe_ratio": 1.2645202176593346,
+      "win_rate": 0.6046452228441818,
+      "num_trades": 38,
+      "max_drawdown": -0.09221111590495677,
+      "profit_factor": 2.0614631716548617,
+      "avg_win": 0.0211575017879515,
+      "avg_loss": -0.013291152471290618
+    },
+    "QQQ": {
+      "total_return": 0.3681308366462187,
+      "sharpe_ratio": 1.2082520935340417,
+      "win_rate": 0.5350432732838171,
+      "num_trades": 36,
+      "max_drawdown": -0.14215986280615545,
+      "profit_factor": 1.5275490969020402,
+      "avg_win": 0.033744787161513766,
+      "avg_loss": -0.013730653444053392
+    },
+    "AAPL": {
+      "total_return": 0.286478674469322,
+      "sharpe_ratio": 1.3608971033709345,
+      "win_rate": 0.524213945273761,
+      "num_trades": 25,
+      "max_drawdown": -0.10922057581191626,
+      "profit_factor": 1.5835785116386196,
+      "avg_win": 0.026560374446720235,
+      "avg_loss": -0.018133829571793207
+    },
+    "MSFT": {
+      "total_return": 0.3037223576319723,
+      "sharpe_ratio": 1.9512834473492453,
+      "win_rate": 0.5214068272340667,
+      "num_trades": 25,
+      "max_drawdown": -0.09056759449526716,
+      "profit_factor": 1.6839260693123956,
+      "avg_win": 0.022344310924180266,
+      "avg_loss": -0.010947063778170738
+    },
+    "TSLA": {
+      "total_return": 0.3350010321729183,
+      "sharpe_ratio": 1.6090441681772836,
+      "win_rate": 0.6390776047021172,
+      "num_trades": 28,
+      "max_drawdown": -0.08192463073116796,
+      "profit_factor": 1.888408352358856,
+      "avg_win": 0.03474875336840609,
+      "avg_loss": -0.01470919710442872
+    }
+  },
+  "ml_metrics": {
+    "direction_accuracy": 0.68,
+    "volatility_rmse": 0.0145,
+    "regime_accuracy": 0.82,
+    "ensemble_score": 0.75
+  },
+  "optimized_parameters": {
+    "stop_loss": 0.025,
+    "take_profit": 0.06,
+    "ml_confidence_threshold": 0.65,
+    "position_size": 0.1,
+    "max_positions": 4
+  },
+  "timestamp": "2025-07-10T17:56:53.179418"
+}

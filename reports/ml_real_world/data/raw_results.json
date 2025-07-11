@@ -1,0 +1,37 @@
+{
+  "SPY": {
+    "total_return": 26.709223052662388,
+    "sharpe_ratio": 1.8960386244527148,
+    "max_drawdown": -9.974315525522282,
+    "win_rate": 56.22489959839358,
+    "trades": 12
+  },
+  "QQQ": {
+    "total_return": 94.19218810023389,
+    "sharpe_ratio": 0.7478324728927942,
+    "max_drawdown": -35.118729311654505,
+    "win_rate": 55.124378109452735,
+    "trades": 50
+  },
+  "AAPL": {
+    "total_return": 163.1893269570187,
+    "sharpe_ratio": 0.8907707838541339,
+    "max_drawdown": -31.427260655722876,
+    "win_rate": 52.537313432835816,
+    "trades": 50
+  },
+  "MSFT": {
+    "total_return": 142.95207302174853,
+    "sharpe_ratio": 0.8457528961676763,
+    "max_drawdown": -37.14849378130541,
+    "win_rate": 52.63681592039801,
+    "trades": 50
+  },
+  "TSLA": {
+    "total_return": 766.2668930252307,
+    "sharpe_ratio": 1.13586767964078,
+    "max_drawdown": -73.63221744219119,
+    "win_rate": 53.73134328358209,
+    "trades": 50
+  }
+}
