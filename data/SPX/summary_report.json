@@ -1,0 +1,419 @@
+{
+  "summary": {
+    "symbol": "SPY",
+    "fetch_date": "2025-07-15T13:37:11.565887",
+    "timeframes": {
+      "1min": {
+        "rows": 4696,
+        "start_date": "2025-07-08T04:00:00-04:00",
+        "end_date": "2025-07-14T19:59:00-04:00",
+        "file_path": "data/SPX/1min/SPY_1min_20250708_20250714.csv",
+        "file_size_mb": 0.4165668487548828,
+        "columns": [
+          "Open",
+          "High",
+          "Low",
+          "Close",
+          "Volume",
+          "Dividends",
+          "Stock Splits",
+          "Capital Gains",
+          "Repaired?"
+        ],
+        "description": "High-frequency trading data"
+      },
+      "5min": {
+        "rows": 7143,
+        "start_date": "2025-05-19T04:00:00-04:00",
+        "end_date": "2025-07-14T19:55:00-04:00",
+        "file_path": "data/SPX/5min/SPY_5min_20250519_20250714.csv",
+        "file_size_mb": 0.7343835830688477,
+        "columns": [
+          "Open",
+          "High",
+          "Low",
+          "Close",
+          "Volume",
+          "Dividends",
+          "Stock Splits",
+          "Capital Gains",
+          "Repaired?"
+        ],
+        "description": "Intraday momentum tracking"
+      },
+      "15min": {
+        "rows": 2382,
+        "start_date": "2025-05-19T04:00:00-04:00",
+        "end_date": "2025-07-14T19:45:00-04:00",
+        "file_path": "data/SPX/15min/SPY_15min_20250519_20250714.csv",
+        "file_size_mb": 0.2456808090209961,
+        "columns": [
+          "Open",
+          "High",
+          "Low",
+          "Close",
+          "Volume",
+          "Dividends",
+          "Stock Splits",
+          "Capital Gains",
+          "Repaired?"
+        ],
+        "description": "Short-term trend analysis"
+      },
+      "30min": {
+        "rows": 1211,
+        "start_date": "2025-05-19T04:00:00-04:00",
+        "end_date": "2025-07-14T19:30:00-04:00",
+        "file_path": "data/SPX/30min/SPY_30min_20250519_20250714.csv",
+        "file_size_mb": 0.10696983337402344,
+        "columns": [
+          "Open",
+          "High",
+          "Low",
+          "Close",
+          "Volume",
+          "Dividends",
+          "Stock Splits",
+          "Capital Gains",
+          "Repaired?"
+        ],
+        "description": "Intraday swing trading"
+      },
+      "1H": {
+        "rows": 2035,
+        "start_date": "2025-01-16T04:00:00-05:00",
+        "end_date": "2025-07-14T19:00:00-04:00",
+        "file_path": "data/SPX/1H/SPY_1H_20250116_20250714.csv",
+        "file_size_mb": 0.22484683990478516,
+        "columns": [
+          "Open",
+          "High",
+          "Low",
+          "Close",
+          "Volume",
+          "Dividends",
+          "Stock Splits",
+          "Capital Gains",
+          "Repaired?"
+        ],
+        "description": "Daily trend confirmation"
+      },
+      "4H": {
+        "rows": 2188,
+        "start_date": "2024-07-15T04:00:00-04:00",
+        "end_date": "2025-07-14T16:00:00-04:00",
+        "file_path": "data/SPX/4H/SPY_4H_20240715_20250714.csv",
+        "file_size_mb": 0.13336181640625,
+        "columns": [
+          "Open",
+          "High",
+          "Low",
+          "Close",
+          "Volume"
+        ],
+        "description": "Multi-day swing trading"
+      },
+      "1D": {
+        "rows": 500,
+        "start_date": "2023-07-17T00:00:00-04:00",
+        "end_date": "2025-07-14T00:00:00-04:00",
+        "file_path": "data/SPX/1D/SPY_1D_20230717_20250714.csv",
+        "file_size_mb": 0.059662818908691406,
+        "columns": [
+          "Open",
+          "High",
+          "Low",
+          "Close",
+          "Volume",
+          "Dividends",
+          "Stock Splits",
+          "Capital Gains",
+          "Repaired?"
+        ],
+        "description": "Position trading and trend following"
+      }
+    }
+  },
+  "validation": {
+    "1min": {
+      "rows": 4696,
+      "missing_values": {
+        "Open": 0,
+        "High": 0,
+        "Low": 0,
+        "Close": 0,
+        "Volume": 0,
+        "Dividends": 0,
+        "Stock Splits": 0,
+        "Capital Gains": 0,
+        "Repaired?": 1
+      },
+      "missing_percentage": {
+        "Open": 0.0,
+        "High": 0.0,
+        "Low": 0.0,
+        "Close": 0.0,
+        "Volume": 0.0,
+        "Dividends": 0.0,
+        "Stock Splits": 0.0,
+        "Capital Gains": 0.0,
+        "Repaired?": 0.02129471890971039
+      },
+      "price_consistency": {
+        "high_low_valid": "True",
+        "ohlc_valid": "True",
+        "positive_volume": "True"
+      },
+      "date_gaps": {
+        "checked": true,
+        "missing_count": 927,
+        "missing_percentage": 31.455717678995587,
+        "largest_gap": {
+          "duration": "2 days 08:01:00",
+          "start": "2025-07-11T19:59:00-04:00",
+          "end": "2025-07-14T04:00:00-04:00"
+        }
+      },
+      "data_freshness": 0
+    },
+    "5min": {
+      "rows": 7143,
+      "missing_values": {
+        "Open": 0,
+        "High": 0,
+        "Low": 0,
+        "Close": 0,
+        "Volume": 0,
+        "Dividends": 0,
+        "Stock Splits": 0,
+        "Capital Gains": 0,
+        "Repaired?": 0
+      },
+      "missing_percentage": {
+        "Open": 0.0,
+        "High": 0.0,
+        "Low": 0.0,
+        "Close": 0.0,
+        "Volume": 0.0,
+        "Dividends": 0.0,
+        "Stock Splits": 0.0,
+        "Capital Gains": 0.0,
+        "Repaired?": 0.0
+      },
+      "price_consistency": {
+        "high_low_valid": "True",
+        "ohlc_valid": "True",
+        "positive_volume": "True"
+      },
+      "date_gaps": {
+        "checked": true,
+        "missing_count": 1731,
+        "missing_percentage": 35.72755417956656,
+        "largest_gap": {
+          "duration": "3 days 11:05:00",
+          "start": "2025-07-03T16:55:00-04:00",
+          "end": "2025-07-07T04:00:00-04:00"
+        }
+      },
+      "data_freshness": 0
+    },
+    "15min": {
+      "rows": 2382,
+      "missing_values": {
+        "Open": 0,
+        "High": 0,
+        "Low": 0,
+        "Close": 0,
+        "Volume": 0,
+        "Dividends": 0,
+        "Stock Splits": 0,
+        "Capital Gains": 0,
+        "Repaired?": 0
+      },
+      "missing_percentage": {
+        "Open": 0.0,
+        "High": 0.0,
+        "Low": 0.0,
+        "Close": 0.0,
+        "Volume": 0.0,
+        "Dividends": 0.0,
+        "Stock Splits": 0.0,
+        "Capital Gains": 0.0,
+        "Repaired?": 0.0
+      },
+      "price_consistency": {
+        "high_low_valid": "True",
+        "ohlc_valid": "True",
+        "positive_volume": "True"
+      },
+      "date_gaps": {
+        "checked": true,
+        "missing_count": 589,
+        "missing_percentage": 35.63218390804598,
+        "largest_gap": {
+          "duration": "3 days 11:15:00",
+          "start": "2025-07-03T16:45:00-04:00",
+          "end": "2025-07-07T04:00:00-04:00"
+        }
+      },
+      "data_freshness": 0
+    },
+    "30min": {
+      "rows": 1211,
+      "missing_values": {
+        "Open": 1,
+        "High": 1,
+        "Low": 1,
+        "Close": 1,
+        "Volume": 0,
+        "Dividends": 0,
+        "Stock Splits": 0,
+        "Capital Gains": 0,
+        "Repaired?": 0
+      },
+      "missing_percentage": {
+        "Open": 0.08257638315441783,
+        "High": 0.08257638315441783,
+        "Low": 0.08257638315441783,
+        "Close": 0.08257638315441783,
+        "Volume": 0.0,
+        "Dividends": 0.0,
+        "Stock Splits": 0.0,
+        "Capital Gains": 0.0,
+        "Repaired?": 0.0
+      },
+      "price_consistency": {
+        "high_low_valid": "False",
+        "ohlc_valid": "False",
+        "positive_volume": "True"
+      },
+      "date_gaps": {
+        "checked": true,
+        "missing_count": 285,
+        "missing_percentage": 33.33333333333333,
+        "largest_gap": {
+          "duration": "3 days 11:30:00",
+          "start": "2025-07-03T16:30:00-04:00",
+          "end": "2025-07-07T04:00:00-04:00"
+        }
+      },
+      "data_freshness": 0
+    },
+    "1H": {
+      "rows": 2035,
+      "missing_values": {
+        "Open": 0,
+        "High": 0,
+        "Low": 0,
+        "Close": 0,
+        "Volume": 0,
+        "Dividends": 0,
+        "Stock Splits": 0,
+        "Capital Gains": 0,
+        "Repaired?": 0
+      },
+      "missing_percentage": {
+        "Open": 0.0,
+        "High": 0.0,
+        "Low": 0.0,
+        "Close": 0.0,
+        "Volume": 0.0,
+        "Dividends": 0.0,
+        "Stock Splits": 0.0,
+        "Capital Gains": 0.0,
+        "Repaired?": 0.0
+      },
+      "price_consistency": {
+        "high_low_valid": "True",
+        "ohlc_valid": "True",
+        "positive_volume": "True"
+      },
+      "date_gaps": {
+        "checked": true,
+        "missing_count": 3127,
+        "missing_percentage": 72.5353746230573,
+        "largest_gap": {
+          "duration": "3 days 12:00:00",
+          "start": "2025-07-03T16:00:00-04:00",
+          "end": "2025-07-07T04:00:00-04:00"
+        }
+      },
+      "data_freshness": 0
+    },
+    "4H": {
+      "rows": 2188,
+      "missing_values": {
+        "Open": 1188,
+        "High": 1188,
+        "Low": 1188,
+        "Close": 1188,
+        "Volume": 0
+      },
+      "missing_percentage": {
+        "Open": 54.296160877513714,
+        "High": 54.296160877513714,
+        "Low": 54.296160877513714,
+        "Close": 54.296160877513714,
+        "Volume": 0.0
+      },
+      "price_consistency": {
+        "high_low_valid": "False",
+        "ohlc_valid": "False",
+        "positive_volume": "True"
+      },
+      "date_gaps": {
+        "checked": true,
+        "missing_count": 0,
+        "missing_percentage": 0.0,
+        "largest_gap": {
+          "duration": "0 days 04:00:00",
+          "start": "2024-07-15T04:00:00-04:00",
+          "end": "2024-07-15T08:00:00-04:00"
+        }
+      },
+      "data_freshness": 0
+    },
+    "1D": {
+      "rows": 500,
+      "missing_values": {
+        "Open": 0,
+        "High": 0,
+        "Low": 0,
+        "Close": 0,
+        "Volume": 0,
+        "Dividends": 0,
+        "Stock Splits": 0,
+        "Capital Gains": 0,
+        "Repaired?": 0
+      },
+      "missing_percentage": {
+        "Open": 0.0,
+        "High": 0.0,
+        "Low": 0.0,
+        "Close": 0.0,
+        "Volume": 0.0,
+        "Dividends": 0.0,
+        "Stock Splits": 0.0,
+        "Capital Gains": 0.0,
+        "Repaired?": 0.0
+      },
+      "price_consistency": {
+        "high_low_valid": "True",
+        "ohlc_valid": "True",
+        "positive_volume": "True"
+      },
+      "date_gaps": {
+        "checked": true,
+        "missing_count": 21,
+        "missing_percentage": 4.030710172744722,
+        "largest_gap": {
+          "duration": "4 days 00:00:00",
+          "start": "2023-09-01T00:00:00-04:00",
+          "end": "2023-09-05T00:00:00-04:00"
+        }
+      },
+      "data_freshness": 1
+    }
+  },
+  "fetch_timestamp": "2025-07-15T13:37:36.613558"
+}

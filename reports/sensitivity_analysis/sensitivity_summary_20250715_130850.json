@@ -1,0 +1,77 @@
+{
+  "best_config": {
+    "atr_length": 14.0,
+    "min_factor": 2.0,
+    "max_factor": 5.0,
+    "sharpe_ratio": 1.5130030153105718,
+    "total_return": 23.33892062722812,
+    "max_drawdown": 12.283556415259346
+  },
+  "parameter_correlations": {
+    "atr_length": {
+      "atr_length": 1.0,
+      "min_factor": 1.1500117392607728e-16,
+      "max_factor": -2.990030522078009e-16,
+      "sharpe_ratio": -0.3130157864211582,
+      "total_return": -0.1228215119063412,
+      "max_drawdown": 0.0412083783177035
+    },
+    "min_factor": {
+      "atr_length": 1.1500117392607728e-16,
+      "min_factor": 1.0,
+      "max_factor": -1.7763568394002502e-17,
+      "sharpe_ratio": 0.0356580210169958,
+      "total_return": -0.006058433689538943,
+      "max_drawdown": 0.027047548671484276
+    },
+    "max_factor": {
+      "atr_length": -2.990030522078009e-16,
+      "min_factor": -1.7763568394002502e-17,
+      "max_factor": 1.0,
+      "sharpe_ratio": -0.2463848658185004,
+      "total_return": -0.28247943959743455,
+      "max_drawdown": 0.10570959028533326
+    },
+    "sharpe_ratio": {
+      "atr_length": -0.3130157864211582,
+      "min_factor": 0.0356580210169958,
+      "max_factor": -0.2463848658185004,
+      "sharpe_ratio": 1.0,
+      "total_return": 0.6818862049898337,
+      "max_drawdown": -0.025041433756612223
+    },
+    "total_return": {
+      "atr_length": -0.1228215119063412,
+      "min_factor": -0.006058433689538943,
+      "max_factor": -0.28247943959743455,
+      "sharpe_ratio": 0.6818862049898337,
+      "total_return": 1.0,
+      "max_drawdown": -0.09194708783379654
+    },
+    "max_drawdown": {
+      "atr_length": 0.0412083783177035,
+      "min_factor": 0.027047548671484276,
+      "max_factor": 0.10570959028533326,
+      "sharpe_ratio": -0.025041433756612223,
+      "total_return": -0.09194708783379654,
+      "max_drawdown": 1.0
+    }
+  },
+  "parameter_ranges": {
+    "atr_length": {
+      "min": "5",
+      "max": "30",
+      "optimal": 14.0
+    },
+    "min_factor": {
+      "min": 0.5,
+      "max": 2.0,
+      "optimal": 2.0
+    },
+    "max_factor": {
+      "min": 3.0,
+      "max": 6.0,
+      "optimal": 5.0
+    }
+  }
+}

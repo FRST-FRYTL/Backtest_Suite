@@ -21,6 +21,8 @@ A comprehensive Python-based backtesting framework for quantitative trading stra
 - **Strategy builder** with rule-based framework and logical operators
 - **Portfolio management** with position tracking and risk controls
 - **Performance analytics** including Sharpe ratio, drawdown analysis, and more
+- **Enhanced trade reporting** with entry/exit prices, stop losses, and risk analysis
+- **Professional report generation** with HTML dashboards, markdown docs, and JSON exports
 - **Strategy optimization** using grid search, random search, and differential evolution
 - **Walk-forward analysis** for robust parameter selection
 - **Interactive visualizations** with Plotly dashboards
@@ -102,11 +104,50 @@ async def run_backtest():
 asyncio.run(run_backtest())
 ```
 
+## Enhanced Trade Reporting
+
+The Backtest Suite now includes comprehensive trade-level reporting with detailed price analysis:
+
+### 📊 Trade Analysis Features
+- **Entry/Exit Prices**: Exact execution prices for every trade
+- **Stop Loss Analysis**: Stop placement effectiveness and hit rates
+- **Risk Per Trade**: Position sizing and risk management analysis
+- **Trade Duration**: Precise timing and holding period analysis
+- **Slippage Tracking**: Execution quality measurement
+- **MAE/MFE Analysis**: Maximum adverse/favorable excursion tracking
+
+### 📈 Professional Reports
+- **Interactive HTML Dashboards**: Professional-grade visualizations
+- **Detailed Trade Tables**: Complete price and timing information
+- **Risk Analysis Charts**: Stop loss effectiveness and risk distribution
+- **Performance Metrics**: Comprehensive statistics and benchmarks
+- **Multi-Format Export**: HTML, Markdown, and JSON outputs
+
+### 🎯 Configuration Example
+```python
+from src.reporting.report_config import ReportConfig, TradeReportingConfig
+
+trade_config = TradeReportingConfig(
+    enable_detailed_trade_prices=True,
+    show_stop_loss_prices=True,
+    enable_risk_per_trade_analysis=True,
+    include_mae_mfe_analysis=True
+)
+
+config = ReportConfig(
+    title="My Strategy Report",
+    trade_reporting=trade_config,
+    output_formats=["html", "markdown", "json"]
+)
+```
+
 ## Documentation
 
 - [Quick Start Guide](docs/QUICK_START.md) - Get up and running quickly
 - [API Reference](docs/API_REFERENCE.md) - Comprehensive API documentation
 - [Strategy Development](docs/STRATEGY_DEVELOPMENT.md) - Complete guide to building strategies
+- [Enhanced Trade Reporting](docs/ENHANCED_TRADE_REPORTING.md) - Detailed trade analysis features
+- [Standardized Reporting](docs/STANDARDIZED_REPORTING.md) - Professional report generation
 - [Indicators Guide](docs/INDICATORS.md) - All available indicators
 - [Optimization Guide](docs/OPTIMIZATION_GUIDE.md) - Parameter optimization techniques
 - [Troubleshooting](docs/TROUBLESHOOTING.md) - Common issues and solutions
@@ -119,6 +160,8 @@ Check out the [examples/](examples/) directory for:
 - Strategy YAML configurations
 - Parameter optimization setups
 - Custom indicator implementations
+- Enhanced trade reporting demonstrations
+- Professional report generation examples
 
 ## Project Structure
 
@@ -133,6 +176,12 @@ Backtest_Suite/
 │   ├── strategies/     # Strategy framework
 │   ├── backtesting/    # Event-driven backtesting engine
 │   ├── portfolio/      # Portfolio and position management
+│   ├── reporting/      # Enhanced trade reporting system
+│   │   ├── standard_report_generator.py  # Main report generator
+│   │   ├── report_config.py              # Configuration and themes
+│   │   ├── report_sections.py            # Modular report sections
+│   │   ├── visualization_types.py        # Professional charts
+│   │   └── templates/                    # HTML and markdown templates
 │   ├── utils/          # Performance metrics and utilities
 │   ├── visualization/  # Plotly charts and dashboards
 │   ├── optimization/   # Grid, random, and DE optimization
@@ -143,7 +192,11 @@ Backtest_Suite/
 ├── examples/          # Example strategies and notebooks
 │   ├── strategies/    # YAML strategy configurations
 │   ├── notebooks/     # Jupyter notebook tutorials
-│   └── scripts/       # Python script examples
+│   ├── scripts/       # Python script examples
+│   └── demo_enhanced_trade_reporting.py  # Enhanced reporting demo
+├── reports/           # Generated reports and analysis
+│   ├── comprehensive_visualizations/     # Interactive dashboards
+│   └── enhanced_trade_demo/              # Trade analysis examples
 ├── .github/           # CI/CD workflows
 └── data/              # Data storage (gitignored)
 ```
@@ -338,11 +391,20 @@ python generate_backtest_results.py
 # Generate performance analysis reports
 python generate_performance_reports.py
 
+# Generate enhanced trade report with detailed price analysis
+python examples/demo_enhanced_trade_reporting.py
+
+# Generate standard report from backtest results
+python generate_standard_report.py backtest_results.json
+
 # Generate strategy reports
 python examples/reports/generate_report.py
 python examples/reports/monthly_contribution_strategy_report.py
 python examples/reports/strategy_summary_visual.py
 python examples/reports/strategy_dashboard.py
+
+# Test standard reporting system
+python examples/test_standard_reporting.py
 ```
 
 ### Visualization and Monitoring

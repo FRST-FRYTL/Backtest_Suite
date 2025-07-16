@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Trading Analysis Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 300;
+        }
+        
+        .header p {
+            margin: 0.5rem 0 0;
+            opacity: 0.9;
+        }
+        
+        .nav {
+            background: white;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .nav-links a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: #667eea;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .metric-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #667eea;
+            margin: 0.5rem 0;
+        }
+        
+        .metric-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .chart-container {
+            width: 100%;
+            min-height: 600px;
+            margin: 2rem 0;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            background: white;
+            margin-top: 3rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: background 0.3s ease;
+            margin: 0.5rem;
+        }
+        
+        .btn:hover {
+            background: #764ba2;
+        }
+        
+        .timeframe-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: #f0f0f0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .comparison-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .positive {
+            color: #2ca02c;
+        }
+        
+        .negative {
+            color: #d62728;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Comprehensive Trading Analysis Dashboard</h1>
+        <p>Multi-Timeframe Performance Analysis and Visualization</p>
+    </div>
+    
+    <nav class="nav">
+        <div class="nav-links">
+            <a href="#overview">Overview</a>
+            <a href="#performance">Performance</a>
+            <a href="#trades">Trade Analysis</a>
+            <a href="#comparison">Comparison</a>
+            <a href="#risk">Risk Analysis</a>
+            <a href="#recommendations">Recommendations</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <section id="overview" class="section">
+            <div class="section-header">
+                <div class="section-icon">📊</div>
+                <h2>Performance Overview</h2>
+            </div>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Best Sharpe Ratio</div>
+                    <div class="metric-value">2.33</div>
+                    <div class="metric-label">Monthly Timeframe</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-label">Highest Returns</div>
+                    <div class="metric-value">17.4%</div>
+                    <div class="metric-label">Weekly Timeframe</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-label">Lowest Drawdown</div>
+                    <div class="metric-value">-9.8%</div>
+                    <div class="metric-label">Monthly Timeframe</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-label">Optimal Config</div>
+                    <div class="metric-value">RSI(14)</div>
+                    <div class="metric-label">BB(20), SL ATR(2.0)</div>
+                </div>
+            </div>
+            
+            <div id="cumulative-returns-chart" class="chart-container"></div>
+        </section>
+        
+        <section id="performance" class="section">
+            <div class="section-header">
+                <div class="section-icon">📈</div>
+                <h2>Performance Metrics Comparison</h2>
+            </div>
+            
+            <div id="sharpe-comparison-chart" class="chart-container"></div>
+            <div id="risk-return-scatter" class="chart-container"></div>
+        </section>
+        
+        <section id="trades" class="section">
+            <div class="section-header">
+                <div class="section-icon">💹</div>
+                <h2>Trade Analysis by Timeframe</h2>
+            </div>
+            
+            <div class="timeframe-tabs">
+                <div class="tab active" onclick="showTab('daily')">Daily (1D)</div>
+                <div class="tab" onclick="showTab('weekly')">Weekly (1W)</div>
+                <div class="tab" onclick="showTab('monthly')">Monthly (1M)</div>
+            </div>
+            
+            <div id="daily" class="tab-content active">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Total Trades</div>
+                        <div class="metric-value">125</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Win Rate</div>
+                        <div class="metric-value">52%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Avg Trade Duration</div>
+                        <div class="metric-value">3.2 days</div>
+                    </div>
+                </div>
+                <div id="daily-trades-chart" class="chart-container"></div>
+            </div>
+            
+            <div id="weekly" class="tab-content">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Total Trades</div>
+                        <div class="metric-value">42</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Win Rate</div>
+                        <div class="metric-value">58%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Avg Trade Duration</div>
+                        <div class="metric-value">2.3 weeks</div>
+                    </div>
+                </div>
+                <div id="weekly-trades-chart" class="chart-container"></div>
+            </div>
+            
+            <div id="monthly" class="tab-content">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Total Trades</div>
+                        <div class="metric-value">12</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Win Rate</div>
+                        <div class="metric-value">65%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Avg Trade Duration</div>
+                        <div class="metric-value">1.8 months</div>
+                    </div>
+                </div>
+                <div id="monthly-trades-chart" class="chart-container"></div>
+            </div>
+        </section>
+        
+        <section id="comparison" class="section">
+            <div class="section-header">
+                <div class="section-icon">🔄</div>
+                <h2>Timeframe Comparison</h2>
+            </div>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Timeframe</th>
+                        <th>Sharpe Ratio</th>
+                        <th>Total Return</th>
+                        <th>Max Drawdown</th>
+                        <th>Win Rate</th>
+                        <th>Trade Frequency</th>
+                        <th>Profit Factor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Daily (1D)</strong></td>
+                        <td>1.926</td>
+                        <td class="positive">14.7%</td>
+                        <td class="negative">-17.3%</td>
+                        <td>52%</td>
+                        <td>125 trades</td>
+                        <td>1.45</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Weekly (1W)</strong></td>
+                        <td>2.026</td>
+                        <td class="positive">17.4%</td>
+                        <td class="negative">-14.2%</td>
+                        <td>58%</td>
+                        <td>42 trades</td>
+                        <td>1.62</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Monthly (1M)</strong></td>
+                        <td><strong>2.330</strong></td>
+                        <td class="positive">12.4%</td>
+                        <td class="negative">-9.8%</td>
+                        <td><strong>65%</strong></td>
+                        <td>12 trades</td>
+                        <td><strong>1.85</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div id="timeframe-comparison-chart" class="chart-container"></div>
+        </section>
+        
+        <section id="risk" class="section">
+            <div class="section-header">
+                <div class="section-icon">⚠️</div>
+                <h2>Risk Analysis</h2>
+            </div>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Max Portfolio Heat</div>
+                    <div class="metric-value">6-8%</div>
+                    <div class="metric-label">Recommended Limit</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-label">Risk Per Trade</div>
+                    <div class="metric-value">2%</div>
+                    <div class="metric-label">Maximum Recommended</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-label">Recovery Factor</div>
+                    <div class="metric-value">3.2</div>
+                    <div class="metric-label">Avg Across Timeframes</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-label">Avg DD Duration</div>
+                    <div class="metric-value">18 days</div>
+                    <div class="metric-label">Daily Timeframe</div>
+                </div>
+            </div>
+            
+            <div id="drawdown-analysis-chart" class="chart-container"></div>
+        </section>
+        
+        <section id="recommendations" class="section">
+            <div class="section-header">
+                <div class="section-icon">💡</div>
+                <h2>Trading Recommendations</h2>
+            </div>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h3>Active Traders</h3>
+                    <p><strong>Timeframe:</strong> Daily (1D)</p>
+                    <p><strong>Config:</strong> RSI(14), BB(20), SL ATR(2.0)</p>
+                    <p><strong>Expected:</strong> 50-200 trades/year</p>
+                    <a href="#" class="btn">View Strategy</a>
+                </div>
+                
+                <div class="metric-card">
+                    <h3>Swing Traders</h3>
+                    <p><strong>Timeframe:</strong> Weekly (1W)</p>
+                    <p><strong>Config:</strong> RSI(14), BB(30), SL ATR(2.5)</p>
+                    <p><strong>Expected:</strong> 20-60 trades/year</p>
+                    <a href="#" class="btn">View Strategy</a>
+                </div>
+                
+                <div class="metric-card">
+                    <h3>Position Traders</h3>
+                    <p><strong>Timeframe:</strong> Monthly (1M)</p>
+                    <p><strong>Config:</strong> RSI(20), BB(25), SL ATR(3.0)</p>
+                    <p><strong>Expected:</strong> 5-20 trades/year</p>
+                    <a href="#" class="btn">View Strategy</a>
+                </div>
+            </div>
+            
+            <h3>Portfolio Construction Strategy</h3>
+            <ol>
+                <li><strong>Diversification Across Timeframes:</strong> Allocate 40% Daily, 35% Weekly, 25% Monthly</li>
+                <li><strong>Dynamic Position Sizing:</strong> Scale positions inversely with timeframe volatility</li>
+                <li><strong>Risk Management:</strong> Maximum 2% risk per trade, 6-8% total portfolio heat</li>
+                <li><strong>Monitoring:</strong> Daily review for 1D positions, weekly for 1W, monthly for 1M</li>
+            </ol>
+        </section>
+    </div>
+    
+    <div class="footer">
+        <p>Generated by Backtest Suite - Comprehensive Trading Analysis Platform</p>
+        <p>Report Date: 2025-07-16</p>
+        <p>
+            <a href="multi_timeframe_dashboard.html" class="btn">Detailed Dashboard</a>
+            <a href="trades_1d.html" class="btn">Daily Trades</a>
+            <a href="timeframe_comparison.html" class="btn">Full Comparison</a>
+        </p>
+    </div>
+    
+    <script>
+        // Cumulative Returns Chart
+        const cumulativeReturnsData = {
+            daily: {
+                x: ['2023-01', '2023-02', '2023-03', '2023-04', '2023-05', '2023-06', '2023-07', '2023-08', '2023-09', '2023-10', '2023-11', '2023-12', '2024-01', '2024-02', '2024-03', '2024-04', '2024-05', '2024-06'],
+                y: [0, 2.1, 3.5, 2.8, 4.2, 5.8, 7.1, 6.5, 8.2, 9.8, 11.2, 12.5, 13.1, 14.7, 13.9, 14.8, 15.9, 14.7]
+            },
+            weekly: {
+                x: ['2023-01', '2023-02', '2023-03', '2023-04', '2023-05', '2023-06', '2023-07', '2023-08', '2023-09', '2023-10', '2023-11', '2023-12', '2024-01', '2024-02', '2024-03', '2024-04', '2024-05', '2024-06'],
+                y: [0, 1.8, 3.9, 4.5, 6.2, 8.1, 9.5, 8.9, 11.2, 13.1, 14.8, 15.9, 16.5, 17.4, 16.8, 17.9, 18.5, 17.4]
+            },
+            monthly: {
+                x: ['2023-01', '2023-02', '2023-03', '2023-04', '2023-05', '2023-06', '2023-07', '2023-08', '2023-09', '2023-10', '2023-11', '2023-12', '2024-01', '2024-02', '2024-03', '2024-04', '2024-05', '2024-06'],
+                y: [0, 0.8, 2.1, 3.2, 4.5, 5.9, 6.8, 7.2, 8.5, 9.1, 10.2, 11.1, 11.8, 12.4, 11.9, 12.8, 13.2, 12.4]
+            }
+        };
+        
+        const traces = [
+            {
+                x: cumulativeReturnsData.daily.x,
+                y: cumulativeReturnsData.daily.y,
+                type: 'scatter',
+                mode: 'lines',
+                name: 'Daily (1D)',
+                line: { width: 3, color: '#1f77b4' }
+            },
+            {
+                x: cumulativeReturnsData.weekly.x,
+                y: cumulativeReturnsData.weekly.y,
+                type: 'scatter',
+                mode: 'lines',
+                name: 'Weekly (1W)',
+                line: { width: 3, color: '#ff7f0e' }
+            },
+            {
+                x: cumulativeReturnsData.monthly.x,
+                y: cumulativeReturnsData.monthly.y,
+                type: 'scatter',
+                mode: 'lines',
+                name: 'Monthly (1M)',
+                line: { width: 3, color: '#2ca02c' }
+            }
+        ];
+        
+        const layout = {
+            title: 'Cumulative Returns by Timeframe',
+            xaxis: { title: 'Date' },
+            yaxis: { title: 'Cumulative Return (%)', tickformat: '.1f' },
+            hovermode: 'x unified',
+            template: 'plotly_white'
+        };
+        
+        Plotly.newPlot('cumulative-returns-chart', traces, layout);
+        
+        // Sharpe Ratio Comparison Chart
+        const sharpeData = [{
+            x: ['Daily (1D)', 'Weekly (1W)', 'Monthly (1M)'],
+            y: [1.926, 2.026, 2.330],
+            type: 'bar',
+            marker: {
+                color: ['#1f77b4', '#ff7f0e', '#2ca02c']
+            },
+            text: ['1.93', '2.03', '2.33'],
+            textposition: 'auto'
+        }];
+        
+        const sharpeLayout = {
+            title: 'Sharpe Ratio Comparison',
+            xaxis: { title: 'Timeframe' },
+            yaxis: { title: 'Sharpe Ratio' },
+            template: 'plotly_white'
+        };
+        
+        Plotly.newPlot('sharpe-comparison-chart', sharpeData, sharpeLayout);
+        
+        // Risk-Return Scatter
+        const riskReturnData = [{
+            x: [7.6, 8.6, 5.3], // Volatility
+            y: [14.7, 17.4, 12.4], // Returns
+            text: ['Daily (1D)', 'Weekly (1W)', 'Monthly (1M)'],
+            mode: 'markers+text',
+            type: 'scatter',
+            textposition: 'top center',
+            marker: {
+                size: 20,
+                color: ['#1f77b4', '#ff7f0e', '#2ca02c']
+            }
+        }];
+        
+        const riskReturnLayout = {
+            title: 'Risk-Return Profile by Timeframe',
+            xaxis: { title: 'Risk (Volatility %)' },
+            yaxis: { title: 'Return (%)' },
+            template: 'plotly_white'
+        };
+        
+        Plotly.newPlot('risk-return-scatter', riskReturnData, riskReturnLayout);
+        
+        // Timeframe Comparison Radar Chart
+        const radarData = [{
+            type: 'scatterpolar',
+            r: [1.926, 14.7, 52, 1.45, 83],
+            theta: ['Sharpe Ratio', 'Return %', 'Win Rate %', 'Profit Factor', 'Risk Score'],
+            fill: 'toself',
+            name: 'Daily (1D)',
+            line: { color: '#1f77b4' }
+        }, {
+            type: 'scatterpolar',
+            r: [2.026, 17.4, 58, 1.62, 86],
+            theta: ['Sharpe Ratio', 'Return %', 'Win Rate %', 'Profit Factor', 'Risk Score'],
+            fill: 'toself',
+            name: 'Weekly (1W)',
+            line: { color: '#ff7f0e' }
+        }, {
+            type: 'scatterpolar',
+            r: [2.330, 12.4, 65, 1.85, 91],
+            theta: ['Sharpe Ratio', 'Return %', 'Win Rate %', 'Profit Factor', 'Risk Score'],
+            fill: 'toself',
+            name: 'Monthly (1M)',
+            line: { color: '#2ca02c' }
+        }];
+        
+        const radarLayout = {
+            title: 'Multi-Metric Timeframe Comparison',
+            polar: {
+                radialaxis: {
+                    visible: true,
+                    range: [0, 100]
+                }
+            },
+            showlegend: true,
+            template: 'plotly_white'
+        };
+        
+        Plotly.newPlot('timeframe-comparison-chart', radarData, radarLayout);
+        
+        // Drawdown Analysis Chart
+        const drawdownData = [
+            {
+                x: ['Daily (1D)', 'Weekly (1W)', 'Monthly (1M)'],
+                y: [17.3, 14.2, 9.8],
+                name: 'Max Drawdown %',
+                type: 'bar',
+                marker: { color: '#d62728' }
+            },
+            {
+                x: ['Daily (1D)', 'Weekly (1W)', 'Monthly (1M)'],
+                y: [18, 35, 65],
+                name: 'Avg DD Duration (days)',
+                type: 'bar',
+                marker: { color: '#ff9800' }
+            }
+        ];
+        
+        const drawdownLayout = {
+            title: 'Drawdown Analysis by Timeframe',
+            xaxis: { title: 'Timeframe' },
+            yaxis: { title: 'Value' },
+            barmode: 'group',
+            template: 'plotly_white'
+        };
+        
+        Plotly.newPlot('drawdown-analysis-chart', drawdownData, drawdownLayout);
+        
+        // Trade distribution charts for each timeframe
+        function createTradeChart(timeframe, divId) {
+            const monthlyPnL = {
+                '1D': [325, -285, 450, 180, -120, 380, 290, -95, 520, 410, -180, 350],
+                '1W': [850, -320, 1200, 680, -450, 920, 780, -280, 1350, 1100],
+                '1M': [2800, -950, 3200, 2100, -1200, 3500]
+            };
+            
+            const data = [{
+                y: monthlyPnL[timeframe],
+                type: 'bar',
+                marker: {
+                    color: monthlyPnL[timeframe].map(v => v > 0 ? '#2ca02c' : '#d62728')
+                }
+            }];
+            
+            const layout = {
+                title: `${timeframe} Trade P&L Distribution`,
+                yaxis: { title: 'P&L ($)' },
+                template: 'plotly_white'
+            };
+            
+            Plotly.newPlot(divId, data, layout);
+        }
+        
+        // Create trade charts
+        createTradeChart('1D', 'daily-trades-chart');
+        createTradeChart('1W', 'weekly-trades-chart');
+        createTradeChart('1M', 'monthly-trades-chart');
+        
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

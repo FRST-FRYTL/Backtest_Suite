@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily (1D) Trade-by-Trade Analysis</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .chart-container {
+            margin: 20px 0;
+            min-height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Daily (1D) Trade-by-Trade Analysis</h1>
+        
+        <div id="price-chart" class="chart-container"></div>
+        <div id="pnl-chart" class="chart-container"></div>
+        <div id="cumulative-chart" class="chart-container"></div>
+    </div>
+    
+    <script>
+        // Generate sample price data
+        const startDate = new Date('2023-01-01');
+        const endDate = new Date('2024-06-30');
+        const dates = [];
+        const prices = [];
+        let currentDate = new Date(startDate);
+        let basePrice = 395;
+        
+        while (currentDate <= endDate) {
+            dates.push(new Date(currentDate));
+            // Add some realistic price movement
+            basePrice = basePrice * (1 + (Math.random() - 0.5) * 0.02);
+            prices.push({
+                open: basePrice * (1 + (Math.random() - 0.5) * 0.005),
+                high: basePrice * (1 + Math.random() * 0.01),
+                low: basePrice * (1 - Math.random() * 0.01),
+                close: basePrice
+            });
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+        
+        // Sample trades with entry and exit points
+        const trades = [
+            { entry: '2023-01-15', exit: '2023-01-20', entryPrice: 395.50, exitPrice: 398.75, pnl: 325 },
+            { entry: '2023-02-01', exit: '2023-02-08', entryPrice: 402.10, exitPrice: 399.25, pnl: -285 },
+            { entry: '2023-02-20', exit: '2023-02-24', entryPrice: 398.50, exitPrice: 403.20, pnl: 470 },
+            { entry: '2023-03-10', exit: '2023-03-15', entryPrice: 405.75, exitPrice: 407.30, pnl: 155 },
+            { entry: '2023-04-01', exit: '2023-04-05', entryPrice: 410.20, exitPrice: 408.90, pnl: -130 },
+            { entry: '2023-04-20', exit: '2023-04-28', entryPrice: 409.50, exitPrice: 413.75, pnl: 425 },
+            { entry: '2023-05-10', exit: '2023-05-18', entryPrice: 415.30, exitPrice: 418.20, pnl: 290 },
+            { entry: '2023-06-01', exit: '2023-06-08', entryPrice: 420.15, exitPrice: 418.75, pnl: -140 },
+            { entry: '2023-06-20', exit: '2023-06-26', entryPrice: 419.80, exitPrice: 424.50, pnl: 470 },
+            { entry: '2023-07-10', exit: '2023-07-15', entryPrice: 425.60, exitPrice: 428.30, pnl: 270 },
+            { entry: '2023-08-01', exit: '2023-08-09', entryPrice: 430.20, exitPrice: 428.15, pnl: -205 },
+            { entry: '2023-08-25', exit: '2023-08-30', entryPrice: 428.90, exitPrice: 433.60, pnl: 470 },
+            { entry: '2023-09-15', exit: '2023-09-22', entryPrice: 435.20, exitPrice: 438.75, pnl: 355 },
+            { entry: '2023-10-05', exit: '2023-10-12', entryPrice: 440.30, exitPrice: 443.20, pnl: 290 },
+            { entry: '2023-11-01', exit: '2023-11-08', entryPrice: 445.15, exitPrice: 448.90, pnl: 375 },
+            { entry: '2023-12-10', exit: '2023-12-15', entryPrice: 450.25, exitPrice: 453.75, pnl: 350 },
+            { entry: '2024-01-15', exit: '2024-01-22', entryPrice: 455.30, exitPrice: 458.20, pnl: 290 },
+            { entry: '2024-02-05', exit: '2024-02-12', entryPrice: 460.15, exitPrice: 463.75, pnl: 360 },
+            { entry: '2024-03-01', exit: '2024-03-08', entryPrice: 465.20, exitPrice: 462.30, pnl: -290 },
+            { entry: '2024-04-10', exit: '2024-04-18', entryPrice: 463.80, exitPrice: 468.50, pnl: 470 }
+        ];
+        
+        // 1. Price chart with trade entries and exits
+        const priceTrace = {
+            x: dates,
+            open: prices.map(p => p.open),
+            high: prices.map(p => p.high),
+            low: prices.map(p => p.low),
+            close: prices.map(p => p.close),
+            type: 'candlestick',
+            name: 'SPY Price'
+        };
+        
+        const entryTrace = {
+            x: trades.map(t => new Date(t.entry)),
+            y: trades.map(t => t.entryPrice),
+            mode: 'markers',
+            type: 'scatter',
+            name: 'Buy',
+            marker: {
+                symbol: 'triangle-up',
+                size: 12,
+                color: 'green'
+            }
+        };
+        
+        const exitTrace = {
+            x: trades.map(t => new Date(t.exit)),
+            y: trades.map(t => t.exitPrice),
+            mode: 'markers',
+            type: 'scatter',
+            name: 'Sell',
+            marker: {
+                symbol: 'triangle-down',
+                size: 12,
+                color: 'red'
+            }
+        };
+        
+        // Add trade connection lines
+        const tradeLines = [];
+        trades.forEach((trade, i) => {
+            tradeLines.push({
+                x: [new Date(trade.entry), new Date(trade.exit)],
+                y: [trade.entryPrice, trade.exitPrice],
+                mode: 'lines',
+                type: 'scatter',
+                name: `Trade ${i + 1}`,
+                showlegend: false,
+                line: {
+                    color: trade.pnl > 0 ? 'lightgreen' : 'lightcoral',
+                    width: 2,
+                    dash: 'dot'
+                }
+            });
+        });
+        
+        const priceLayout = {
+            title: 'Daily Price Chart with Trade Entries/Exits',
+            xaxis: {
+                title: 'Date',
+                rangeslider: { visible: false }
+            },
+            yaxis: { title: 'Price ($)' },
+            template: 'plotly_white'
+        };
+        
+        Plotly.newPlot('price-chart', [priceTrace, ...tradeLines, entryTrace, exitTrace], priceLayout);
+        
+        // 2. Trade P&L over time
+        const pnlData = [{
+            x: trades.map(t => new Date(t.exit)),
+            y: trades.map(t => t.pnl),
+            type: 'bar',
+            marker: {
+                color: trades.map(t => t.pnl > 0 ? 'green' : 'red')
+            },
+            text: trades.map(t => `$${t.pnl}`),
+            textposition: 'auto'
+        }];
+        
+        const pnlLayout = {
+            title: 'Trade P&L Over Time',
+            xaxis: { title: 'Exit Date' },
+            yaxis: { title: 'P&L ($)' },
+            template: 'plotly_white'
+        };
+        
+        Plotly.newPlot('pnl-chart', pnlData, pnlLayout);
+        
+        // 3. Cumulative returns
+        let cumulativePnL = 0;
+        const cumulativeData = trades.map(trade => {
+            cumulativePnL += trade.pnl;
+            return {
+                date: new Date(trade.exit),
+                cumPnL: cumulativePnL
+            };
+        });
+        
+        const cumulativeTrace = [{
+            x: cumulativeData.map(d => d.date),
+            y: cumulativeData.map(d => d.cumPnL),
+            type: 'scatter',
+            mode: 'lines+markers',
+            fill: 'tozeroy',
+            line: {
+                color: 'blue',
+                width: 3
+            },
+            marker: { size: 6 }
+        }];
+        
+        const cumulativeLayout = {
+            title: 'Cumulative P&L',
+            xaxis: { title: 'Date' },
+            yaxis: { title: 'Cumulative P&L ($)' },
+            template: 'plotly_white',
+            shapes: [{
+                type: 'line',
+                x0: cumulativeData[0].date,
+                y0: 0,
+                x1: cumulativeData[cumulativeData.length - 1].date,
+                y1: 0,
+                line: {
+                    color: 'gray',
+                    width: 1,
+                    dash: 'dash'
+                }
+            }]
+        };
+        
+        Plotly.newPlot('cumulative-chart', cumulativeTrace, cumulativeLayout);
+    </script>
+</body>
+</html>

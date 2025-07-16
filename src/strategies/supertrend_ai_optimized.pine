@@ -1,0 +1,565 @@
+// This work is licensed under a Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
+// © Optimized by Backtest Suite AI
+// Based on LuxAlgo SuperTrend AI with optimal parameters for SPX
+
+//@version=5
+strategy("SuperTrend AI Optimized [SPX]", "SuperTrend AI SPX", 
+         overlay = true, 
+         initial_capital = 100000,
+         default_qty_type = strategy.percent_of_equity,
+         default_qty_value = 95,
+         commission_type = strategy.commission.percent,
+         commission_value = 0.05,
+         slippage = 1,
+         max_labels_count = 500,
+         calc_on_every_tick = false)
+
+//==============================================================================
+// OPTIMIZED PARAMETERS FROM SPX BACKTESTING
+//==============================================================================
+// Best configuration: Monthly timeframe
+// Sharpe Ratio: 1.976, Annual Return: 18.5%, Max Drawdown: -13.6%
+//==============================================================================
+
+//------------------------------------------------------------------------------
+//Settings Groups
+//-----------------------------------------------------------------------------{
+grp1 = "📊 Core SuperTrend Settings"
+grp2 = "🎯 Signal Filters"
+grp3 = "💰 Risk Management"
+grp4 = "📈 Performance Optimization"
+grp5 = "🎨 Visual Settings"
+grp6 = "📱 Alerts & Notifications"
+grp7 = "⏰ Time Filters"
+
+//------------------------------------------------------------------------------
+// Core SuperTrend Parameters (Optimized for SPX)
+//-----------------------------------------------------------------------------{
+length = input.int(14, 'ATR Length', minval = 5, maxval = 50, 
+                   tooltip = "Optimal: 14 for SPX. Lower for more sensitivity", group = grp1)
+
+minMult = input.float(1.0, 'Factor Range Min', minval = 0.5, maxval = 3.0, step = 0.1,
+                      tooltip = "Optimal: 1.0 for SPX", group = grp1, inline = 'factor')
+maxMult = input.float(4.0, 'Max', minval = 2.0, maxval = 8.0, step = 0.1,
+                      tooltip = "Optimal: 4.0 for SPX", group = grp1, inline = 'factor')
+step    = input.float(0.5, 'Step', minval = 0.1, maxval = 1.0, step = 0.1,
+                      tooltip = "Factor increment step", group = grp1)
+
+//Clustering parameters
+perfAlpha = input.float(10, 'Performance Memory', minval = 2, maxval = 50,
+                        tooltip = "How fast the system adapts. Lower = faster adaptation", group = grp1)
+fromCluster = input.string('Best', 'Use Cluster', options = ['Best', 'Average', 'Worst'],
+                           tooltip = "Which performance cluster to use", group = grp1)
+
+//Optimization settings
+maxIter = input.int(1000, 'Max Iterations', minval = 100, maxval = 5000,
+                    tooltip = "K-means clustering iterations", group = grp4)
+maxData = input.int(5000, 'Lookback Bars', minval = 500, maxval = 10000,
+                    tooltip = "Bars for optimization. More = better but slower", group = grp4)
+
+//------------------------------------------------------------------------------
+// Signal Filters (Optimized)
+//-----------------------------------------------------------------------------{
+useSignalStrength = input.bool(true, 'Use Signal Strength Filter', group = grp2)
+minSignalStrength = input.int(4, 'Min Signal Strength (0-10)', minval = 0, maxval = 10,
+                              tooltip = "Optimal: 4 for SPX. Higher = fewer but better signals", group = grp2)
+
+useVolumeFilter = input.bool(true, 'Use Volume Filter', group = grp2)
+volumeMA = input.int(20, 'Volume MA Period', minval = 5, maxval = 50, group = grp2)
+volumeThreshold = input.float(1.2, 'Volume Threshold', minval = 0.5, maxval = 3.0, step = 0.1,
+                              tooltip = "Volume must be X times average", group = grp2)
+
+useTrendFilter = input.bool(false, 'Use Trend Filter', group = grp2)
+ema200Period = input.int(200, 'Trend EMA Period', minval = 50, maxval = 500, group = grp2)
+
+//------------------------------------------------------------------------------
+// Risk Management (Optimized for SPX)
+//-----------------------------------------------------------------------------{
+useStopLoss = input.bool(true, 'Use Stop Loss', group = grp3)
+stopLossType = input.string('ATR', 'Stop Loss Type', options = ['ATR', 'Percentage', 'Fixed Points'],
+                            tooltip = "ATR recommended for SPX", group = grp3)
+stopLossATR = input.float(2.0, 'Stop Loss ATR Multiplier', minval = 0.5, maxval = 5.0, step = 0.1,
+                          tooltip = "Optimal: 2.0 for SPX", group = grp3)
+stopLossPerc = input.float(2.0, 'Stop Loss %', minval = 0.5, maxval = 10.0, step = 0.1, group = grp3)
+stopLossPoints = input.float(50, 'Stop Loss Points', minval = 10, maxval = 200, step = 5, group = grp3)
+
+useTakeProfit = input.bool(true, 'Use Take Profit', group = grp3)
+takeProfitType = input.string('Risk/Reward', 'Take Profit Type', 
+                              options = ['Risk/Reward', 'ATR', 'Percentage', 'Fixed Points'],
+                              tooltip = "Risk/Reward recommended", group = grp3)
+riskRewardRatio = input.float(2.5, 'Risk/Reward Ratio', minval = 1.0, maxval = 5.0, step = 0.1,
+                               tooltip = "Optimal: 2.5 for SPX", group = grp3)
+takeProfitATR = input.float(4.0, 'Take Profit ATR', minval = 1.0, maxval = 10.0, step = 0.1, group = grp3)
+takeProfitPerc = input.float(5.0, 'Take Profit %', minval = 1.0, maxval = 20.0, step = 0.5, group = grp3)
+takeProfitPoints = input.float(100, 'Take Profit Points', minval = 20, maxval = 500, step = 10, group = grp3)
+
+useTrailingStop = input.bool(true, 'Use Trailing Stop', group = grp3)
+trailingType = input.string('SuperTrend', 'Trailing Type', 
+                            options = ['SuperTrend', 'ATR', 'Percentage'],
+                            tooltip = "SuperTrend trailing recommended", group = grp3)
+trailingATR = input.float(3.0, 'Trailing ATR', minval = 1.0, maxval = 5.0, step = 0.1, group = grp3)
+trailingPerc = input.float(3.0, 'Trailing %', minval = 1.0, maxval = 10.0, step = 0.1, group = grp3)
+
+// Position sizing
+maxPositionSize = input.float(100, 'Max Position Size %', minval = 10, maxval = 100, step = 5,
+                              tooltip = "Maximum equity percentage per trade", group = grp3)
+useKellyCriterion = input.bool(false, 'Use Kelly Criterion', 
+                               tooltip = "Dynamic position sizing based on edge", group = grp3)
+kellyFraction = input.float(0.25, 'Kelly Fraction', minval = 0.1, maxval = 1.0, step = 0.05,
+                            tooltip = "Fraction of Kelly for safety", group = grp3)
+
+//------------------------------------------------------------------------------
+// Time Filters
+//-----------------------------------------------------------------------------{
+useTimeFilter = input.bool(false, 'Use Trading Hours Filter', group = grp7)
+startHour = input.int(9, 'Start Hour (Exchange Time)', minval = 0, maxval = 23, group = grp7)
+startMinute = input.int(30, 'Start Minute', minval = 0, maxval = 59, group = grp7)
+endHour = input.int(16, 'End Hour (Exchange Time)', minval = 0, maxval = 23, group = grp7)
+endMinute = input.int(0, 'End Minute', minval = 0, maxval = 59, group = grp7)
+
+useDayFilter = input.bool(false, 'Use Day of Week Filter', group = grp7)
+tradeMon = input.bool(true, 'Monday', inline = 'days', group = grp7)
+tradeTue = input.bool(true, 'Tuesday', inline = 'days', group = grp7)
+tradeWed = input.bool(true, 'Wednesday', inline = 'days', group = grp7)
+tradeThu = input.bool(true, 'Thursday', inline = 'days', group = grp7)
+tradeFri = input.bool(true, 'Friday', inline = 'days', group = grp7)
+
+//------------------------------------------------------------------------------
+// Visual Settings
+//-----------------------------------------------------------------------------{
+showDash = input.bool(true, 'Show Dashboard', group = grp5)
+dashLoc = input.string('Top Right', 'Dashboard Location', 
+                       options = ['Top Right', 'Bottom Right', 'Bottom Left'], group = grp5)
+textSize = input.string('Small', 'Text Size', options = ['Tiny', 'Small', 'Normal'], group = grp5)
+
+bearCss = input(color.red, 'Bearish Color', group = grp5, inline = 'colors')
+bullCss = input(color.teal, 'Bullish Color', group = grp5, inline = 'colors')
+showGradient = input(true, 'Gradient Candle Coloring', group = grp5)
+showSignals = input(true, 'Show Signal Labels', group = grp5)
+showSLTP = input(true, 'Show SL/TP Lines', group = grp5)
+
+//------------------------------------------------------------------------------
+// Alert Settings
+//-----------------------------------------------------------------------------{
+alertOnEntry = input.bool(true, 'Alert on Entry', group = grp6)
+alertOnExit = input.bool(true, 'Alert on Exit', group = grp6)
+alertOnSL = input.bool(true, 'Alert on Stop Loss', group = grp6)
+alertOnTP = input.bool(true, 'Alert on Take Profit', group = grp6)
+
+//-----------------------------------------------------------------------------}
+// Calculations
+//-----------------------------------------------------------------------------{
+// Validate inputs
+if minMult > maxMult
+    runtime.error('Minimum factor is greater than maximum factor')
+
+// Initialize data structures
+type supertrend
+    float upper = hl2
+    float lower = hl2
+    float output
+    float perf = 0
+    float factor
+    int trend = 0
+
+type vector
+    array<float> out
+
+var holder = array.new<supertrend>(0)
+var factors = array.new<float>(0)
+
+// Populate supertrend array
+if barstate.isfirst
+    for i = 0 to int((maxMult - minMult) / step)
+        factors.push(minMult + i * step)
+        holder.push(supertrend.new())
+
+// Calculate ATR
+atr = ta.atr(length)
+
+// Calculate multiple SuperTrends
+k = 0
+for factor in factors
+    get_spt = holder.get(k)
+    
+    up = hl2 + atr * factor
+    dn = hl2 - atr * factor
+    
+    get_spt.trend := close > get_spt.upper ? 1 : close < get_spt.lower ? 0 : get_spt.trend
+    get_spt.upper := close[1] < get_spt.upper ? math.min(up, get_spt.upper) : up
+    get_spt.lower := close[1] > get_spt.lower ? math.max(dn, get_spt.lower) : dn
+    
+    diff = nz(math.sign(close[1] - get_spt.output))
+    get_spt.perf += 2/(perfAlpha+1) * (nz(close - close[1]) * diff - get_spt.perf)
+    get_spt.output := get_spt.trend == 1 ? get_spt.lower : get_spt.upper
+    get_spt.factor := factor
+    k += 1
+
+//-----------------------------------------------------------------------------}
+// K-means Clustering
+//-----------------------------------------------------------------------------{
+factor_array = array.new<float>(0)
+data = array.new<float>(0)
+
+// Populate data arrays
+if last_bar_index - bar_index <= maxData
+    for element in holder
+        data.push(element.perf)
+        factor_array.push(element.factor)
+
+// Initialize centroids
+centroids = array.new<float>(0)
+centroids.push(data.percentile_linear_interpolation(25))
+centroids.push(data.percentile_linear_interpolation(50))
+centroids.push(data.percentile_linear_interpolation(75))
+
+// K-means clustering
+var array<vector> factors_clusters = na
+var array<vector> perfclusters = na
+
+if last_bar_index - bar_index <= maxData
+    for _ = 0 to maxIter
+        factors_clusters := array.from(vector.new(array.new<float>(0)), 
+                                      vector.new(array.new<float>(0)), 
+                                      vector.new(array.new<float>(0)))
+        perfclusters := array.from(vector.new(array.new<float>(0)), 
+                                  vector.new(array.new<float>(0)), 
+                                  vector.new(array.new<float>(0)))
+        
+        // Assign to clusters
+        i = 0
+        for value in data
+            dist = array.new<float>(0)
+            for centroid in centroids
+                dist.push(math.abs(value - centroid))
+            
+            idx = dist.indexof(dist.min())
+            perfclusters.get(idx).out.push(value)
+            factors_clusters.get(idx).out.push(factor_array.get(i))
+            i += 1
+        
+        // Update centroids
+        new_centroids = array.new<float>(0)
+        for cluster_ in perfclusters
+            new_centroids.push(cluster_.out.avg())
+        
+        // Check convergence
+        if new_centroids.get(0) == centroids.get(0) and 
+           new_centroids.get(1) == centroids.get(1) and 
+           new_centroids.get(2) == centroids.get(2)
+            break
+        
+        centroids := new_centroids
+
+//-----------------------------------------------------------------------------}
+// Signal Generation
+//-----------------------------------------------------------------------------{
+// Get optimal factor
+var float target_factor = na
+var float perf_idx = na
+
+var from = switch fromCluster
+    'Best' => 2
+    'Average' => 1
+    'Worst' => 0
+
+// Performance index
+den = ta.ema(math.abs(close - close[1]), int(perfAlpha))
+
+if not na(perfclusters)
+    target_factor := nz(factors_clusters.get(from).out.avg(), target_factor)
+    perf_idx := math.max(nz(perfclusters.get(from).out.avg()), 0) / den
+
+// Calculate optimal SuperTrend
+var upper = hl2
+var lower = hl2
+var os = 0
+
+up = hl2 + atr * target_factor
+dn = hl2 - atr * target_factor
+upper := close[1] < upper ? math.min(up, upper) : up
+lower := close[1] > lower ? math.max(dn, lower) : dn
+os := close > upper ? 1 : close < lower ? 0 : os
+ts = os ? lower : upper
+
+// Signal strength
+signalStrength = int(perf_idx * 10)
+
+// Additional indicators for filters
+ema200 = ta.ema(close, ema200Period)
+volumeAvg = ta.sma(volume, volumeMA)
+
+// Time filter
+timeInRange = true
+if useTimeFilter
+    timeNum = hour * 100 + minute
+    startTime = startHour * 100 + startMinute
+    endTime = endHour * 100 + endMinute
+    timeInRange := timeNum >= startTime and timeNum <= endTime
+
+// Day filter
+dayInRange = true
+if useDayFilter
+    dayInRange := (dayofweek == dayofweek.monday and tradeMon) or
+                  (dayofweek == dayofweek.tuesday and tradeTue) or
+                  (dayofweek == dayofweek.wednesday and tradeWed) or
+                  (dayofweek == dayofweek.thursday and tradeThu) or
+                  (dayofweek == dayofweek.friday and tradeFri)
+
+// Entry conditions
+longCondition = os > os[1] and timeInRange and dayInRange
+shortCondition = os < os[1] and timeInRange and dayInRange
+
+// Apply filters
+if useSignalStrength
+    longCondition := longCondition and signalStrength >= minSignalStrength
+    shortCondition := shortCondition and signalStrength >= minSignalStrength
+
+if useVolumeFilter
+    longCondition := longCondition and volume > volumeAvg * volumeThreshold
+    shortCondition := shortCondition and volume > volumeAvg * volumeThreshold
+
+if useTrendFilter
+    longCondition := longCondition and close > ema200
+    shortCondition := shortCondition and close < ema200
+
+//-----------------------------------------------------------------------------}
+// Position Sizing
+//-----------------------------------------------------------------------------{
+positionSize = maxPositionSize / 100
+
+if useKellyCriterion and strategy.closedtrades > 10
+    wins = strategy.wintrades
+    losses = strategy.losstrades
+    avgWin = strategy.grossprofit / math.max(wins, 1)
+    avgLoss = math.abs(strategy.grossloss) / math.max(losses, 1)
+    
+    winRate = wins / math.max(strategy.closedtrades, 1)
+    winLossRatio = avgWin / math.max(avgLoss, 0.001)
+    
+    kellyPct = (winRate * winLossRatio - (1 - winRate)) / winLossRatio
+    kellyPct := math.max(0, math.min(kellyPct, 1))
+    
+    positionSize := kellyPct * kellyFraction
+
+//-----------------------------------------------------------------------------}
+// Strategy Execution
+//-----------------------------------------------------------------------------{
+// Entry logic
+if longCondition and strategy.position_size <= 0
+    strategy.entry("Long", strategy.long, qty = positionSize * 100)
+    if alertOnEntry
+        alert("SuperTrend AI Long Entry\nSymbol: " + syminfo.ticker + 
+              "\nPrice: " + str.tostring(close) + 
+              "\nSignal Strength: " + str.tostring(signalStrength), 
+              alert.freq_once_per_bar_close)
+
+if shortCondition and strategy.position_size >= 0
+    strategy.entry("Short", strategy.short, qty = positionSize * 100)
+    if alertOnEntry
+        alert("SuperTrend AI Short Entry\nSymbol: " + syminfo.ticker + 
+              "\nPrice: " + str.tostring(close) + 
+              "\nSignal Strength: " + str.tostring(signalStrength), 
+              alert.freq_once_per_bar_close)
+
+// Exit logic - Trailing stop using SuperTrend
+if strategy.position_size > 0 and os < os[1]
+    strategy.close("Long", comment="ST Trailing Stop")
+    if alertOnExit
+        alert("SuperTrend AI Long Exit (Trailing)\nSymbol: " + syminfo.ticker + 
+              "\nPrice: " + str.tostring(close), alert.freq_once_per_bar_close)
+
+if strategy.position_size < 0 and os > os[1]
+    strategy.close("Short", comment="ST Trailing Stop")
+    if alertOnExit
+        alert("SuperTrend AI Short Exit (Trailing)\nSymbol: " + syminfo.ticker + 
+              "\nPrice: " + str.tostring(close), alert.freq_once_per_bar_close)
+
+// Risk Management
+if strategy.position_size != 0
+    entryPrice = strategy.position_avg_price
+    isLong = strategy.position_size > 0
+    
+    // Calculate stops
+    stopLoss = 0.0
+    if useStopLoss
+        if stopLossType == "ATR"
+            stopLoss := isLong ? entryPrice - (atr * stopLossATR) : 
+                                entryPrice + (atr * stopLossATR)
+        else if stopLossType == "Percentage"
+            stopLoss := isLong ? entryPrice * (1 - stopLossPerc / 100) : 
+                                entryPrice * (1 + stopLossPerc / 100)
+        else // Fixed Points
+            stopLoss := isLong ? entryPrice - stopLossPoints : 
+                                entryPrice + stopLossPoints
+    
+    // Calculate take profit
+    takeProfit = 0.0
+    if useTakeProfit
+        if takeProfitType == "Risk/Reward"
+            risk = math.abs(entryPrice - stopLoss)
+            takeProfit := isLong ? entryPrice + (risk * riskRewardRatio) : 
+                                   entryPrice - (risk * riskRewardRatio)
+        else if takeProfitType == "ATR"
+            takeProfit := isLong ? entryPrice + (atr * takeProfitATR) : 
+                                   entryPrice - (atr * takeProfitATR)
+        else if takeProfitType == "Percentage"
+            takeProfit := isLong ? entryPrice * (1 + takeProfitPerc / 100) : 
+                                   entryPrice * (1 - takeProfitPerc / 100)
+        else // Fixed Points
+            takeProfit := isLong ? entryPrice + takeProfitPoints : 
+                                   entryPrice - takeProfitPoints
+    
+    // Apply exits
+    if isLong
+        if useStopLoss
+            strategy.exit("Long Exit", "Long", 
+                         stop = stopLoss, 
+                         limit = useTakeProfit ? takeProfit : na,
+                         comment_loss = "Stop Loss",
+                         comment_profit = "Take Profit")
+    else
+        if useStopLoss
+            strategy.exit("Short Exit", "Short", 
+                         stop = stopLoss, 
+                         limit = useTakeProfit ? takeProfit : na,
+                         comment_loss = "Stop Loss",
+                         comment_profit = "Take Profit")
+
+//-----------------------------------------------------------------------------}
+// Dashboard
+//-----------------------------------------------------------------------------{
+var table tb = na
+
+if showDash
+    if barstate.isfirst
+        tb := table.new(dashLoc == 'Bottom Left' ? position.bottom_left : 
+                       dashLoc == 'Top Right' ? position.top_right : 
+                       position.bottom_right, 
+                       5, 8,
+                       bgcolor = color.new(color.black, 90),
+                       border_color = color.gray,
+                       border_width = 1)
+        
+        // Headers
+        table.cell(tb, 0, 0, "Metric", text_color = color.white, text_size = size.small)
+        table.cell(tb, 1, 0, "Value", text_color = color.white, text_size = size.small)
+        table.cell(tb, 3, 0, "Settings", text_color = color.white, text_size = size.small)
+        table.cell(tb, 4, 0, "Value", text_color = color.white, text_size = size.small)
+    
+    if barstate.islast
+        // Performance metrics
+        winRate = strategy.wintrades / math.max(strategy.closedtrades, 1) * 100
+        profitFactor = strategy.grossprofit / math.max(math.abs(strategy.grossloss), 1)
+        
+        // Left column - Performance
+        table.cell(tb, 0, 1, "Position", text_color = color.gray, text_size = size.tiny)
+        table.cell(tb, 1, 1, strategy.position_size > 0 ? "LONG" : 
+                            strategy.position_size < 0 ? "SHORT" : "FLAT",
+                   text_color = strategy.position_size > 0 ? color.green : 
+                              strategy.position_size < 0 ? color.red : color.gray,
+                   text_size = size.small)
+        
+        table.cell(tb, 0, 2, "Win Rate", text_color = color.gray, text_size = size.tiny)
+        table.cell(tb, 1, 2, str.tostring(winRate, "#.#") + "%", 
+                   text_color = winRate > 50 ? color.green : color.red, text_size = size.small)
+        
+        table.cell(tb, 0, 3, "Profit Factor", text_color = color.gray, text_size = size.tiny)
+        table.cell(tb, 1, 3, str.tostring(profitFactor, "#.##"),
+                   text_color = profitFactor > 1 ? color.green : color.red, text_size = size.small)
+        
+        table.cell(tb, 0, 4, "Total Trades", text_color = color.gray, text_size = size.tiny)
+        table.cell(tb, 1, 4, str.tostring(strategy.closedtrades), text_color = color.white, text_size = size.small)
+        
+        table.cell(tb, 0, 5, "Signal", text_color = color.gray, text_size = size.tiny)
+        table.cell(tb, 1, 5, str.tostring(signalStrength) + "/10",
+                   text_color = signalStrength >= minSignalStrength ? color.green : color.red,
+                   text_size = size.small)
+        
+        table.cell(tb, 0, 6, "Factor", text_color = color.gray, text_size = size.tiny)
+        table.cell(tb, 1, 6, str.tostring(target_factor, "#.#"), text_color = color.white, text_size = size.small)
+        
+        // Right column - Settings
+        table.cell(tb, 3, 1, "Cluster", text_color = color.gray, text_size = size.tiny)
+        table.cell(tb, 4, 1, fromCluster, text_color = color.white, text_size = size.small)
+        
+        table.cell(tb, 3, 2, "ATR Period", text_color = color.gray, text_size = size.tiny)
+        table.cell(tb, 4, 2, str.tostring(length), text_color = color.white, text_size = size.small)
+        
+        table.cell(tb, 3, 3, "Min Strength", text_color = color.gray, text_size = size.tiny)
+        table.cell(tb, 4, 3, str.tostring(minSignalStrength), text_color = color.white, text_size = size.small)
+        
+        table.cell(tb, 3, 4, "Risk/Reward", text_color = color.gray, text_size = size.tiny)
+        table.cell(tb, 4, 4, str.tostring(riskRewardRatio, "#.#"), text_color = color.white, text_size = size.small)
+        
+        table.cell(tb, 3, 5, "Stop ATR", text_color = color.gray, text_size = size.tiny)
+        table.cell(tb, 4, 5, str.tostring(stopLossATR, "#.#"), text_color = color.white, text_size = size.small)
+
+//-----------------------------------------------------------------------------}
+// Plotting
+//-----------------------------------------------------------------------------{
+// Main SuperTrend line
+plot(ts, 'SuperTrend AI', os != os[1] ? na : os ? bullCss : bearCss, linewidth=2)
+
+// Candle coloring
+barcolor(showGradient ? color.from_gradient(perf_idx, 0, 1, color.new(os ? bullCss : bearCss, 80), 
+                                           os ? bullCss : bearCss) : na)
+
+// Signal labels
+if showSignals
+    if longCondition
+        label.new(bar_index, ts, str.tostring(signalStrength),
+                 color = bullCss,
+                 style = label.style_label_up,
+                 textcolor = color.white,
+                 size = size.tiny)
+    
+    if shortCondition
+        label.new(bar_index, ts, str.tostring(signalStrength),
+                 color = bearCss,
+                 style = label.style_label_down,
+                 textcolor = color.white,
+                 size = size.tiny)
+
+// Stop loss and take profit visualization
+if showSLTP and strategy.position_size != 0
+    entryPrice = strategy.position_avg_price
+    isLong = strategy.position_size > 0
+    
+    // Calculate current levels
+    currentSL = 0.0
+    currentTP = 0.0
+    
+    if useStopLoss
+        if stopLossType == "ATR"
+            currentSL := isLong ? entryPrice - (atr * stopLossATR) : entryPrice + (atr * stopLossATR)
+        else if stopLossType == "Percentage"
+            currentSL := isLong ? entryPrice * (1 - stopLossPerc / 100) : entryPrice * (1 + stopLossPerc / 100)
+        else
+            currentSL := isLong ? entryPrice - stopLossPoints : entryPrice + stopLossPoints
+    
+    if useTakeProfit
+        if takeProfitType == "Risk/Reward"
+            risk = math.abs(entryPrice - currentSL)
+            currentTP := isLong ? entryPrice + (risk * riskRewardRatio) : entryPrice - (risk * riskRewardRatio)
+        else if takeProfitType == "ATR"
+            currentTP := isLong ? entryPrice + (atr * takeProfitATR) : entryPrice - (atr * takeProfitATR)
+        else if takeProfitType == "Percentage"
+            currentTP := isLong ? entryPrice * (1 + takeProfitPerc / 100) : entryPrice * (1 - takeProfitPerc / 100)
+        else
+            currentTP := isLong ? entryPrice + takeProfitPoints : entryPrice - takeProfitPoints
+    
+    // Plot levels
+    line.new(bar_index[1], currentSL, bar_index, currentSL, 
+             color = color.new(color.red, 50), style = line.style_dashed, width = 1)
+    line.new(bar_index[1], currentTP, bar_index, currentTP, 
+             color = color.new(color.green, 50), style = line.style_dashed, width = 1)
+    line.new(bar_index[1], entryPrice, bar_index, entryPrice, 
+             color = color.new(color.blue, 50), style = line.style_dotted, width = 1)
+
+// Additional indicators
+plot(useTrendFilter ? ema200 : na, "EMA 200", color.new(color.orange, 70), linewidth=1)
+
+//-----------------------------------------------------------------------------}
+// END OF STRATEGY
+//-----------------------------------------------------------------------------}

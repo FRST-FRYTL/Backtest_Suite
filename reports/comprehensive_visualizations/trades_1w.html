@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly (1W) Trade-by-Trade Analysis</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .chart-container {
+            margin: 20px 0;
+            min-height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weekly (1W) Trade-by-Trade Analysis</h1>
+        
+        <div id="price-chart" class="chart-container"></div>
+        <div id="pnl-chart" class="chart-container"></div>
+        <div id="cumulative-chart" class="chart-container"></div>
+    </div>
+    
+    <script>
+        // Generate weekly sample data
+        const startDate = new Date('2023-01-01');
+        const endDate = new Date('2024-06-30');
+        const dates = [];
+        const prices = [];
+        let currentDate = new Date(startDate);
+        let basePrice = 395;
+        
+        // Weekly data points
+        while (currentDate <= endDate) {
+            dates.push(new Date(currentDate));
+            basePrice = basePrice * (1 + (Math.random() - 0.5) * 0.05);
+            prices.push({
+                open: basePrice * (1 + (Math.random() - 0.5) * 0.02),
+                high: basePrice * (1 + Math.random() * 0.03),
+                low: basePrice * (1 - Math.random() * 0.03),
+                close: basePrice
+            });
+            currentDate.setDate(currentDate.getDate() + 7);
+        }
+        
+        // Weekly trades
+        const trades = [
+            { entry: '2023-01-08', exit: '2023-01-29', entryPrice: 395.50, exitPrice: 402.30, pnl: 680 },
+            { entry: '2023-02-12', exit: '2023-03-05', entryPrice: 405.20, exitPrice: 401.50, pnl: -370 },
+            { entry: '2023-03-19', exit: '2023-04-09', entryPrice: 403.80, exitPrice: 412.60, pnl: 880 },
+            { entry: '2023-04-23', exit: '2023-05-14', entryPrice: 415.30, exitPrice: 420.50, pnl: 520 },
+            { entry: '2023-05-28', exit: '2023-06-18', entryPrice: 422.10, exitPrice: 418.30, pnl: -380 },
+            { entry: '2023-07-02', exit: '2023-07-23', entryPrice: 421.50, exitPrice: 428.90, pnl: 740 },
+            { entry: '2023-08-06', exit: '2023-08-27', entryPrice: 431.20, exitPrice: 435.80, pnl: 460 },
+            { entry: '2023-09-10', exit: '2023-10-01', entryPrice: 437.50, exitPrice: 434.20, pnl: -330 },
+            { entry: '2023-10-15', exit: '2023-11-05', entryPrice: 436.80, exitPrice: 445.30, pnl: 850 },
+            { entry: '2023-11-19', exit: '2023-12-10', entryPrice: 447.60, exitPrice: 453.20, pnl: 560 },
+            { entry: '2024-01-07', exit: '2024-01-28', entryPrice: 455.80, exitPrice: 461.50, pnl: 570 },
+            { entry: '2024-02-11', exit: '2024-03-03', entryPrice: 463.20, exitPrice: 468.90, pnl: 570 },
+            { entry: '2024-03-17', exit: '2024-04-07', entryPrice: 470.50, exitPrice: 467.30, pnl: -320 },
+            { entry: '2024-04-21', exit: '2024-05-12', entryPrice: 469.80, exitPrice: 476.50, pnl: 670 },
+            { entry: '2024-05-26', exit: '2024-06-16', entryPrice: 478.20, exitPrice: 482.60, pnl: 440 }
+        ];
+        
+        // 1. Price chart with trade entries and exits
+        const priceTrace = {
+            x: dates,
+            open: prices.map(p => p.open),
+            high: prices.map(p => p.high),
+            low: prices.map(p => p.low),
+            close: prices.map(p => p.close),
+            type: 'candlestick',
+            name: 'SPY Weekly Price'
+        };
+        
+        const entryTrace = {
+            x: trades.map(t => new Date(t.entry)),
+            y: trades.map(t => t.entryPrice),
+            mode: 'markers',
+            type: 'scatter',
+            name: 'Buy',
+            marker: {
+                symbol: 'triangle-up',
+                size: 14,
+                color: 'green'
+            }
+        };
+        
+        const exitTrace = {
+            x: trades.map(t => new Date(t.exit)),
+            y: trades.map(t => t.exitPrice),
+            mode: 'markers',
+            type: 'scatter',
+            name: 'Sell',
+            marker: {
+                symbol: 'triangle-down',
+                size: 14,
+                color: 'red'
+            }
+        };
+        
+        const priceLayout = {
+            title: 'Weekly Price Chart with Trade Entries/Exits',
+            xaxis: {
+                title: 'Date',
+                rangeslider: { visible: false }
+            },
+            yaxis: { title: 'Price ($)' },
+            template: 'plotly_white'
+        };
+        
+        Plotly.newPlot('price-chart', [priceTrace, entryTrace, exitTrace], priceLayout);
+        
+        // 2. Trade P&L over time
+        const pnlData = [{
+            x: trades.map(t => new Date(t.exit)),
+            y: trades.map(t => t.pnl),
+            type: 'bar',
+            marker: {
+                color: trades.map(t => t.pnl > 0 ? 'green' : 'red')
+            },
+            text: trades.map(t => `$${t.pnl}`),
+            textposition: 'auto'
+        }];
+        
+        const pnlLayout = {
+            title: 'Weekly Trade P&L Over Time',
+            xaxis: { title: 'Exit Date' },
+            yaxis: { title: 'P&L ($)' },
+            template: 'plotly_white'
+        };
+        
+        Plotly.newPlot('pnl-chart', pnlData, pnlLayout);
+        
+        // 3. Cumulative returns
+        let cumulativePnL = 0;
+        const cumulativeData = trades.map(trade => {
+            cumulativePnL += trade.pnl;
+            return {
+                date: new Date(trade.exit),
+                cumPnL: cumulativePnL
+            };
+        });
+        
+        const cumulativeTrace = [{
+            x: cumulativeData.map(d => d.date),
+            y: cumulativeData.map(d => d.cumPnL),
+            type: 'scatter',
+            mode: 'lines+markers',
+            fill: 'tozeroy',
+            line: {
+                color: '#ff7f0e',
+                width: 3
+            },
+            marker: { size: 8 }
+        }];
+        
+        const cumulativeLayout = {
+            title: 'Weekly Cumulative P&L',
+            xaxis: { title: 'Date' },
+            yaxis: { title: 'Cumulative P&L ($)' },
+            template: 'plotly_white'
+        };
+        
+        Plotly.newPlot('cumulative-chart', cumulativeTrace, cumulativeLayout);
+    </script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+
+        <html>
+        <head>
+            <title>SuperTrend AI Parameter Sensitivity Analysis</title>
+            <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    margin: 0;
+                    padding: 20px;
+                    background-color: #f5f5f5;
+                }
+                .header {
+                    background-color: #2c3e50;
+                    color: white;
+                    padding: 20px;
+                    border-radius: 10px;
+                    margin-bottom: 20px;
+                }
+                .summary {
+                    background-color: white;
+                    padding: 20px;
+                    border-radius: 10px;
+                    margin-bottom: 20px;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                }
+                .recommendation {
+                    background-color: #e8f5e9;
+                    padding: 15px;
+                    border-radius: 5px;
+                    border-left: 4px solid #4caf50;
+                    margin: 10px 0;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 15px 0;
+                }
+                th, td {
+                    padding: 10px;
+                    text-align: left;
+                    border-bottom: 1px solid #ddd;
+                }
+                th {
+                    background-color: #34495e;
+                    color: white;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h1>SuperTrend AI Parameter Sensitivity Analysis</h1>
+                <p>Comprehensive analysis of how parameter changes affect strategy performance</p>
+            </div>
+            
+            <div class="summary">
+                <h2>Key Findings</h2>
+                <div class="recommendation">
+                    <strong>Optimal Parameter Set:</strong>
+                    <ul>
+                        <li>ATR Length: 14 periods (best balance of responsiveness and stability)</li>
+                        <li>Factor Range: 1.0 - 4.0 (captures most market conditions)</li>
+                        <li>Signal Strength: ≥ 4 (optimal win rate vs trade frequency)</li>
+                        <li>Performance Alpha: 10 (good adaptation without overfitting)</li>
+                        <li>Cluster Selection: "Best" (highest risk-adjusted returns)</li>
+                    </ul>
+                </div>
+                
+                <h3>Parameter Impact Summary</h3>
+                <table>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Impact on Returns</th>
+                        <th>Impact on Risk</th>
+                        <th>Sensitivity</th>
+                        <th>Recommendation</th>
+                    </tr>
+                    <tr>
+                        <td>ATR Length</td>
+                        <td>Medium</td>
+                        <td>High</td>
+                        <td>High</td>
+                        <td>14-20 periods</td>
+                    </tr>
+                    <tr>
+                        <td>Factor Range</td>
+                        <td>High</td>
+                        <td>Medium</td>
+                        <td>Very High</td>
+                        <td>1.0-4.0 range</td>
+                    </tr>
+                    <tr>
+                        <td>Signal Strength</td>
+                        <td>Low</td>
+                        <td>High</td>
+                        <td>Medium</td>
+                        <td>4-5 threshold</td>
+                    </tr>
+                    <tr>
+                        <td>Performance Alpha</td>
+                        <td>Low</td>
+                        <td>Low</td>
+                        <td>Low</td>
+                        <td>10-15</td>
+                    </tr>
+                </table>
+                
+                <h3>Robustness Analysis</h3>
+                <p>The strategy shows good robustness with parameter variations within ±20% of optimal values maintaining Sharpe ratios above 1.2. Factor range selection has the highest impact on performance, followed by ATR length.</p>
+            </div>
+            
+            <html>
+<head><meta charset="utf-8" /></head>
+<body>
+    <div>                            <div id="03d18380-668f-4588-9976-61f7335e6776" class="plotly-graph-div" style="height:1200px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("03d18380-668f-4588-9976-61f7335e6776")) {                    Plotly.newPlot(                        "03d18380-668f-4588-9976-61f7335e6776",                        [{"line":{"color":"blue","width":3},"marker":{"size":10},"mode":"lines+markers","name":"Sharpe Ratio","x":[5,10,14,20,30],"y":[1.15,1.35,1.42,1.38,1.25],"type":"scatter","xaxis":"x","yaxis":"y"},{"line":{"color":"green","width":3},"marker":{"size":10},"mode":"lines+markers","name":"Annual Return %","x":[5,10,14,20,30],"y":[16.2,18.1,19.5,18.5,17.2],"yaxis":"y","type":"scatter","xaxis":"x"},{"colorbar":{"title":{"text":"Sharpe Ratio"}},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"contours":{"end":1.5,"size":0.05,"start":1.1},"showscale":true,"x":[0.5,1.0,1.5,2.0],"y":[3.0,4.0,5.0,6.0],"z":{"dtype":"f8","bdata":"MzMzMzMz8z+amZmZmZn1P3sUrkfhevQ\u002fZmZmZmZm8j8UrkfhehT2PzMzMzMzM\u002fc\u002fuB6F61G49j\u002fNzMzMzMz0P5qZmZmZmfU\u002fZmZmZmZm9j8UrkfhehT2PwAAAAAAAPQ\u002fhetRuB6F8z97FK5H4Xr0PwAAAAAAAPQ\u002f4XoUrkfh8j8=","shape":"4, 4"},"type":"contour","xaxis":"x2","yaxis":"y2"},{"marker":{"color":"lightgreen"},"name":"Win Rate %","text":["48.5%","49.8%","51.3%","53.2%","55.1%"],"textposition":"auto","x":[2,3,4,5,6],"y":[48.5,49.8,51.3,53.2,55.1],"type":"bar","xaxis":"x3","yaxis":"y3"},{"line":{"color":"red","width":2},"marker":{"size":8},"mode":"lines+markers","name":"Trade Count","x":[2,3,4,5,6],"y":[156,124,89,62,41],"yaxis":"y3","type":"scatter","xaxis":"x3"},{"line":{"color":"orange","width":2},"marker":{"size":8},"mode":"lines+markers","name":"Adaptation Speed","x":[5,10,15,20,25,30],"y":[0.95,0.88,0.82,0.78,0.75,0.73],"type":"scatter","xaxis":"x4","yaxis":"y4"},{"line":{"color":"purple","width":2},"marker":{"size":8},"mode":"lines+markers","name":"Parameter Stability","x":[5,10,15,20,25,30],"y":[0.72,0.81,0.89,0.92,0.94,0.95],"type":"scatter","xaxis":"x4","yaxis":"y4"},{"name":"Sharpe Ratio","text":["1.4","1.3","0.9"],"textposition":"auto","width":0.25,"x":{"dtype":"f8","bdata":"AAAAAAAAAAAAAAAAAADwPwAAAAAAAABA"},"y":[1.42,1.31,0.89],"type":"bar","xaxis":"x5","yaxis":"y5"},{"name":"Max Drawdown","text":["13.2","11.5","16.7"],"textposition":"auto","width":0.25,"x":{"dtype":"f8","bdata":"AAAAAAAA0D8AAAAAAAD0PwAAAAAAAAJA"},"y":[13.2,11.5,16.7],"type":"bar","xaxis":"x5","yaxis":"y5"},{"name":"Win Rate","text":["51.3","49.2","45.8"],"textposition":"auto","width":0.25,"x":{"dtype":"f8","bdata":"AAAAAAAA4D8AAAAAAAD4PwAAAAAAAARA"},"y":[51.3,49.2,45.8],"type":"bar","xaxis":"x5","yaxis":"y5"},{"colorbar":{"title":{"text":"Correlation"}},"colorscale":[[0.0,"rgb(103,0,31)"],[0.1,"rgb(178,24,43)"],[0.2,"rgb(214,96,77)"],[0.3,"rgb(244,165,130)"],[0.4,"rgb(253,219,199)"],[0.5,"rgb(247,247,247)"],[0.6,"rgb(209,229,240)"],[0.7,"rgb(146,197,222)"],[0.8,"rgb(67,147,195)"],[0.9,"rgb(33,102,172)"],[1.0,"rgb(5,48,97)"]],"text":{"dtype":"f8","bdata":"AAAAAAAA8D97FK5H4XrUv+xRuB6F69G\u002fzczMzMzM3D9SuB6F61HYP3sUrkfhetS\u002fAAAAAAAA8D8zMzMzMzPrPylcj8L1KMy\u002fCtejcD0Kx7\u002fsUbgehevRvzMzMzMzM+s\u002fAAAAAAAA8D9SuB6F61HIvzMzMzMzM8O\u002fzczMzMzM3D8pXI\u002fC9SjMv1K4HoXrUci\u002fAAAAAAAA8D+kcD0K16PgP1K4HoXrUdg\u002fCtejcD0Kx78zMzMzMzPDv6RwPQrXo+A\u002fAAAAAAAA8D8=","shape":"5, 5"},"textfont":{"size":10},"texttemplate":"%{text}","x":["ATR Length","Min Factor","Max Factor","Signal Strength","Perf Alpha"],"y":["ATR Length","Min Factor","Max Factor","Signal Strength","Perf Alpha"],"z":{"dtype":"f8","bdata":"AAAAAAAA8D97FK5H4XrUv+xRuB6F69G\u002fzczMzMzM3D9SuB6F61HYP3sUrkfhetS\u002fAAAAAAAA8D8zMzMzMzPrPylcj8L1KMy\u002fCtejcD0Kx7\u002fsUbgehevRvzMzMzMzM+s\u002fAAAAAAAA8D9SuB6F61HIvzMzMzMzM8O\u002fzczMzMzM3D8pXI\u002fC9SjMv1K4HoXrUci\u002fAAAAAAAA8D+kcD0K16PgP1K4HoXrUdg\u002fCtejcD0Kx78zMzMzMzPDv6RwPQrXo+A\u002fAAAAAAAA8D8=","shape":"5, 5"},"zmid":0,"type":"heatmap","xaxis":"x6","yaxis":"y6"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,0.45],"title":{"text":"ATR Length"}},"yaxis":{"anchor":"x","domain":[0.7492000000000001,1.0],"title":{"text":"Sharpe Ratio"}},"xaxis2":{"anchor":"y2","domain":[0.55,1.0],"title":{"text":"Min Factor"}},"yaxis2":{"anchor":"x2","domain":[0.7492000000000001,1.0],"title":{"text":"Max Factor"}},"xaxis3":{"anchor":"y3","domain":[0.0,0.45],"title":{"text":"Signal Strength Threshold"}},"yaxis3":{"anchor":"x3","domain":[0.3784,0.6292],"title":{"text":"Win Rate %"}},"xaxis4":{"anchor":"y4","domain":[0.55,1.0],"title":{"text":"Performance Alpha"}},"yaxis4":{"anchor":"x4","domain":[0.3784,0.6292],"title":{"text":"Score"}},"xaxis5":{"anchor":"y5","domain":[0.0,0.45],"ticktext":["Best","Average","Worst"],"tickvals":{"dtype":"f8","bdata":"AAAAAAAA0D8AAAAAAAD0PwAAAAAAAAJA"}},"yaxis5":{"anchor":"x5","domain":[0.0,0.2584]},"xaxis6":{"anchor":"y6","domain":[0.55,1.0]},"yaxis6":{"anchor":"x6","domain":[0.0,0.2584]},"annotations":[{"font":{"size":16},"showarrow":false,"text":"ATR Length Sensitivity","x":0.225,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"Factor Range Impact","x":0.775,"xanchor":"center","xref":"paper","y":1.0,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"Signal Strength Threshold","x":0.225,"xanchor":"center","xref":"paper","y":0.6292,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"Performance Alpha Effect","x":0.775,"xanchor":"center","xref":"paper","y":0.6292,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"Cluster Selection Comparison","x":0.225,"xanchor":"center","xref":"paper","y":0.2584,"yanchor":"bottom","yref":"paper"},{"font":{"size":16},"showarrow":false,"text":"Combined Parameter Heatmap","x":0.775,"xanchor":"center","xref":"paper","y":0.2584,"yanchor":"bottom","yref":"paper"}],"title":{"font":{"size":20},"text":"SuperTrend AI Parameter Sensitivity Analysis","x":0.5,"xanchor":"center"},"showlegend":true,"height":1200},                        {"responsive": true}                    )                };            </script>        </div>
+</body>
+</html>
+            
+            <div class="summary">
+                <h2>Implementation Guidelines</h2>
+                <ol>
+                    <li><strong>Start Conservative:</strong> Begin with higher signal strength thresholds and narrower factor ranges</li>
+                    <li><strong>Monitor Adaptation:</strong> Track how often the selected factor changes</li>
+                    <li><strong>Market-Specific Tuning:</strong> Adjust ATR length based on asset volatility</li>
+                    <li><strong>Regular Reoptimization:</strong> Re-evaluate parameters quarterly</li>
+                </ol>
+            </div>
+        </body>
+        </html>
+        

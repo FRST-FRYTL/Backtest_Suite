@@ -1,0 +1,27 @@
+{
+  "config": {
+    "symbol": "AAPL",
+    "start_date": "2022-01-01",
+    "end_date": "2023-12-31",
+    "initial_capital": 100000,
+    "commission": 0.001,
+    "atr_length": 10,
+    "min_mult": 1.0,
+    "max_mult": 5.0,
+    "step": 0.5,
+    "perf_alpha": 10,
+    "min_signal_strength": 4,
+    "use_stop_loss": true,
+    "stop_loss_atr": 2.0,
+    "use_take_profit": true,
+    "risk_reward_ratio": 2.0
+  },
+  "metrics": {
+    "total_return": 0.0,
+    "buy_hold_return": 6.988525519913358,
+    "sharpe_ratio": NaN,
+    "max_drawdown": 0.0,
+    "num_trades": 0
+  },
+  "trades": []
+}
