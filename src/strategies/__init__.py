@@ -1,5 +1,6 @@
 """Trading strategies module."""
 
+from .base import BaseStrategy, TradeAction, Signal, Position, StrategyError
 from .builder import StrategyBuilder
 from .rules import Rule, Condition, LogicalOperator
 from .signals import SignalGenerator
@@ -17,6 +18,11 @@ except ImportError:
     ENHANCED_CONFLUENCE_AVAILABLE = False
 
 __all__ = [
+    "BaseStrategy",
+    "TradeAction", 
+    "Signal",
+    "Position",
+    "StrategyError",
     "StrategyBuilder",
     "Rule",
     "Condition",

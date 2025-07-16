@@ -38,11 +38,13 @@ class Order:
     status: OrderStatus = OrderStatus.PENDING
     price: Optional[float] = None  # For limit orders
     stop_price: Optional[float] = None  # For stop orders
+    limit_price: Optional[float] = None  # Alias for price
     filled_quantity: int = 0
     avg_fill_price: float = 0.0
     commission: float = 0.0
     time_in_force: str = "DAY"  # DAY, GTC, IOC, FOK
     notes: str = ""
+    rejection_reason: Optional[str] = None
     
     def is_buy(self) -> bool:
         """Check if order is a buy order."""
@@ -93,5 +95,16 @@ class Order:
     def reject(self, reason: str = "") -> None:
         """Reject the order."""
         self.status = OrderStatus.REJECTED
+        self.rejection_reason = reason
         if reason:
             self.notes = f"Rejected: {reason}"
+            
+    @property
+    def id(self) -> str:
+        """Get order ID (alias for order_id)."""
+        return self.order_id
+        
+    @property
+    def fill_price(self) -> float:
+        """Get fill price (alias for avg_fill_price)."""
+        return self.avg_fill_price

@@ -1,0 +1,21 @@
+{
+  "results": {
+    "imports": true,
+    "indicator": true,
+    "strategy": true,
+    "memory": {
+      "initial_memory": 219.4296875,
+      "current_memory": 219.4296875,
+      "memory_increase": 0.0
+    },
+    "coverage": false
+  },
+  "score": 80.0,
+  "timestamp": 1752664655.29156,
+  "system_info": {
+    "cpu_count": 4,
+    "memory_available_mb": 11364.8046875,
+    "memory_used_mb": 4218.41796875,
+    "memory_percent": 28.9
+  }
+}

@@ -6,6 +6,7 @@ for all backtest results and analysis outputs.
 """
 
 from .standard_report_generator import StandardReportGenerator
+from .report_config import ReportConfig, ReportSection, TradeReportingConfig
 from .report_sections import (
     ExecutiveSummary,
     PerformanceAnalysis,
@@ -25,6 +26,9 @@ from .visualization_types import (
 
 __all__ = [
     'StandardReportGenerator',
+    'ReportConfig',
+    'ReportSection',
+    'TradeReportingConfig',
     'ExecutiveSummary',
     'PerformanceAnalysis',
     'RiskAnalysis',

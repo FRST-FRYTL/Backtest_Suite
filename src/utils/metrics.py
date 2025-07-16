@@ -342,3 +342,45 @@ Information Ratio: {information_ratio}
         ).apply(rolling_max_dd)
         
         return rolling_metrics
+
+
+# Standalone utility functions for monitoring
+def calculate_sharpe_ratio(returns: pd.Series, risk_free_rate: float = 0.02, periods_per_year: int = 252) -> float:
+    """Calculate Sharpe ratio for a returns series."""
+    if len(returns) < 2 or returns.std() == 0:
+        return 0.0
+    
+    excess_returns = returns - risk_free_rate / periods_per_year
+    return excess_returns.mean() / returns.std() * np.sqrt(periods_per_year)
+
+
+def calculate_max_drawdown(equity_curve: pd.Series) -> float:
+    """Calculate maximum drawdown for an equity curve."""
+    if len(equity_curve) < 2:
+        return 0.0
+    
+    # Calculate running maximum
+    running_max = equity_curve.expanding().max()
+    
+    # Calculate drawdown series
+    drawdown = (equity_curve - running_max) / running_max * 100
+    
+    # Return maximum drawdown as positive value
+    return abs(drawdown.min())
+
+
+def calculate_volatility(returns: pd.Series, periods_per_year: int = 252) -> float:
+    """Calculate annualized volatility."""
+    if len(returns) < 2:
+        return 0.0
+    
+    return returns.std() * np.sqrt(periods_per_year) * 100
+
+
+def calculate_win_rate(trade_returns: pd.Series) -> float:
+    """Calculate win rate from trade returns."""
+    if len(trade_returns) == 0:
+        return 0.0
+    
+    winning_trades = sum(trade_returns > 0)
+    return winning_trades / len(trade_returns) * 100

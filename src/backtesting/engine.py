@@ -18,6 +18,30 @@ from ..strategies.signals import SignalGenerator
 from ..reporting import StandardReportGenerator, ReportConfig
 
 
+class BacktestResults:
+    """Backward compatibility class for backtest results."""
+    
+    def __init__(self, results_dict: Dict):
+        """Initialize with results dictionary."""
+        self.results = results_dict
+        
+    def __getitem__(self, key):
+        """Allow dictionary-like access."""
+        return self.results[key]
+    
+    def __getattr__(self, key):
+        """Allow attribute-like access."""
+        return self.results.get(key)
+    
+    def keys(self):
+        """Return available keys."""
+        return self.results.keys()
+    
+    def get(self, key, default=None):
+        """Get value with default."""
+        return self.results.get(key, default)
+
+
 class BacktestEngine:
     """Event-driven backtesting engine."""
     

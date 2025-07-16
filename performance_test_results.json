@@ -1,0 +1,89 @@
+{
+  "coverage_analysis": {
+    "command_successful": false,
+    "stdout": "============================= test session starts ==============================\nplatform linux -- Python 3.12.1, pytest-8.4.1, pluggy-1.6.0 -- /home/codespace/.python/current/bin/python\ncachedir: .pytest_cache\nrootdir: /workspaces/Backtest_Suite\nconfigfile: pyproject.toml\ntestpaths: tests\nplugins: anyio-4.9.0, cov-6.2.1\ncollecting ... collected 261 items / 6 errors\n\n==================================== ERRORS ====================================\n____________ ERROR collecting tests/integration/test_end_to_end.py _____________\nImportError while importing test module '/workspaces/Backtest_Suite/tests/integration/test_end_to_end.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/local/python/3.12.1/lib/python3.12/site-packages/_pytest/python.py:498: in importtestmodule\n    mod = import_path(\n/usr/local/python/3.12.1/lib/python3.12/site-packages/_pytest/pathlib.py:587: in import_path\n    importlib.import_module(module_name)\n/usr/local/python/3.12.1/lib/python3.12/importlib/__init__.py:90: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n<frozen importlib._bootstrap>:1387: in _gcd_import\n    ???\n<frozen importlib._bootstrap>:1360: in _find_and_load\n    ???\n<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked\n    ???\n<frozen importlib._bootstrap>:935: in _load_unlocked\n    ???\n/usr/local/python/3.12.1/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:186: in exec_module\n    exec(co, module.__dict__)\ntests/integration/test_end_to_end.py:17: in <module>\n    from src.visualization import ChartGenerator, DashboardBuilder\nE   ImportError: cannot import name 'DashboardBuilder' from 'src.visualization' (/workspaces/Backtest_Suite/src/visualization/__init__.py)\n______ ERROR collecting tests/integration/test_supertrend_ai_strategy.py _______\nImportError while importing test module '/workspaces/Backtest_Suite/tests/integration/test_supertrend_ai_strategy.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/local/python/3.12.1/lib/python3.12/site-packages/_pytest/python.py:498: in importtestmodule\n    mod = import_path(\n/usr/local/python/3.12.1/lib/python3.12/site-packages/_pytest/pathlib.py:587: in import_path\n    importlib.import_module(module_name)\n/usr/local/python/3.12.1/lib/python3.12/importlib/__init__.py:90: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n<frozen importlib._bootstrap>:1387: in _gcd_import\n    ???\n<frozen importlib._bootstrap>:1360: in _find_and_load\n    ???\n<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked\n    ???\n<frozen importlib._bootstrap>:935: in _load_unlocked\n    ???\n/usr/local/python/3.12.1/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:186: in exec_module\n    exec(co, module.__dict__)\ntests/integration/test_supertrend_ai_strategy.py:15: in <module>\n    from src.ml import DirectionPredictor, VolatilityForecaster, MarketRegimeDetector\nE   ImportError: cannot import name 'DirectionPredictor' from 'src.ml' (/workspaces/Backtest_Suite/src/ml/__init__.py)\n_____________ ERROR collecting tests/monitoring/test_monitoring.py _____________\nImportError while importing test module '/workspaces/Backtest_Suite/tests/monitoring/test_monitoring.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/local/python/3.12.1/lib/python3.12/site-packages/_pytest/python.py:498: in importtestmodule\n    mod = import_path(\n/usr/local/python/3.12.1/lib/python3.12/site-packages/_pytest/pathlib.py:587: in import_path\n    importlib.import_module(module_name)\n/usr/local/python/3.12.1/lib/python3.12/importlib/__init__.py:90: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n<frozen importlib._bootstrap>:1387: in _gcd_import\n    ???\n<frozen importlib._bootstrap>:1360: in _find_and_load\n    ???\n<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked\n    ???\n<frozen importlib._bootstrap>:935: in _load_unlocked\n    ???\n/usr/local/python/3.12.1/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:186: in exec_module\n    exec(co, module.__dict__)\ntests/monitoring/test_monitoring.py:13: in <module>\n    from src.monitoring import (\nsrc/monitoring/__init__.py:12: in <module>\n    from .alerts import AlertEngine, Alert, AlertType, AlertPriority\nsrc/monitoring/alerts/__init__.py:3: in <module>\n    from ..alerts import AlertEngine, Alert, AlertType, AlertPriority\nE   ImportError: cannot import name 'AlertEngine' from partially initialized module 'src.monitoring.alerts' (most likely due to a circular import) (/workspaces/Backtest_Suite/src/monitoring/alerts/__init__.py)\n__________________ ERROR collecting tests/test_backtester.py ___________________\nImportError while importing test module '/workspaces/Backtest_Suite/tests/test_backtester.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/local/python/3.12.1/lib/python3.12/site-packages/_pytest/python.py:498: in importtestmodule\n    mod = import_path(\n/usr/local/python/3.12.1/lib/python3.12/site-packages/_pytest/pathlib.py:587: in import_path\n    importlib.import_module(module_name)\n/usr/local/python/3.12.1/lib/python3.12/importlib/__init__.py:90: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n<frozen importlib._bootstrap>:1387: in _gcd_import\n    ???\n<frozen importlib._bootstrap>:1360: in _find_and_load\n    ???\n<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked\n    ???\n<frozen importlib._bootstrap>:935: in _load_unlocked\n    ???\n/usr/local/python/3.12.1/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:186: in exec_module\n    exec(co, module.__dict__)\ntests/test_backtester.py:11: in <module>\n    from src.backtesting.events import (\nE   ImportError: cannot import name 'EventQueue' from 'src.backtesting.events' (/workspaces/Backtest_Suite/src/backtesting/events.py)\n_____________________ ERROR collecting tests/test_data.py ______________________\nImportError while importing test module '/workspaces/Backtest_Suite/tests/test_data.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/local/python/3.12.1/lib/python3.12/site-packages/_pytest/python.py:498: in importtestmodule\n    mod = import_path(\n/usr/local/python/3.12.1/lib/python3.12/site-packages/_pytest/pathlib.py:587: in import_path\n    importlib.import_module(module_name)\n/usr/local/python/3.12.1/lib/python3.12/importlib/__init__.py:90: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n<frozen importlib._bootstrap>:1387: in _gcd_import\n    ???\n<frozen importlib._bootstrap>:1360: in _find_and_load\n    ???\n<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked\n    ???\n<frozen importlib._bootstrap>:935: in _load_unlocked\n    ???\n/usr/local/python/3.12.1/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:186: in exec_module\n    exec(co, module.__dict__)\ntests/test_data.py:18: in <module>\n    from src.data.fetcher import DataSource, DataError\nE   ImportError: cannot import name 'DataSource' from 'src.data.fetcher' (/workspaces/Backtest_Suite/src/data/fetcher.py)\n___________ ERROR collecting tests/test_supertrend_ai_performance.py ___________\nImportError while importing test module '/workspaces/Backtest_Suite/tests/test_supertrend_ai_performance.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/local/python/3.12.1/lib/python3.12/site-packages/_pytest/python.py:498: in importtestmodule\n    mod = import_path(\n/usr/local/python/3.12.1/lib/python3.12/site-packages/_pytest/pathlib.py:587: in import_path\n    importlib.import_module(module_name)\n/usr/local/python/3.12.1/lib/python3.12/importlib/__init__.py:90: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n<frozen importlib._bootstrap>:1387: in _gcd_import\n    ???\n<frozen importlib._bootstrap>:1360: in _find_and_load\n    ???\n<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked\n    ???\n<frozen importlib._bootstrap>:935: in _load_unlocked\n    ???\n/usr/local/python/3.12.1/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:186: in exec_module\n    exec(co, module.__dict__)\ntests/test_supertrend_ai_performance.py:14: in <module>\n    from tests.integration.test_supertrend_ai_strategy import SuperTrendAIStrategy\n/usr/local/python/3.12.1/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:186: in exec_module\n    exec(co, module.__dict__)\ntests/integration/test_supertrend_ai_strategy.py:15: in <module>\n    from src.ml import DirectionPredictor, VolatilityForecaster, MarketRegimeDetector\nE   ImportError: cannot import name 'DirectionPredictor' from 'src.ml' (/workspaces/Backtest_Suite/src/ml/__init__.py)\n=============================== warnings summary ===============================\ntests/indicators/test_all_indicators.py:435\n  /workspaces/Backtest_Suite/tests/indicators/test_all_indicators.py:435: PytestUnknownMarkWarning:\n  \n  Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html\n\ntests/indicators/test_all_indicators.py:461\n  /workspaces/Backtest_Suite/tests/indicators/test_all_indicators.py:461: PytestUnknownMarkWarning:\n  \n  Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html\n\ntests/indicators/test_all_indicators.py:526\n  /workspaces/Backtest_Suite/tests/indicators/test_all_indicators.py:526: PytestUnknownMarkWarning:\n  \n  Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html\n\ntests/indicators/test_meta_indicators.py:48\n  /workspaces/Backtest_Suite/tests/indicators/test_meta_indicators.py:48: PytestUnknownMarkWarning:\n  \n  Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html\n\ntests/indicators/test_meta_indicators.py:62\n  /workspaces/Backtest_Suite/tests/indicators/test_meta_indicators.py:62: PytestUnknownMarkWarning:\n  \n  Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html\n\ntests/indicators/test_meta_indicators.py:154\n  /workspaces/Backtest_Suite/tests/indicators/test_meta_indicators.py:154: PytestUnknownMarkWarning:\n  \n  Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html\n\ntests/integration/test_meta_indicators_integration.py:48\n  /workspaces/Backtest_Suite/tests/integration/test_meta_indicators_integration.py:48: PytestUnknownMarkWarning:\n  \n  Unknown pytest.mark.integration - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html\n\ntests/integration/test_meta_indicators_integration.py:52\n  /workspaces/Backtest_Suite/tests/integration/test_meta_indicators_integration.py:52: PytestUnknownMarkWarning:\n  \n  Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html\n\ntests/integration/test_meta_indicators_integration.py:77\n  /workspaces/Backtest_Suite/tests/integration/test_meta_indicators_integration.py:77: PytestUnknownMarkWarning:\n  \n  Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html\n\ntests/integration/test_meta_indicators_integration.py:152\n  /workspaces/Backtest_Suite/tests/integration/test_meta_indicators_integration.py:152: PytestUnknownMarkWarning:\n  \n  Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ============================\nERROR tests/integration/test_end_to_end.py\nERROR tests/integration/test_supertrend_ai_strategy.py\nERROR tests/monitoring/test_monitoring.py\nERROR tests/test_backtester.py\nERROR tests/test_data.py\nERROR tests/test_supertrend_ai_performance.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 6 errors during collection !!!!!!!!!!!!!!!!!!!!\n======================== 10 warnings, 6 errors in 3.66s ========================\n",
+    "stderr": "",
+    "return_code": 2
+  },
+  "backtesting_performance": {
+    "small": {
+      "error": "'SuperTrendAIStrategy' object has no attribute 'entry_rules'",
+      "success": false
+    },
+    "medium": {
+      "error": "'SuperTrendAIStrategy' object has no attribute 'entry_rules'",
+      "success": false
+    },
+    "large": {
+      "error": "'SuperTrendAIStrategy' object has no attribute 'entry_rules'",
+      "success": false
+    }
+  },
+  "indicator_performance": {
+    "small": {
+      "error": "Data must contain columns: ['open', 'high', 'low', 'close']",
+      "success": false
+    },
+    "medium": {
+      "error": "Data must contain columns: ['open', 'high', 'low', 'close']",
+      "success": false
+    },
+    "large": {
+      "error": "Data must contain columns: ['open', 'high', 'low', 'close']",
+      "success": false
+    }
+  },
+  "memory_usage": {
+    "small": {
+      "error": "'SuperTrendAIStrategy' object has no attribute 'entry_rules'",
+      "success": false
+    },
+    "medium": {
+      "error": "'SuperTrendAIStrategy' object has no attribute 'entry_rules'",
+      "success": false
+    },
+    "large": {
+      "error": "'SuperTrendAIStrategy' object has no attribute 'entry_rules'",
+      "success": false
+    }
+  },
+  "stress_testing": {
+    "extreme_short": {
+      "error": "'SuperTrendAIStrategy' object has no attribute 'entry_rules'",
+      "completed_successfully": false
+    },
+    "extreme_long": {
+      "error": "'SuperTrendAIStrategy' object has no attribute 'entry_rules'",
+      "completed_successfully": false
+    }
+  },
+  "concurrent_operations": {
+    "thread_test": {
+      "total_threads": 4,
+      "successful_threads": 0,
+      "failed_threads": 4,
+      "results": [
+        {
+          "strategy_name": "concurrent_1",
+          "error": "'SuperTrendAIStrategy' object has no attribute 'entry_rules'",
+          "success": false
+        },
+        {
+          "strategy_name": "concurrent_0",
+          "error": "'SuperTrendAIStrategy' object has no attribute 'entry_rules'",
+          "success": false
+        },
+        {
+          "strategy_name": "concurrent_2",
+          "error": "'SuperTrendAIStrategy' object has no attribute 'entry_rules'",
+          "success": false
+        },
+        {
+          "strategy_name": "concurrent_3",
+          "error": "'SuperTrendAIStrategy' object has no attribute 'entry_rules'",
+          "success": false
+        }
+      ]
+    }
+  }
+}

@@ -14,6 +14,41 @@ from .cache import DataCache
 logger = logging.getLogger(__name__)
 
 
+class DataError(Exception):
+    """Base exception for data-related errors."""
+    pass
+
+
+class DataSource:
+    """Abstract base class for data sources."""
+    
+    def __init__(self, name: str):
+        """Initialize data source.
+        
+        Args:
+            name: Name of the data source
+        """
+        self.name = name
+        
+    def fetch_data(self, symbol: str, start: str, end: str, **kwargs) -> pd.DataFrame:
+        """Fetch data from the source.
+        
+        Args:
+            symbol: Stock symbol
+            start: Start date
+            end: End date
+            **kwargs: Additional parameters
+            
+        Returns:
+            DataFrame with stock data
+        """
+        raise NotImplementedError("Subclasses must implement fetch_data")
+        
+    def is_available(self) -> bool:
+        """Check if data source is available."""
+        return True
+
+
 class StockDataFetcher:
     """Fetches stock data with caching and retry logic."""
     

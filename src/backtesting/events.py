@@ -4,7 +4,8 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Optional
+from typing import List, Optional
+import queue
 
 
 class EventType(Enum):
@@ -82,3 +83,46 @@ class FillEvent(Event):
     
     def get_type(self) -> EventType:
         return EventType.FILL
+
+
+class EventQueue:
+    """Thread-safe event queue for backtesting."""
+    
+    def __init__(self):
+        """Initialize the event queue."""
+        self._queue = queue.Queue()
+        self._events = []
+        
+    def put(self, event: Event):
+        """Add event to the queue."""
+        self._queue.put(event)
+        self._events.append(event)
+        
+    def get(self, block: bool = True, timeout: Optional[float] = None) -> Event:
+        """Get event from the queue."""
+        return self._queue.get(block=block, timeout=timeout)
+        
+    def get_nowait(self) -> Event:
+        """Get event without blocking."""
+        return self._queue.get_nowait()
+        
+    def empty(self) -> bool:
+        """Check if queue is empty."""
+        return self._queue.empty()
+        
+    def qsize(self) -> int:
+        """Get queue size."""
+        return self._queue.qsize()
+        
+    def clear(self):
+        """Clear all events."""
+        while not self._queue.empty():
+            try:
+                self._queue.get_nowait()
+            except queue.Empty:
+                break
+        self._events.clear()
+        
+    def get_all_events(self) -> List[Event]:
+        """Get all events that have been processed."""
+        return self._events.copy()

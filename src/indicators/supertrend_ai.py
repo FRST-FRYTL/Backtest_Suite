@@ -47,7 +47,8 @@ class SuperTrendAI:
         n_clusters: int = 5,
         lookback_window: int = 252,
         adaptive: bool = True,
-        volatility_adjustment: bool = True
+        volatility_adjustment: bool = True,
+        random_seed: int = None
     ):
         """
         Initialize SuperTrend AI indicator.
@@ -60,12 +61,26 @@ class SuperTrendAI:
             adaptive: Whether to use adaptive parameters
             volatility_adjustment: Whether to adjust for volatility regime
         """
+        # Parameter validation
+        if n_clusters <= 0:
+            raise ValueError("n_clusters must be positive")
+        if lookback_window <= 0:
+            raise ValueError("lookback_window must be positive")
+        
+        # Validate atr_periods and multipliers before assignment
+        if atr_periods is not None and not atr_periods:
+            raise ValueError("atr_periods cannot be empty")
+        if multipliers is not None and not multipliers:
+            raise ValueError("multipliers cannot be empty")
+        
         self.atr_periods = atr_periods or [7, 10, 14, 20]
         self.multipliers = multipliers or [1.5, 2.0, 2.5, 3.0]
+        
         self.n_clusters = n_clusters
         self.lookback_window = lookback_window
         self.adaptive = adaptive
         self.volatility_adjustment = volatility_adjustment
+        self.random_seed = random_seed
         
         self.kmeans = None
         self.scaler = StandardScaler()
@@ -114,26 +129,24 @@ class SuperTrendAI:
                 trend.iloc[i] = trend.iloc[i-1]
                 continue
                 
-            # Uptrend conditions
-            if close.iloc[i] <= upper_band.iloc[i]:
-                if trend.iloc[i-1] == 1:
-                    if lower_band.iloc[i] > lower_band.iloc[i-1]:
-                        lower_band.iloc[i] = lower_band.iloc[i]
-                    else:
-                        lower_band.iloc[i] = lower_band.iloc[i-1]
+            # SuperTrend logic
+            # Check if we need to update the bands based on trend
+            if trend.iloc[i-1] == 1:  # Previous uptrend
+                if lower_band.iloc[i] > lower_band.iloc[i-1] or pd.isna(lower_band.iloc[i-1]):
+                    lower_band.iloc[i] = lower_band.iloc[i]
+                else:
+                    lower_band.iloc[i] = lower_band.iloc[i-1]
             
-            # Downtrend conditions
-            if close.iloc[i] >= lower_band.iloc[i]:
-                if trend.iloc[i-1] == -1:
-                    if upper_band.iloc[i] < upper_band.iloc[i-1]:
-                        upper_band.iloc[i] = upper_band.iloc[i]
-                    else:
-                        upper_band.iloc[i] = upper_band.iloc[i-1]
+            if trend.iloc[i-1] == -1:  # Previous downtrend
+                if upper_band.iloc[i] < upper_band.iloc[i-1] or pd.isna(upper_band.iloc[i-1]):
+                    upper_band.iloc[i] = upper_band.iloc[i]
+                else:
+                    upper_band.iloc[i] = upper_band.iloc[i-1]
             
             # Determine trend
-            if close.iloc[i] > upper_band.iloc[i]:
+            if close.iloc[i] <= lower_band.iloc[i]:
                 trend.iloc[i] = 1
-            elif close.iloc[i] < lower_band.iloc[i]:
+            elif close.iloc[i] >= upper_band.iloc[i]:
                 trend.iloc[i] = -1
             else:
                 trend.iloc[i] = trend.iloc[i-1]
@@ -187,7 +200,8 @@ class SuperTrendAI:
         features_scaled = self.scaler.fit_transform(features)
         
         # Perform K-means clustering
-        self.kmeans = KMeans(n_clusters=self.n_clusters, random_state=42)
+        random_state = self.random_seed if self.random_seed is not None else 42
+        self.kmeans = KMeans(n_clusters=self.n_clusters, random_state=random_state)
         clusters = self.kmeans.fit_predict(features_scaled)
         
         # Test parameter combinations for each cluster
@@ -352,3 +366,104 @@ class SuperTrendAI:
         strength = 1 / (1 + np.exp(-distance))
         
         return strength
+    
+    def generate_signals(self, result: SuperTrendResult) -> pd.DataFrame:
+        """Generate trading signals from SuperTrend result."""
+        signals = pd.DataFrame(index=result.trend.index)
+        
+        # Generate entry signals
+        signals['long_entry'] = (result.trend == 1) & (result.trend.shift(1) == -1)
+        signals['short_entry'] = (result.trend == -1) & (result.trend.shift(1) == 1)
+        
+        # Generate exit signals
+        signals['exit_long'] = (result.trend == -1) & (result.trend.shift(1) == 1)
+        signals['exit_short'] = (result.trend == 1) & (result.trend.shift(1) == -1)
+        
+        return signals
+    
+    def calculate_performance_metrics(self, data: pd.DataFrame, result: SuperTrendResult) -> Dict[str, float]:
+        """Calculate performance metrics for the SuperTrend strategy."""
+        # Generate signals
+        signals = self.generate_signals(result)
+        
+        # Calculate returns
+        returns = data['close'].pct_change().dropna()
+        
+        # Strategy returns
+        strategy_returns = returns * result.trend.shift(1)
+        
+        # Calculate trades
+        trades = []
+        position = 0
+        entry_price = 0
+        
+        for i in range(len(signals)):
+            if signals['long_entry'].iloc[i] and position == 0:
+                position = 1
+                entry_price = data['close'].iloc[i]
+            elif signals['short_entry'].iloc[i] and position == 0:
+                position = -1
+                entry_price = data['close'].iloc[i]
+            elif signals['exit_long'].iloc[i] and position == 1:
+                exit_price = data['close'].iloc[i]
+                pnl = (exit_price - entry_price) / entry_price
+                trades.append(pnl)
+                position = 0
+            elif signals['exit_short'].iloc[i] and position == -1:
+                exit_price = data['close'].iloc[i]
+                pnl = (entry_price - exit_price) / entry_price
+                trades.append(pnl)
+                position = 0
+        
+        if not trades:
+            return {
+                'total_signals': 0,
+                'win_rate': 0,
+                'avg_gain': 0,
+                'avg_loss': 0,
+                'profit_factor': 0,
+                'max_drawdown': 0,
+                'sharpe_ratio': 0
+            }
+        
+        trades = pd.Series(trades)
+        winning_trades = trades[trades > 0]
+        losing_trades = trades[trades < 0]
+        
+        # Calculate metrics
+        total_signals = len(trades)
+        win_rate = len(winning_trades) / total_signals if total_signals > 0 else 0
+        avg_gain = winning_trades.mean() if len(winning_trades) > 0 else 0
+        avg_loss = losing_trades.mean() if len(losing_trades) > 0 else 0
+        
+        gross_profit = winning_trades.sum() if len(winning_trades) > 0 else 0
+        gross_loss = abs(losing_trades.sum()) if len(losing_trades) > 0 else 0
+        profit_factor = gross_profit / gross_loss if gross_loss > 0 else float('inf')
+        
+        # Calculate drawdown
+        cumulative_returns = (1 + strategy_returns).cumprod()
+        rolling_max = cumulative_returns.expanding().max()
+        drawdown = (cumulative_returns - rolling_max) / rolling_max
+        max_drawdown = drawdown.min()
+        
+        # Calculate Sharpe ratio
+        sharpe_ratio = strategy_returns.mean() / strategy_returns.std() * np.sqrt(252) if strategy_returns.std() > 0 else 0
+        
+        return {
+            'total_signals': total_signals,
+            'win_rate': win_rate,
+            'avg_gain': avg_gain,
+            'avg_loss': avg_loss,
+            'profit_factor': profit_factor,
+            'max_drawdown': max_drawdown,
+            'sharpe_ratio': sharpe_ratio
+        }
+    
+    def update(self, new_data: pd.DataFrame, previous_result: SuperTrendResult) -> SuperTrendResult:
+        """Update SuperTrend calculation with new data."""
+        # For simplicity, recalculate with all data
+        # In a real implementation, this would be more efficient
+        combined_data = pd.concat([previous_result.trend.to_frame('trend'), new_data])
+        combined_data = combined_data.drop('trend', axis=1)
+        
+        return self.calculate(combined_data)

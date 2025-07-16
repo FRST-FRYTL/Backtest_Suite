@@ -70,8 +70,12 @@ class RSI(Indicator):
         rs = avg_gains / avg_losses
         rsi = 100 - (100 / (1 + rs))
         
-        # Handle division by zero
-        rsi = rsi.fillna(50)  # Neutral value when no losses
+        # Handle division by zero, but keep NaN for initial period
+        # Only fill with 50 where we have valid data but division by zero
+        rsi = rsi.where(avg_losses != 0, 50)  # 50 when no losses
+        
+        # Set proper series name
+        rsi.name = 'rsi'
         
         return rsi
         
@@ -86,11 +90,14 @@ class RSI(Indicator):
         Returns:
             Averaged series
         """
-        # First average is simple moving average
-        sma = series.rolling(window=period, min_periods=1).mean()
+        # First 'period' values should be NaN since we need at least 'period' values
+        # for a meaningful RSI calculation
+        result = series.ewm(alpha=1/period, adjust=False).mean()
         
-        # Apply Wilder's smoothing
-        return series.ewm(alpha=1/period, adjust=False).mean()
+        # Set the first 'period' values to NaN to match traditional RSI behavior
+        result.iloc[:period] = np.nan
+        
+        return result
         
     def get_signals(self, rsi: pd.Series) -> pd.DataFrame:
         """

@@ -164,7 +164,7 @@ def mock_data_fetcher():
 @pytest.fixture
 def sample_portfolio():
     """Provide a sample portfolio for testing."""
-    return Portfolio(initial_capital=100000, commission_rate=0.001)
+    return Portfolio(initial_capital=100000, commission_rate=0.001, slippage_rate=0.0)
 
 
 @pytest.fixture

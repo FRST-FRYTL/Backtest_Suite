@@ -7,6 +7,11 @@ import pandas as pd
 import numpy as np
 
 
+class IndicatorError(Exception):
+    """Exception raised for indicator calculation errors."""
+    pass
+
+
 class Indicator(ABC):
     """Abstract base class for all indicators."""
     
@@ -33,7 +38,7 @@ class Indicator(ABC):
         """
         pass
         
-    def validate_data(self, data: pd.DataFrame, required_columns: list) -> None:
+    def validate_data(self, data: pd.DataFrame, required_columns: list = None) -> None:
         """
         Validate that required columns exist in the data.
         
@@ -42,11 +47,15 @@ class Indicator(ABC):
             required_columns: List of required column names
             
         Raises:
-            ValueError: If required columns are missing
+            IndicatorError: If required columns are missing or data is invalid
         """
-        missing_columns = set(required_columns) - set(data.columns)
-        if missing_columns:
-            raise ValueError(f"Missing required columns: {missing_columns}")
+        if data is None or data.empty:
+            raise IndicatorError("Data is empty or None")
+            
+        if required_columns is not None:
+            missing_columns = set(required_columns) - set(data.columns)
+            if missing_columns:
+                raise IndicatorError(f"Missing required columns: {missing_columns}")
             
     @staticmethod
     def rolling_window(series: pd.Series, window: int, func=None) -> pd.Series:

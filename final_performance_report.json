@@ -1,0 +1,96 @@
+{
+  "timestamp": 1752664752.4026403,
+  "summary": {
+    "total_tests": 0,
+    "total_passed": 0,
+    "total_failed": 0,
+    "success_rate": 0
+  },
+  "test_results": {
+    "SuperTrend AI Core": {
+      "passed": 0,
+      "failed": 0,
+      "return_code": 4,
+      "success": false
+    },
+    "Enhanced Trade Reporting": {
+      "passed": 0,
+      "failed": 0,
+      "return_code": 4,
+      "success": false
+    },
+    "Standard Report Generator": {
+      "passed": 0,
+      "failed": 0,
+      "return_code": 4,
+      "success": false
+    },
+    "Visualization Types": {
+      "passed": 0,
+      "failed": 0,
+      "return_code": 4,
+      "success": false
+    },
+    "Technical Indicators": {
+      "passed": 0,
+      "failed": 0,
+      "return_code": 4,
+      "success": false
+    },
+    "All Indicators": {
+      "passed": 0,
+      "failed": 0,
+      "return_code": 4,
+      "success": false
+    },
+    "Meta Indicators": {
+      "passed": 0,
+      "failed": 0,
+      "return_code": 4,
+      "success": false
+    }
+  },
+  "coverage_estimate": {
+    "total_source_files": 137,
+    "total_test_files": 24,
+    "estimated_coverage": 17.51824817518248,
+    "areas_covered": [
+      "SuperTrend AI Indicator",
+      "Strategy Implementation",
+      "Reporting Framework",
+      "Visualization System",
+      "Technical Indicators",
+      "Meta Indicators"
+    ],
+    "areas_needing_work": [
+      "Backtesting Engine Integration",
+      "Data Fetching",
+      "ML Integration",
+      "Monitoring System",
+      "End-to-End Testing"
+    ]
+  },
+  "performance_data": {
+    "indicator_small": {
+      "execution_time": 0.02106618881225586,
+      "rows_processed": 100,
+      "rows_per_second": 4746.943117770887
+    },
+    "indicator_medium": {
+      "execution_time": 0.3407771587371826,
+      "rows_processed": 1000,
+      "rows_per_second": 2934.4689758717936
+    }
+  },
+  "conclusion": {
+    "overall_status": "NEEDS_WORK",
+    "ready_for_production": false,
+    "recommended_next_steps": [
+      "Fix remaining test failures",
+      "Improve backtesting engine integration",
+      "Add more comprehensive integration tests",
+      "Implement missing ML components",
+      "Add performance monitoring"
+    ]
+  }
+}

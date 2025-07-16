@@ -9,15 +9,18 @@ This module provides:
 - System health monitoring
 """
 
-from .alerts import AlertEngine, Alert, AlertType, AlertPriority
+from .alerts import AlertEngine, Alert, AlertType, AlertPriority, create_drawdown_alert, create_position_size_alert, create_signal_alert
 from .dashboard import MonitoringDashboard, DashboardConfig
 from .collectors import (
     MetricCollector,
     PerformanceCollector,
     PositionCollector,
-    SystemHealthCollector
+    SystemHealthCollector,
+    MetricPoint,
+    MetricBuffer,
+    MetricAggregator
 )
-from .config import MonitoringConfig
+from .config import MonitoringConfig, AlertConfig, CollectorConfig
 
 __all__ = [
     # Alerts
@@ -25,6 +28,9 @@ __all__ = [
     'Alert',
     'AlertType',
     'AlertPriority',
+    'create_drawdown_alert',
+    'create_position_size_alert',
+    'create_signal_alert',
     
     # Dashboard
     'MonitoringDashboard',
@@ -35,7 +41,12 @@ __all__ = [
     'PerformanceCollector',
     'PositionCollector',
     'SystemHealthCollector',
+    'MetricPoint',
+    'MetricBuffer',
+    'MetricAggregator',
     
     # Config
     'MonitoringConfig',
+    'AlertConfig',
+    'CollectorConfig',
 ]

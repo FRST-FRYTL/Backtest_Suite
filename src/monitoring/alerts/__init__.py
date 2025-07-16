@@ -1,1 +1,0 @@
-"""Alerts module for monitoring system."""

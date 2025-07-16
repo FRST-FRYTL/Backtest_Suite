@@ -21,6 +21,14 @@ from .agents import (
     AGENT_TYPES
 )
 
+# Import ML models
+from .models.enhanced_direction_predictor import EnhancedDirectionPredictor
+from .models.lstm_volatility import VolatilityForecaster
+from .market_regime_detector import MarketRegimeDetector
+
+# Create aliases for backward compatibility
+DirectionPredictor = EnhancedDirectionPredictor
+
 __version__ = "1.0.0"
 
 __all__ = [
@@ -40,6 +48,12 @@ __all__ = [
     # Factory functions
     'create_agent',
     'AGENT_TYPES',
+    
+    # ML Models
+    'EnhancedDirectionPredictor',
+    'DirectionPredictor',
+    'VolatilityForecaster',
+    'MarketRegimeDetector',
     
     # Version
     '__version__'

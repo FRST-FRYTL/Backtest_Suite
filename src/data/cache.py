@@ -5,9 +5,35 @@ import pickle
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Optional
+from dataclasses import dataclass
 
 import pandas as pd
 from diskcache import Cache
+
+
+class CacheError(Exception):
+    """Exception raised for cache-related errors."""
+    pass
+
+
+@dataclass
+class CacheEntry:
+    """Cache entry with metadata."""
+    
+    key: str
+    data: Any
+    timestamp: datetime
+    size_bytes: int
+    hit_count: int = 0
+    
+    @property
+    def age(self) -> timedelta:
+        """Get age of cache entry."""
+        return datetime.now() - self.timestamp
+    
+    def is_expired(self, max_age: timedelta) -> bool:
+        """Check if entry is expired."""
+        return self.age > max_age
 
 
 class DataCache:

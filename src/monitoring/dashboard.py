@@ -9,15 +9,27 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-import dash
-import plotly.graph_objs as go
-from dash import dcc, html, Input, Output, State
-from dash.exceptions import PreventUpdate
+try:
+    import dash
+    import plotly.graph_objs as go
+    from dash import dcc, html, Input, Output, State
+    from dash.exceptions import PreventUpdate
+    from flask import Flask
+    from flask_cors import CORS
+    import websockets
+    import websockets.server
+    DASH_AVAILABLE = True
+except ImportError:
+    DASH_AVAILABLE = False
+    dash = None
+    go = None
+    dcc = html = Input = Output = State = None
+    PreventUpdate = None
+    Flask = None
+    CORS = None
+    websockets = None
+    
 import pandas as pd
-from flask import Flask
-from flask_cors import CORS
-import websockets
-import websockets.server
 
 from .alerts import Alert, AlertEngine, AlertType
 from .collectors import MetricAggregator, MetricPoint
@@ -33,6 +45,10 @@ class MonitoringDashboard:
         self.alert_engine = alert_engine
         self.metric_aggregator = metric_aggregator
         self.logger = logging.getLogger(__name__)
+        
+        if not DASH_AVAILABLE:
+            self.logger.warning("Dash dependencies not available. Dashboard will be disabled.")
+            return
         
         # Initialize Flask server
         self.server = Flask(__name__)
@@ -415,6 +431,10 @@ class MonitoringDashboard:
         """Start the dashboard."""
         if not self.config.enabled:
             self.logger.info("Dashboard is disabled")
+            return
+            
+        if not DASH_AVAILABLE:
+            self.logger.warning("Dashboard dependencies not available. Skipping dashboard startup.")
             return
         
         # Start WebSocket server if enabled
