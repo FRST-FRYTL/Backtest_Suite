@@ -192,51 +192,6 @@ class MarketDataDownloader:
         logger.info(f"\nData download complete. Saved to {complete_data_file}")
         return all_data
     
-    
-def load_cached_data(symbol: str, timeframe: str = '1D') -> Optional[pd.DataFrame]:
-    """
-    Load cached data for a specific symbol and timeframe.
-    
-    Args:
-        symbol: Asset symbol
-        timeframe: Timeframe (1H, 4H, 1D, 1W, 1M)
-        
-    Returns:
-        DataFrame with OHLCV data or None if not found
-    """
-    # Try to load from complete market data pickle
-    cache_file = Path("data/processed/complete_market_data.pkl")
-    
-    if cache_file.exists():
-        try:
-            with open(cache_file, 'rb') as f:
-                all_data = pickle.load(f)
-                
-            if symbol in all_data and timeframe in all_data[symbol]:
-                data = all_data[symbol][timeframe]
-                if not data.empty:
-                    # Ensure column names are lowercase
-                    data.columns = [col.lower() for col in data.columns]
-                    return data
-        except Exception as e:
-            logger.error(f"Error loading cached data: {e}")
-    
-    # Try individual cache file
-    downloader = MarketDataDownloader()
-    individual_cache = downloader.cache_dir / f"{symbol}_{timeframe}_2019-01-01_2024-01-01.pkl"
-    
-    if individual_cache.exists():
-        try:
-            with open(individual_cache, 'rb') as f:
-                data = pickle.load(f)
-                if not data.empty:
-                    data.columns = [col.lower() for col in data.columns]
-                    return data
-        except Exception as e:
-            logger.error(f"Error loading individual cache: {e}")
-    
-    return None
-        
     def get_spreads_and_fees(self, symbol: str, price: float, volume: float, 
                            avg_volume: float, volatility: float) -> Dict[str, float]:
         """
@@ -295,6 +250,53 @@ def load_cached_data(symbol: str, timeframe: str = '1D') -> Optional[pd.DataFram
             'total_cost': spread_cost + commission + slippage,
             'total_cost_pct': (spread_cost + commission + slippage) / price
         }
+
+
+def load_cached_data(symbol: str, timeframe: str = '1D') -> Optional[pd.DataFrame]:
+    """
+    Load cached data for a specific symbol and timeframe.
+    
+    Args:
+        symbol: Asset symbol
+        timeframe: Timeframe (1H, 4H, 1D, 1W, 1M)
+        
+    Returns:
+        DataFrame with OHLCV data or None if not found
+    """
+    # Try to load from complete market data pickle
+    cache_file = Path("data/processed/complete_market_data.pkl")
+    
+    if cache_file.exists():
+        try:
+            with open(cache_file, 'rb') as f:
+                all_data = pickle.load(f)
+                
+            if symbol in all_data and timeframe in all_data[symbol]:
+                data = all_data[symbol][timeframe]
+                if not data.empty:
+                    # Ensure column names are lowercase
+                    data.columns = [col.lower() for col in data.columns]
+                    return data
+        except Exception as e:
+            logger.error(f"Error loading cached data: {e}")
+    
+    # Try individual cache file
+    downloader = MarketDataDownloader()
+    individual_cache = downloader.cache_dir / f"{symbol}_{timeframe}_2019-01-01_2024-01-01.pkl"
+    
+    if individual_cache.exists():
+        try:
+            with open(individual_cache, 'rb') as f:
+                data = pickle.load(f)
+                if not data.empty:
+                    data.columns = [col.lower() for col in data.columns]
+                    return data
+        except Exception as e:
+            logger.error(f"Error loading individual cache: {e}")
+    
+    return None
+
+
 
 
 def main():

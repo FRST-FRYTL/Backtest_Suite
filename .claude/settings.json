@@ -35,88 +35,86 @@
     ]
   },
   "hooks": {
-    "preEditHook": {
-      "command": "npx",
-      "args": [
-        "claude-flow",
-        "hooks",
-        "pre-edit",
-        "--file",
-        "${file}",
-        "--auto-assign-agents",
-        "true",
-        "--load-context",
-        "true"
-      ],
-      "alwaysRun": false,
-      "outputFormat": "json"
-    },
-    "postEditHook": {
-      "command": "npx",
-      "args": [
-        "claude-flow",
-        "hooks",
-        "post-edit",
-        "--file",
-        "${file}",
-        "--format",
-        "true",
-        "--update-memory",
-        "true",
-        "--train-neural",
-        "true"
-      ],
-      "alwaysRun": true,
-      "outputFormat": "json"
-    },
-    "preCommandHook": {
-      "command": "npx",
-      "args": [
-        "claude-flow",
-        "hooks",
-        "pre-command",
-        "--command",
-        "${command}",
-        "--validate-safety",
-        "true",
-        "--prepare-resources",
-        "true"
-      ],
-      "alwaysRun": false,
-      "outputFormat": "json"
-    },
-    "postCommandHook": {
-      "command": "npx",
-      "args": [
-        "claude-flow",
-        "hooks",
-        "post-command",
-        "--command",
-        "${command}",
-        "--track-metrics",
-        "true",
-        "--store-results",
-        "true"
-      ],
-      "alwaysRun": false,
-      "outputFormat": "json"
-    },
-    "sessionEndHook": {
-      "command": "npx",
-      "args": [
-        "claude-flow",
-        "hooks",
-        "session-end",
-        "--generate-summary",
-        "true",
-        "--persist-state",
-        "true",
-        "--export-metrics",
-        "true"
-      ],
-      "alwaysRun": true,
-      "outputFormat": "json"
-    }
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx claude-flow hooks pre-edit --file ${file} --auto-assign-agents true --load-context true",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx claude-flow hooks pre-command --command \"${command}\" --validate-safety true --prepare-resources true",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx claude-flow hooks post-edit --file ${file} --format true --update-memory true --train-neural true",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx claude-flow hooks post-command --command \"${command}\" --track-metrics true --store-results true",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx claude-flow hooks session-end --generate-summary true --persist-state true --export-metrics true",
+            "timeout": 60
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx claude-flow hooks notification --message \"${message}\" --telemetry true",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx claude-flow hooks subagent-stop --agent-id \"${agent}\" --sync-memory true",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
   },
   "mcpServers": {
     "claude-flow": {

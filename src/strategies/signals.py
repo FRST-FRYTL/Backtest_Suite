@@ -6,10 +6,29 @@ import pandas as pd
 import numpy as np
 
 from .rules import Rule
+from .signal_filters import SignalFilter
+
+__all__ = ["SignalGenerator", "SignalFilter"]
 
 
 class SignalGenerator:
     """Generates trading signals from strategy rules."""
+    
+    def __init__(self, min_signal_strength: float = 0.0, max_signals_per_day: int = None):
+        """
+        Initialize signal generator.
+        
+        Args:
+            min_signal_strength: Minimum signal strength threshold
+            max_signals_per_day: Maximum signals allowed per day
+        """
+        self.min_signal_strength = min_signal_strength
+        self.max_signals_per_day = max_signals_per_day
+        self.filters = []
+    
+    def add_filter(self, filter: SignalFilter):
+        """Add a signal filter."""
+        self.filters.append(filter)
     
     def generate(self, strategy, data: pd.DataFrame) -> pd.DataFrame:
         """
@@ -83,8 +102,19 @@ class SignalGenerator:
             rule_signal = rule.evaluate_series(data)
             entry_signal |= rule_signal  # OR logic between rules
             
-        # Apply filters
-        return entry_signal & filter_pass
+        # Apply rule-based filters
+        entry_signal = entry_signal & filter_pass
+        
+        # Apply signal filters
+        for signal_filter in self.filters:
+            entry_signal = signal_filter.apply(data, entry_signal)
+        
+        # Apply signal strength filter
+        if self.min_signal_strength > 0:
+            signal_strength = self._calculate_signal_strength(entry_rules, data, entry_signal)
+            entry_signal = entry_signal & (signal_strength >= self.min_signal_strength)
+        
+        return entry_signal
         
     def _generate_exit_signals(
         self,

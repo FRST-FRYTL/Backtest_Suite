@@ -3,7 +3,7 @@
 from .base import BaseStrategy, TradeAction, Signal, Position, StrategyError
 from .builder import StrategyBuilder
 from .rules import Rule, Condition, LogicalOperator
-from .signals import SignalGenerator
+from .signals import SignalGenerator, SignalFilter
 
 try:
     from .monthly_contribution_strategy import MonthlyContributionStrategy
@@ -27,7 +27,8 @@ __all__ = [
     "Rule",
     "Condition",
     "LogicalOperator",
-    "SignalGenerator"
+    "SignalGenerator",
+    "SignalFilter"
 ]
 
 if MONTHLY_STRATEGY_AVAILABLE:

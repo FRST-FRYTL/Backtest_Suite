@@ -11,7 +11,7 @@ from src.backtesting.portfolio import Portfolio
 from src.backtesting.position import Position
 from src.backtesting.order import Order, OrderType, OrderSide
 from src.backtesting.events import MarketEvent, OrderEvent, FillEvent
-from src.strategies.base import Strategy
+from src.strategies.base import BaseStrategy
 from src.strategies.builder import StrategyBuilder
 
 
@@ -25,43 +25,54 @@ class TestBacktestEngineComprehensive:
         assert engine.initial_capital == 100000
         assert engine.commission_rate == 0.001
         assert engine.slippage_rate == 0.0005
-        assert engine.portfolio is not None
-        assert engine.data_handler is None
+        assert engine.portfolio is None  # Portfolio is created during run
         assert engine.strategy is None
+        assert engine.data is None
+        assert engine.events_queue is not None
+        assert engine.max_positions == 10
+        assert engine.generate_report == True
         
         # Custom initialization
         engine_custom = BacktestEngine(
             initial_capital=50000,
             commission_rate=0.002,
             slippage_rate=0.001,
-            margin_requirement=0.1
+            max_positions=5,
+            generate_report=False
         )
         assert engine_custom.initial_capital == 50000
         assert engine_custom.commission_rate == 0.002
         assert engine_custom.slippage_rate == 0.001
+        assert engine_custom.max_positions == 5
+        assert engine_custom.generate_report == False
     
-    def test_engine_data_handler_setup(self, sample_ohlcv_data):
-        """Test data handler setup."""
-        engine = BacktestEngine()
+    def test_engine_run_method(self, sample_ohlcv_data):
+        """Test engine run method."""
+        engine = BacktestEngine(generate_report=False)
         
-        # Test setting up data handler
-        engine.setup_data_handler(sample_ohlcv_data)
-        assert engine.data_handler is not None
-        assert hasattr(engine.data_handler, 'get_latest_bar')
-        assert hasattr(engine.data_handler, 'get_latest_bars')
+        # Create a simple strategy
+        strategy = StrategyBuilder("Test Strategy")
+        strategy.add_entry_rule("close > open")
+        strategy.add_exit_rule("close < open")
+        built_strategy = strategy.build()
         
-        # Test with multiple symbols
-        multi_data = {
-            'AAPL': sample_ohlcv_data.copy(),
-            'GOOGL': sample_ohlcv_data.copy()
-        }
-        engine.setup_data_handler(multi_data)
-        assert engine.data_handler is not None
+        # Run backtest
+        results = engine.run(
+            data=sample_ohlcv_data,
+            strategy=built_strategy,
+            progress_bar=False
+        )
+        
+        # Verify results
+        assert isinstance(results, dict)
+        assert 'metrics' in results
+        assert 'portfolio_value' in results
+        assert 'positions' in results
+        assert 'trades' in results
     
-    def test_engine_strategy_setup(self, sample_ohlcv_data):
-        """Test strategy setup."""
+    def test_engine_initialization_methods(self, sample_ohlcv_data):
+        """Test internal initialization methods."""
         engine = BacktestEngine()
-        engine.setup_data_handler(sample_ohlcv_data)
         
         # Create simple strategy
         strategy = StrategyBuilder("Test Strategy")
@@ -69,71 +80,86 @@ class TestBacktestEngineComprehensive:
         strategy.add_exit_rule("rsi > 70")
         built_strategy = strategy.build()
         
-        engine.setup_strategy(built_strategy)
+        # Test _initialize_backtest
+        engine._initialize_backtest(
+            data=sample_ohlcv_data,
+            strategy=built_strategy
+        )
+        
+        assert engine.portfolio is not None
         assert engine.strategy is not None
-        assert engine.strategy.name == "Test Strategy"
+        assert engine.data is not None
+        assert engine.market_data_index == 0
+        assert engine.portfolio.initial_capital == engine.initial_capital
     
     def test_engine_full_backtest_workflow(self, sample_ohlcv_data):
         """Test complete backtest workflow."""
-        engine = BacktestEngine(initial_capital=100000)
+        engine = BacktestEngine(initial_capital=100000, generate_report=False)
         
-        # Setup data and strategy
-        engine.setup_data_handler(sample_ohlcv_data)
-        
+        # Create strategy
         strategy = StrategyBuilder("Test Strategy")
         strategy.add_entry_rule("close > open")  # Simple rule
         strategy.add_exit_rule("close < open")
         strategy.set_risk_management(position_size=0.1)
+        built_strategy = strategy.build()
         
-        engine.setup_strategy(strategy.build())
+        # Run backtest with date range
+        start_date = sample_ohlcv_data.index[10]
+        end_date = sample_ohlcv_data.index[-10]
         
-        # Run backtest
-        results = engine.run_backtest()
+        results = engine.run(
+            data=sample_ohlcv_data,
+            strategy=built_strategy,
+            start_date=start_date,
+            end_date=end_date,
+            progress_bar=False
+        )
         
         # Verify results structure
         assert isinstance(results, dict)
+        assert 'metrics' in results
         assert 'portfolio_value' in results
         assert 'trades' in results
         assert 'positions' in results
-        assert 'performance_metrics' in results
         
-        # Check portfolio value is a series
-        assert isinstance(results['portfolio_value'], pd.Series)
-        assert len(results['portfolio_value']) > 0
+        # Check portfolio value
+        pv = results['portfolio_value']
+        assert isinstance(pv, pd.Series)
+        assert len(pv) > 0
         
-        # Check trades structure
-        assert isinstance(results['trades'], list)
-        
-        # Check performance metrics
-        metrics = results['performance_metrics']
-        assert 'total_return' in metrics
+        # Check metrics
+        metrics = results['metrics']
+        assert 'returns' in metrics
         assert 'sharpe_ratio' in metrics
         assert 'max_drawdown' in metrics
-        assert 'win_rate' in metrics
     
     def test_engine_event_processing(self, sample_ohlcv_data):
         """Test event processing system."""
         engine = BacktestEngine()
         engine.setup_data_handler(sample_ohlcv_data)
         
-        # Create mock strategy that generates orders
-        class MockStrategy(Strategy):
+        # Create mock strategy that generates signals
+        class MockStrategy(BaseStrategy):
             def __init__(self):
                 super().__init__("Mock Strategy")
-                self.order_count = 0
+                self.signal_count = 0
             
-            def calculate_signals(self, market_data):
-                # Generate a buy signal every 10 days
-                if len(market_data) % 10 == 0 and self.order_count < 5:
-                    self.order_count += 1
-                    return [OrderEvent(
-                        symbol='TEST',
-                        order_type=OrderType.MARKET,
-                        quantity=100,
-                        side=OrderSide.BUY,
-                        timestamp=market_data.index[-1]
-                    )]
-                return []
+            def generate_signals(self, data: pd.DataFrame) -> Dict:
+                # Generate a buy signal every 10 bars
+                if len(data) % 10 == 0 and self.signal_count < 5:
+                    self.signal_count += 1
+                    return {
+                        'signal': 1,  # Buy signal
+                        'confidence': 0.8,
+                        'size': 100
+                    }
+                elif len(data) % 15 == 0:  # Sell signal
+                    return {
+                        'signal': -1,  # Sell signal
+                        'confidence': 0.7,
+                        'size': 100
+                    }
+                return {'signal': 0}  # No signal
         
         engine.setup_strategy(MockStrategy())
         

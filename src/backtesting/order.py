@@ -15,6 +15,12 @@ class OrderType(Enum):
     TRAILING_STOP = "TRAILING_STOP"
 
 
+class OrderSide(Enum):
+    """Order side (buy/sell)."""
+    BUY = "BUY"
+    SELL = "SELL"
+
+
 class OrderStatus(Enum):
     """Order status states."""
     PENDING = "PENDING"
@@ -78,7 +84,13 @@ class Order:
         # Update average fill price
         total_value = (self.avg_fill_price * self.filled_quantity) + (price * quantity)
         self.filled_quantity += quantity
-        self.avg_fill_price = total_value / self.filled_quantity
+        
+        # Handle zero filled quantity
+        if self.filled_quantity == 0:
+            self.avg_fill_price = 0.0
+        else:
+            self.avg_fill_price = total_value / self.filled_quantity
+            
         self.commission += commission
         
         # Update status

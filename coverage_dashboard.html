@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coverage Analysis Dashboard - Backtest Suite</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .metric-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .critical { color: #e74c3c; }
+        .warning { color: #f39c12; }
+        .success { color: #27ae60; }
+        .info { color: #3498db; }
+        
+        .coverage-breakdown {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .module-row {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .module-name {
+            flex: 1;
+            font-weight: bold;
+        }
+        .module-bar {
+            flex: 2;
+            height: 20px;
+            background: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 15px;
+        }
+        .module-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        .module-stats {
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .priority-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .priority-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .priority-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+        .priority-critical { background: #e74c3c; }
+        .priority-high { background: #f39c12; }
+        .priority-medium { background: #3498db; }
+        .priority-low { background: #27ae60; }
+        
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .recommendation-box {
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        .footer {
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Coverage Analysis Dashboard</h1>
+        <p>Backtest Suite Test Coverage Report - Generated July 16, 2025</p>
+        <p><em>Analyzed by Coverage Analyzer Agent (Hive-Mind Swarm)</em></p>
+    </div>
+    
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <div class="metric-value critical">6%</div>
+            <div class="metric-label">Overall Coverage</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value info">21,854</div>
+            <div class="metric-label">Total Statements</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value critical">20,540</div>
+            <div class="metric-label">Missing Coverage</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value success">1,314</div>
+            <div class="metric-label">Covered Lines</div>
+        </div>
+    </div>
+    
+    <div class="coverage-breakdown">
+        <h3>📋 Module Coverage Breakdown</h3>
+        <div class="module-row">
+            <div class="module-name">ML Components</div>
+            <div class="module-bar">
+                <div class="module-fill" style="width: 0%; background: #e74c3c;"></div>
+            </div>
+            <div class="module-stats">0% (7,293 statements)</div>
+        </div>
+        <div class="module-row">
+            <div class="module-name">Visualization</div>
+            <div class="module-bar">
+                <div class="module-fill" style="width: 0%; background: #e74c3c;"></div>
+            </div>
+            <div class="module-stats">0% (2,181 statements)</div>
+        </div>
+        <div class="module-row">
+            <div class="module-name">Reporting</div>
+            <div class="module-bar">
+                <div class="module-fill" style="width: 0%; background: #e74c3c;"></div>
+            </div>
+            <div class="module-stats">0% (2,432 statements)</div>
+        </div>
+        <div class="module-row">
+            <div class="module-name">Events System</div>
+            <div class="module-bar">
+                <div class="module-fill" style="width: 74%; background: #27ae60;"></div>
+            </div>
+            <div class="module-stats">74% (78 statements)</div>
+        </div>
+        <div class="module-row">
+            <div class="module-name">Order Management</div>
+            <div class="module-bar">
+                <div class="module-fill" style="width: 71%; background: #27ae60;"></div>
+            </div>
+            <div class="module-stats">71% (70 statements)</div>
+        </div>
+        <div class="module-row">
+            <div class="module-name">Strategy Base</div>
+            <div class="module-bar">
+                <div class="module-fill" style="width: 67%; background: #27ae60;"></div>
+            </div>
+            <div class="module-stats">67% (87 statements)</div>
+        </div>
+        <div class="module-row">
+            <div class="module-name">Backtesting Engine</div>
+            <div class="module-bar">
+                <div class="module-fill" style="width: 34%; background: #f39c12;"></div>
+            </div>
+            <div class="module-stats">34% (1,082 statements)</div>
+        </div>
+        <div class="module-row">
+            <div class="module-name">Data Pipeline</div>
+            <div class="module-bar">
+                <div class="module-fill" style="width: 23%; background: #f39c12;"></div>
+            </div>
+            <div class="module-stats">23% (625 statements)</div>
+        </div>
+        <div class="module-row">
+            <div class="module-name">Advanced Strategies</div>
+            <div class="module-bar">
+                <div class="module-fill" style="width: 18%; background: #f39c12;"></div>
+            </div>
+            <div class="module-stats">18% (1,824 statements)</div>
+        </div>
+    </div>
+    
+    <div class="priority-section">
+        <h3>🚨 Priority Testing Areas</h3>
+        <div class="priority-item">
+            <div class="priority-icon priority-critical"></div>
+            <div>
+                <strong>ML Components (0% Coverage)</strong><br>
+                <small>7,293 statements - All ML agents, models, and optimization completely untested</small>
+            </div>
+        </div>
+        <div class="priority-item">
+            <div class="priority-icon priority-critical"></div>
+            <div>
+                <strong>Visualization System (0% Coverage)</strong><br>
+                <small>2,181 statements - Charts, dashboards, and export functionality untested</small>
+            </div>
+        </div>
+        <div class="priority-item">
+            <div class="priority-icon priority-critical"></div>
+            <div>
+                <strong>Reporting Framework (0% Coverage)</strong><br>
+                <small>2,432 statements - Report generation and templates completely untested</small>
+            </div>
+        </div>
+        <div class="priority-item">
+            <div class="priority-icon priority-high"></div>
+            <div>
+                <strong>Advanced Strategies (18% Coverage)</strong><br>
+                <small>1,824 statements - Confluence, SuperTrend AI, and ML strategies need testing</small>
+            </div>
+        </div>
+        <div class="priority-item">
+            <div class="priority-icon priority-high"></div>
+            <div>
+                <strong>Data Pipeline (23% Coverage)</strong><br>
+                <small>625 statements - Multi-timeframe data fetching and caching needs testing</small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="chart-container">
+        <h3>📈 Coverage Distribution</h3>
+        <canvas id="coverageChart" width="400" height="200"></canvas>
+    </div>
+    
+    <div class="priority-section">
+        <h3>🎯 Coverage Improvement Roadmap</h3>
+        
+        <div class="recommendation-box">
+            <h4>Phase 1: Critical Foundation (Target: 40% Coverage)</h4>
+            <ul>
+                <li>Add core backtesting engine tests (Strategy execution, Order management)</li>
+                <li>Implement data pipeline tests (Data fetching, Quality checks, Caching)</li>
+                <li>Add basic strategy tests (Signal generation, Risk management)</li>
+            </ul>
+            <strong>Estimated Timeline:</strong> 4-6 weeks
+        </div>
+        
+        <div class="recommendation-box">
+            <h4>Phase 2: Advanced Features (Target: 60% Coverage)</h4>
+            <ul>
+                <li>ML component testing (Model training, Feature engineering, Predictions)</li>
+                <li>Advanced strategy testing (Confluence, SuperTrend AI, Multi-timeframe)</li>
+                <li>Performance and monitoring tests (Benchmarks, Memory usage)</li>
+            </ul>
+            <strong>Estimated Timeline:</strong> 6-8 weeks
+        </div>
+        
+        <div class="recommendation-box">
+            <h4>Phase 3: Comprehensive Coverage (Target: 80% Coverage)</h4>
+            <ul>
+                <li>Complete visualization testing (Charts, Dashboards, Exports)</li>
+                <li>Full reporting system tests (Generation, Templates, Formats)</li>
+                <li>End-to-end integration tests (Complete workflows, Real scenarios)</li>
+            </ul>
+            <strong>Estimated Timeline:</strong> 4-6 weeks
+        </div>
+    </div>
+    
+    <div class="priority-section">
+        <h3>🔍 Specific Functions Needing Immediate Testing</h3>
+        
+        <h4>🔥 Critical Missing Tests:</h4>
+        <ul>
+            <li><strong>ML Model Training:</strong> All training workflows in <code>src/ml/</code></li>
+            <li><strong>Strategy Signal Generation:</strong> Core logic in advanced strategies</li>
+            <li><strong>Data Quality Validation:</strong> Missing data handling and synchronization</li>
+            <li><strong>Performance Calculations:</strong> Risk metrics and portfolio analytics</li>
+            <li><strong>Multi-timeframe Analysis:</strong> Cross-timeframe data processing</li>
+        </ul>
+        
+        <h4>⚠️ High Priority Missing Tests:</h4>
+        <ul>
+            <li><strong>Cache Management:</strong> Data caching and invalidation logic</li>
+            <li><strong>Risk Management:</strong> Position sizing and risk controls</li>
+            <li><strong>Report Generation:</strong> All report templates and export formats</li>
+            <li><strong>Chart Generation:</strong> All visualization components</li>
+            <li><strong>Error Handling:</strong> Exception management across all modules</li>
+        </ul>
+    </div>
+    
+    <div class="footer">
+        <p>Generated by Coverage Analyzer Agent - Hive-Mind Swarm Coordination</p>
+        <p>For detailed line-by-line analysis, see: <a href="htmlcov/index.html">HTML Coverage Report</a></p>
+        <p>Last Updated: July 16, 2025 | Total Analysis Time: 3 minutes</p>
+    </div>
+    
+    <script>
+        // Coverage Distribution Chart
+        const ctx = document.getElementById('coverageChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Covered', 'Missing'],
+                datasets: [{
+                    data: [6, 94],
+                    backgroundColor: ['#27ae60', '#e74c3c'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Animate progress bars
+        document.addEventListener('DOMContentLoaded', function() {
+            const progressBars = document.querySelectorAll('.module-fill');
+            progressBars.forEach(bar => {
+                const targetWidth = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = targetWidth;
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>

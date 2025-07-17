@@ -9,6 +9,12 @@ from plotly.subplots import make_subplots
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+# Handle scipy.stats import
+try:
+    from scipy import stats
+except ImportError:
+    stats = None
+
 
 class ChartGenerator:
     """Generate various charts for backtesting results."""
@@ -63,6 +69,10 @@ class ChartGenerator:
             subplot_titles=('Equity Curve', 'Drawdown %')
         )
         
+        # Handle empty or invalid DataFrame
+        if equity_curve.empty or 'total_value' not in equity_curve.columns:
+            return fig
+        
         # Equity curve
         fig.add_trace(
             go.Scatter(
@@ -76,7 +86,7 @@ class ChartGenerator:
         )
         
         # Add benchmark if provided
-        if benchmark is not None:
+        if benchmark is not None and len(benchmark) > 0 and len(equity_curve) > 0:
             # Normalize to start at same value
             benchmark_normalized = benchmark / benchmark.iloc[0] * equity_curve['total_value'].iloc[0]
             fig.add_trace(
@@ -91,8 +101,11 @@ class ChartGenerator:
             )
             
         # Calculate and plot drawdown
-        running_max = equity_curve['total_value'].expanding().max()
-        drawdown = (equity_curve['total_value'] - running_max) / running_max * 100
+        if len(equity_curve) > 0:
+            running_max = equity_curve['total_value'].expanding().max()
+            drawdown = (equity_curve['total_value'] - running_max) / running_max * 100
+        else:
+            drawdown = pd.Series([], dtype=float)
         
         fig.add_trace(
             go.Scatter(
@@ -130,11 +143,19 @@ class ChartGenerator:
         """Create equity curve with matplotlib."""
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8), sharex=True)
         
+        # Handle empty or invalid DataFrame
+        if equity_curve.empty or 'total_value' not in equity_curve.columns:
+            ax1.text(0.5, 0.5, 'No data available', transform=ax1.transAxes,
+                    ha='center', va='center')
+            ax2.text(0.5, 0.5, 'No data available', transform=ax2.transAxes,
+                    ha='center', va='center')
+            return fig
+        
         # Equity curve
         ax1.plot(equity_curve.index, equity_curve['total_value'], 
                 label='Portfolio', linewidth=2, color='blue')
         
-        if benchmark is not None:
+        if benchmark is not None and len(benchmark) > 0 and len(equity_curve) > 0:
             benchmark_normalized = benchmark / benchmark.iloc[0] * equity_curve['total_value'].iloc[0]
             ax1.plot(benchmark.index, benchmark_normalized,
                     label='Benchmark', linewidth=1, linestyle='--', color='gray')
@@ -145,8 +166,11 @@ class ChartGenerator:
         ax1.grid(True, alpha=0.3)
         
         # Drawdown
-        running_max = equity_curve['total_value'].expanding().max()
-        drawdown = (equity_curve['total_value'] - running_max) / running_max * 100
+        if len(equity_curve) > 0:
+            running_max = equity_curve['total_value'].expanding().max()
+            drawdown = (equity_curve['total_value'] - running_max) / running_max * 100
+        else:
+            drawdown = pd.Series([], dtype=float)
         
         ax2.fill_between(equity_curve.index, 0, drawdown, 
                         color='red', alpha=0.3, label='Drawdown')
@@ -176,6 +200,11 @@ class ChartGenerator:
         if self.style == "plotly":
             fig = go.Figure()
             
+            # Handle empty or invalid data
+            if returns is None or len(returns) == 0:
+                fig.update_layout(title=title)
+                return fig
+            
             # Histogram
             fig.add_trace(go.Histogram(
                 x=returns * 100,  # Convert to percentage
@@ -185,19 +214,20 @@ class ChartGenerator:
                 opacity=0.7
             ))
             
-            # Add normal distribution overlay
-            mean = returns.mean() * 100
-            std = returns.std() * 100
-            x = np.linspace(returns.min() * 100, returns.max() * 100, 100)
-            y = stats.norm.pdf(x, mean, std) * len(returns) * (returns.max() - returns.min()) * 100 / 50
-            
-            fig.add_trace(go.Scatter(
-                x=x,
-                y=y,
-                mode='lines',
-                name='Normal Distribution',
-                line=dict(color='red', width=2)
-            ))
+            # Add normal distribution overlay if scipy is available
+            if stats is not None:
+                mean = returns.mean() * 100
+                std = returns.std() * 100
+                x = np.linspace(returns.min() * 100, returns.max() * 100, 100)
+                y = stats.norm.pdf(x, mean, std) * len(returns) * (returns.max() - returns.min()) * 100 / 50
+                
+                fig.add_trace(go.Scatter(
+                    x=x,
+                    y=y,
+                    mode='lines',
+                    name='Normal Distribution',
+                    line=dict(color='red', width=2)
+                ))
             
             fig.update_layout(
                 title=title,
@@ -210,16 +240,24 @@ class ChartGenerator:
         else:
             fig, ax = plt.subplots(figsize=(10, 6))
             
+            # Handle empty or invalid data
+            if returns is None or len(returns) == 0:
+                ax.text(0.5, 0.5, 'No data available', transform=ax.transAxes,
+                       ha='center', va='center')
+                ax.set_title(title)
+                return fig
+            
             # Histogram
             ax.hist(returns * 100, bins=50, alpha=0.7, color='blue', 
                    density=True, label='Returns')
             
-            # Normal distribution overlay
-            mean = returns.mean() * 100
-            std = returns.std() * 100
-            x = np.linspace(returns.min() * 100, returns.max() * 100, 100)
-            ax.plot(x, stats.norm.pdf(x, mean, std), 'r-', 
-                   linewidth=2, label='Normal Distribution')
+            # Normal distribution overlay if scipy is available
+            if stats is not None:
+                mean = returns.mean() * 100
+                std = returns.std() * 100
+                x = np.linspace(returns.min() * 100, returns.max() * 100, 100)
+                ax.plot(x, stats.norm.pdf(x, mean, std), 'r-', 
+                       linewidth=2, label='Normal Distribution')
             
             ax.set_xlabel('Returns (%)')
             ax.set_ylabel('Density')
@@ -257,6 +295,11 @@ class ChartGenerator:
                 row_heights=[0.7, 0.3]
             )
             
+            # Handle empty or invalid data
+            if data.empty or not all(col in data.columns for col in ['open', 'high', 'low', 'close']):
+                fig.update_layout(title=f'{symbol} - Trade Analysis')
+                return fig
+            
             # Candlestick
             fig.add_trace(
                 go.Candlestick(
@@ -271,8 +314,12 @@ class ChartGenerator:
             )
             
             # Add trade markers
-            buy_trades = trades[trades['type'] == 'OPEN']
-            sell_trades = trades[trades['type'] == 'CLOSE']
+            if not trades.empty and 'type' in trades.columns:
+                buy_trades = trades[trades['type'] == 'OPEN']
+                sell_trades = trades[trades['type'] == 'CLOSE']
+            else:
+                buy_trades = pd.DataFrame()
+                sell_trades = pd.DataFrame()
             
             if not buy_trades.empty:
                 fig.add_trace(
@@ -321,15 +368,16 @@ class ChartGenerator:
                     )
                     
             # Volume
-            fig.add_trace(
-                go.Bar(
-                    x=data.index,
-                    y=data['volume'],
-                    name='Volume',
-                    marker_color='lightblue'
-                ),
-                row=2, col=1
-            )
+            if 'volume' in data.columns:
+                fig.add_trace(
+                    go.Bar(
+                        x=data.index,
+                        y=data['volume'],
+                        name='Volume',
+                        marker_color='lightblue'
+                    ),
+                    row=2, col=1
+                )
             
             fig.update_layout(
                 title=f'{symbol} - Trade Analysis',
@@ -346,12 +394,23 @@ class ChartGenerator:
             # Matplotlib version
             fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 8), sharex=True)
             
+            # Handle empty or invalid data
+            if data.empty or 'close' not in data.columns:
+                ax1.text(0.5, 0.5, 'No data available', transform=ax1.transAxes,
+                        ha='center', va='center')
+                ax1.set_title(f'{symbol} - Trade Analysis')
+                return fig
+            
             # Price plot
             ax1.plot(data.index, data['close'], label='Close', linewidth=1, color='black')
             
             # Trade markers
-            buy_trades = trades[trades['type'] == 'OPEN']
-            sell_trades = trades[trades['type'] == 'CLOSE']
+            if not trades.empty and 'type' in trades.columns:
+                buy_trades = trades[trades['type'] == 'OPEN']
+                sell_trades = trades[trades['type'] == 'CLOSE']
+            else:
+                buy_trades = pd.DataFrame()
+                sell_trades = pd.DataFrame()
             
             if not buy_trades.empty:
                 ax1.scatter(buy_trades['timestamp'], buy_trades['price'],
@@ -372,8 +431,9 @@ class ChartGenerator:
             ax1.grid(True, alpha=0.3)
             
             # Volume
-            ax2.bar(data.index, data['volume'], alpha=0.3, color='blue')
-            ax2.set_ylabel('Volume')
+            if 'volume' in data.columns:
+                ax2.bar(data.index, data['volume'], alpha=0.3, color='blue')
+                ax2.set_ylabel('Volume')
             ax2.set_xlabel('Date')
             ax2.grid(True, alpha=0.3)
             
@@ -408,10 +468,16 @@ class ChartGenerator:
             )
             
             # Returns
-            returns_data = {
-                'Total Return': float(metrics.get('total_return', '0%').strip('%')),
-                'Annual Return': float(metrics.get('annualized_return', '0%').strip('%'))
-            }
+            returns_data = {}
+            for key in ['total_return', 'annualized_return']:
+                value = metrics.get(key, '0%')
+                try:
+                    if isinstance(value, str):
+                        returns_data[key.replace('_', ' ').title()] = float(value.strip('%'))
+                    else:
+                        returns_data[key.replace('_', ' ').title()] = float(value)
+                except (ValueError, AttributeError):
+                    returns_data[key.replace('_', ' ').title()] = 0.0
             fig.add_trace(
                 go.Bar(x=list(returns_data.keys()), y=list(returns_data.values()),
                       marker_color='green'),
@@ -419,10 +485,16 @@ class ChartGenerator:
             )
             
             # Risk metrics
-            risk_data = {
-                'Volatility': float(metrics.get('volatility', '0%').strip('%')),
-                'Max Drawdown': -float(metrics.get('max_drawdown', '0%').strip('%'))
-            }
+            risk_data = {}
+            for key, mult in [('volatility', 1), ('max_drawdown', -1)]:
+                value = metrics.get(key, '0%')
+                try:
+                    if isinstance(value, str):
+                        risk_data[key.replace('_', ' ').title()] = mult * float(value.strip('%'))
+                    else:
+                        risk_data[key.replace('_', ' ').title()] = mult * float(value)
+                except (ValueError, AttributeError):
+                    risk_data[key.replace('_', ' ').title()] = 0.0
             fig.add_trace(
                 go.Bar(x=list(risk_data.keys()), y=list(risk_data.values()),
                       marker_color='red'),
@@ -430,10 +502,18 @@ class ChartGenerator:
             )
             
             # Trade stats
-            trade_data = {
-                'Win Rate': float(metrics.get('win_rate', '0%').strip('%')),
-                'Profit Factor': float(metrics.get('profit_factor', '0'))
-            }
+            trade_data = {}
+            for key in ['win_rate', 'profit_factor']:
+                value = metrics.get(key, '0')
+                try:
+                    if value is None:
+                        trade_data[key.replace('_', ' ').title()] = 0.0
+                    elif isinstance(value, str):
+                        trade_data[key.replace('_', ' ').title()] = float(value.strip('%'))
+                    else:
+                        trade_data[key.replace('_', ' ').title()] = float(value)
+                except (ValueError, AttributeError, TypeError):
+                    trade_data[key.replace('_', ' ').title()] = 0.0
             fig.add_trace(
                 go.Bar(x=list(trade_data.keys()), y=list(trade_data.values()),
                       marker_color='blue'),
@@ -441,11 +521,13 @@ class ChartGenerator:
             )
             
             # Risk-adjusted
-            risk_adj_data = {
-                'Sharpe': float(metrics.get('sharpe_ratio', '0')),
-                'Sortino': float(metrics.get('sortino_ratio', '0')),
-                'Calmar': float(metrics.get('calmar_ratio', '0'))
-            }
+            risk_adj_data = {}
+            for key in ['sharpe_ratio', 'sortino_ratio', 'calmar_ratio']:
+                value = metrics.get(key, '0')
+                try:
+                    risk_adj_data[key.split('_')[0].title()] = float(value)
+                except (ValueError, TypeError):
+                    risk_adj_data[key.split('_')[0].title()] = 0.0
             fig.add_trace(
                 go.Bar(x=list(risk_adj_data.keys()), y=list(risk_adj_data.values()),
                       marker_color='purple'),
@@ -463,15 +545,23 @@ class ChartGenerator:
             # Matplotlib version
             fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(12, 8))
             
-            # Parse metrics
-            total_return = float(metrics.get('total_return', '0%').strip('%'))
-            annual_return = float(metrics.get('annualized_return', '0%').strip('%'))
-            volatility = float(metrics.get('volatility', '0%').strip('%'))
-            max_dd = float(metrics.get('max_drawdown', '0%').strip('%'))
-            win_rate = float(metrics.get('win_rate', '0%').strip('%'))
-            profit_factor = float(metrics.get('profit_factor', '0'))
-            sharpe = float(metrics.get('sharpe_ratio', '0'))
-            sortino = float(metrics.get('sortino_ratio', '0'))
+            # Parse metrics with error handling
+            def safe_parse(value, default=0.0):
+                try:
+                    if isinstance(value, str):
+                        return float(value.strip('%'))
+                    return float(value)
+                except (ValueError, AttributeError, TypeError):
+                    return default
+            
+            total_return = safe_parse(metrics.get('total_return', '0%'))
+            annual_return = safe_parse(metrics.get('annualized_return', '0%'))
+            volatility = safe_parse(metrics.get('volatility', '0%'))
+            max_dd = safe_parse(metrics.get('max_drawdown', '0%'))
+            win_rate = safe_parse(metrics.get('win_rate', '0%'))
+            profit_factor = safe_parse(metrics.get('profit_factor', '0'))
+            sharpe = safe_parse(metrics.get('sharpe_ratio', '0'))
+            sortino = safe_parse(metrics.get('sortino_ratio', '0'))
             
             # Returns
             ax1.bar(['Total Return', 'Annual Return'], [total_return, annual_return], 

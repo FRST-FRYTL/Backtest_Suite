@@ -1,0 +1,182 @@
+{
+  "test_supertrend_ai.py": {
+    "module": "test_supertrend_ai.py",
+    "returncode": 4,
+    "stdout": "",
+    "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --json-report=test_results/test_supertrend_ai.py_report.json --json-report-summary\n  inifile: /workspaces/Backtest_Suite/pyproject.toml\n  rootdir: /workspaces/Backtest_Suite\n\n",
+    "duration": 6.09758186340332,
+    "passed": false,
+    "details": {}
+  },
+  "test_supertrend_ai_performance.py": {
+    "module": "test_supertrend_ai_performance.py",
+    "returncode": 4,
+    "stdout": "",
+    "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --json-report=test_results/test_supertrend_ai_performance.py_report.json --json-report-summary\n  inifile: /workspaces/Backtest_Suite/pyproject.toml\n  rootdir: /workspaces/Backtest_Suite\n\n",
+    "duration": 5.854806661605835,
+    "passed": false,
+    "details": {}
+  },
+  "integration/test_supertrend_ai_strategy.py": {
+    "module": "integration/test_supertrend_ai_strategy.py",
+    "returncode": 4,
+    "stdout": "",
+    "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --json-report=test_results/integration/test_supertrend_ai_strategy.py_report.json --json-report-summary\n  inifile: /workspaces/Backtest_Suite/pyproject.toml\n  rootdir: /workspaces/Backtest_Suite\n\n",
+    "duration": 5.957149028778076,
+    "passed": false,
+    "details": {}
+  },
+  "test_reporting/test_standard_report_generator.py": {
+    "module": "test_reporting/test_standard_report_generator.py",
+    "returncode": 4,
+    "stdout": "",
+    "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --json-report=test_results/test_reporting/test_standard_report_generator.py_report.json --json-report-summary\n  inifile: /workspaces/Backtest_Suite/pyproject.toml\n  rootdir: /workspaces/Backtest_Suite\n\n",
+    "duration": 5.884142160415649,
+    "passed": false,
+    "details": {}
+  },
+  "test_reporting/test_enhanced_trade_reporting.py": {
+    "module": "test_reporting/test_enhanced_trade_reporting.py",
+    "returncode": 4,
+    "stdout": "",
+    "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --json-report=test_results/test_reporting/test_enhanced_trade_reporting.py_report.json --json-report-summary\n  inifile: /workspaces/Backtest_Suite/pyproject.toml\n  rootdir: /workspaces/Backtest_Suite\n\n",
+    "duration": 5.9144251346588135,
+    "passed": false,
+    "details": {}
+  },
+  "test_reporting/test_visualization_types.py": {
+    "module": "test_reporting/test_visualization_types.py",
+    "returncode": 4,
+    "stdout": "",
+    "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --json-report=test_results/test_reporting/test_visualization_types.py_report.json --json-report-summary\n  inifile: /workspaces/Backtest_Suite/pyproject.toml\n  rootdir: /workspaces/Backtest_Suite\n\n",
+    "duration": 5.89040994644165,
+    "passed": false,
+    "details": {}
+  },
+  "test_ml_integration.py": {
+    "module": "test_ml_integration.py",
+    "returncode": 4,
+    "stdout": "",
+    "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --json-report=test_results/test_ml_integration.py_report.json --json-report-summary\n  inifile: /workspaces/Backtest_Suite/pyproject.toml\n  rootdir: /workspaces/Backtest_Suite\n\n",
+    "duration": 5.937066078186035,
+    "passed": false,
+    "details": {}
+  },
+  "test_visualization_comprehensive.py": {
+    "module": "test_visualization_comprehensive.py",
+    "returncode": 4,
+    "stdout": "",
+    "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --json-report=test_results/test_visualization_comprehensive.py_report.json --json-report-summary\n  inifile: /workspaces/Backtest_Suite/pyproject.toml\n  rootdir: /workspaces/Backtest_Suite\n\n",
+    "duration": 5.963610887527466,
+    "passed": false,
+    "details": {}
+  },
+  "test_portfolio_risk_management.py": {
+    "module": "test_portfolio_risk_management.py",
+    "returncode": 4,
+    "stdout": "",
+    "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --json-report=test_results/test_portfolio_risk_management.py_report.json --json-report-summary\n  inifile: /workspaces/Backtest_Suite/pyproject.toml\n  rootdir: /workspaces/Backtest_Suite\n\n",
+    "duration": 5.911074638366699,
+    "passed": false,
+    "details": {}
+  },
+  "coverage/test_technical_indicators_comprehensive.py": {
+    "module": "coverage/test_technical_indicators_comprehensive.py",
+    "returncode": 4,
+    "stdout": "",
+    "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --json-report=test_results/coverage/test_technical_indicators_comprehensive.py_report.json --json-report-summary\n  inifile: /workspaces/Backtest_Suite/pyproject.toml\n  rootdir: /workspaces/Backtest_Suite\n\n",
+    "duration": 5.917621612548828,
+    "passed": false,
+    "details": {}
+  },
+  "coverage/test_backtesting_engine_comprehensive.py": {
+    "module": "coverage/test_backtesting_engine_comprehensive.py",
+    "returncode": 4,
+    "stdout": "",
+    "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --json-report=test_results/coverage/test_backtesting_engine_comprehensive.py_report.json --json-report-summary\n  inifile: /workspaces/Backtest_Suite/pyproject.toml\n  rootdir: /workspaces/Backtest_Suite\n\n",
+    "duration": 5.860291242599487,
+    "passed": false,
+    "details": {}
+  },
+  "coverage/test_strategy_framework_comprehensive.py": {
+    "module": "coverage/test_strategy_framework_comprehensive.py",
+    "returncode": 4,
+    "stdout": "",
+    "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --json-report=test_results/coverage/test_strategy_framework_comprehensive.py_report.json --json-report-summary\n  inifile: /workspaces/Backtest_Suite/pyproject.toml\n  rootdir: /workspaces/Backtest_Suite\n\n",
+    "duration": 5.892571210861206,
+    "passed": false,
+    "details": {}
+  },
+  "coverage/test_portfolio_management_comprehensive.py": {
+    "module": "coverage/test_portfolio_management_comprehensive.py",
+    "returncode": 4,
+    "stdout": "",
+    "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --json-report=test_results/coverage/test_portfolio_management_comprehensive.py_report.json --json-report-summary\n  inifile: /workspaces/Backtest_Suite/pyproject.toml\n  rootdir: /workspaces/Backtest_Suite\n\n",
+    "duration": 5.872566223144531,
+    "passed": false,
+    "details": {}
+  },
+  "test_backtesting.py": {
+    "module": "test_backtesting.py",
+    "returncode": 4,
+    "stdout": "",
+    "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --json-report=test_results/test_backtesting.py_report.json --json-report-summary\n  inifile: /workspaces/Backtest_Suite/pyproject.toml\n  rootdir: /workspaces/Backtest_Suite\n\n",
+    "duration": 5.927546501159668,
+    "passed": false,
+    "details": {}
+  },
+  "test_strategies.py": {
+    "module": "test_strategies.py",
+    "returncode": 4,
+    "stdout": "",
+    "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --json-report=test_results/test_strategies.py_report.json --json-report-summary\n  inifile: /workspaces/Backtest_Suite/pyproject.toml\n  rootdir: /workspaces/Backtest_Suite\n\n",
+    "duration": 5.926624536514282,
+    "passed": false,
+    "details": {}
+  },
+  "test_indicators.py": {
+    "module": "test_indicators.py",
+    "returncode": 4,
+    "stdout": "",
+    "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --json-report=test_results/test_indicators.py_report.json --json-report-summary\n  inifile: /workspaces/Backtest_Suite/pyproject.toml\n  rootdir: /workspaces/Backtest_Suite\n\n",
+    "duration": 5.922621011734009,
+    "passed": false,
+    "details": {}
+  },
+  "test_portfolio.py": {
+    "module": "test_portfolio.py",
+    "returncode": 4,
+    "stdout": "",
+    "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --json-report=test_results/test_portfolio.py_report.json --json-report-summary\n  inifile: /workspaces/Backtest_Suite/pyproject.toml\n  rootdir: /workspaces/Backtest_Suite\n\n",
+    "duration": 5.97006368637085,
+    "passed": false,
+    "details": {}
+  },
+  "test_data.py": {
+    "module": "test_data.py",
+    "returncode": 4,
+    "stdout": "",
+    "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --json-report=test_results/test_data.py_report.json --json-report-summary\n  inifile: /workspaces/Backtest_Suite/pyproject.toml\n  rootdir: /workspaces/Backtest_Suite\n\n",
+    "duration": 6.010937929153442,
+    "passed": false,
+    "details": {}
+  },
+  "test_feature_engineering.py": {
+    "module": "test_feature_engineering.py",
+    "returncode": 4,
+    "stdout": "",
+    "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --json-report=test_results/test_feature_engineering.py_report.json --json-report-summary\n  inifile: /workspaces/Backtest_Suite/pyproject.toml\n  rootdir: /workspaces/Backtest_Suite\n\n",
+    "duration": 5.92201042175293,
+    "passed": false,
+    "details": {}
+  },
+  "test_performance_benchmarks.py": {
+    "module": "test_performance_benchmarks.py",
+    "returncode": 4,
+    "stdout": "",
+    "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --json-report=test_results/test_performance_benchmarks.py_report.json --json-report-summary\n  inifile: /workspaces/Backtest_Suite/pyproject.toml\n  rootdir: /workspaces/Backtest_Suite\n\n",
+    "duration": 5.939874649047852,
+    "passed": false,
+    "details": {}
+  }
+}

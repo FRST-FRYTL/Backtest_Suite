@@ -72,6 +72,12 @@ class VWMABands(Indicator):
         result['vwma_lower'] = vwma - (std_dev * self.band_multiplier)
         result['vwma_width'] = result['vwma_upper'] - result['vwma_lower']
         
+        # Add simple signal generation
+        price = data[self.price_column]
+        result['vwma_signal'] = 0  # Default neutral
+        result.loc[price > result['vwma_upper'], 'vwma_signal'] = -1  # Sell signal
+        result.loc[price < result['vwma_lower'], 'vwma_signal'] = 1   # Buy signal
+        
         return result
         
     def _calculate_vwma(
@@ -188,10 +194,13 @@ class VWMABands(Indicator):
         
         # Band squeeze signal (volatility contraction)
         band_width_ma = vwma_data['vwma_width'].rolling(window=self.period).mean()
-        signals['band_squeeze'] = vwma_data['vwma_width'] < band_width_ma * 0.8
+        # Ensure valid comparison by filling NaN values
+        band_width_filled = vwma_data['vwma_width'].bfill().ffill()
+        band_width_ma_filled = band_width_ma.bfill().ffill()
+        signals['band_squeeze'] = band_width_filled < band_width_ma_filled * 0.8
         
         # Band expansion signal (volatility expansion)
-        signals['band_expansion'] = vwma_data['vwma_width'] > band_width_ma * 1.2
+        signals['band_expansion'] = band_width_filled > band_width_ma_filled * 1.2
         
         return signals
         

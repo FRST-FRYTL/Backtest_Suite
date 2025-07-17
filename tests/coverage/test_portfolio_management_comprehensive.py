@@ -12,7 +12,7 @@ from src.backtesting.order import Order, OrderType, OrderSide
 from src.portfolio.risk_manager import RiskManager
 from src.portfolio.position_sizer import PositionSizer
 from src.portfolio.portfolio_optimizer import PortfolioOptimizer
-from src.portfolio.rebalancer import Rebalancer
+from src.portfolio.rebalancer import PortfolioRebalancer
 
 
 class TestPortfolioComprehensive:

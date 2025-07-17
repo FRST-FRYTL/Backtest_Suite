@@ -15,8 +15,43 @@ import plotly.graph_objects as go
 import plotly.express as px
 from plotly.subplots import make_subplots
 import warnings
+from enum import Enum
+from dataclasses import dataclass
 
 warnings.filterwarnings('ignore')
+
+
+class ChartType(Enum):
+    """Enumeration of available chart types."""
+    EQUITY_CURVE = "equity_curve"
+    DRAWDOWN = "drawdown"
+    RETURNS_DISTRIBUTION = "returns_distribution"
+    TRADE_SCATTER = "trade_scatter"
+    ROLLING_METRICS = "rolling_metrics"
+    HEATMAP = "heatmap"
+    TRADE_PRICE = "trade_price"
+    TRADE_RISK = "trade_risk"
+
+
+@dataclass
+class VisualizationConfig:
+    """Configuration for visualizations."""
+    figure_size: Tuple[int, int] = (12, 8)
+    figure_dpi: int = 300
+    color_scheme: Dict[str, str] = None
+    
+    def __post_init__(self):
+        if self.color_scheme is None:
+            self.color_scheme = {
+                "primary": "#1f77b4",
+                "secondary": "#ff7f0e",
+                "success": "#2ca02c",
+                "warning": "#ff9800",
+                "danger": "#d62728",
+                "info": "#17a2b8",
+                "background": "#ffffff",
+                "text": "#333333"
+            }
 
 
 class BaseVisualization:

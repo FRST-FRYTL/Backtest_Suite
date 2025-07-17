@@ -1,0 +1,222 @@
+{
+  "coverage_analysis": {
+    "timestamp": "2025-07-16T13:02:00Z",
+    "analyzer": "Coverage Analyzer Agent (Hive-Mind Swarm)",
+    "overall_metrics": {
+      "total_statements": 21854,
+      "covered_statements": 1314,
+      "missing_statements": 20540,
+      "overall_coverage": 6.01,
+      "excluded_statements": 30
+    },
+    "module_coverage": {
+      "ml_components": {
+        "coverage": 0,
+        "statements": 7293,
+        "status": "critical",
+        "components": {
+          "agents": {"coverage": 0, "statements": 3027},
+          "models": {"coverage": 0, "statements": 1447},
+          "optimization": {"coverage": 0, "statements": 1565},
+          "features": {"coverage": 0, "statements": 491},
+          "clustering": {"coverage": 0, "statements": 196},
+          "reports": {"coverage": 0, "statements": 194},
+          "market_regime": {"coverage": 0, "statements": 215}
+        }
+      },
+      "visualization": {
+        "coverage": 0,
+        "statements": 2181,
+        "status": "critical"
+      },
+      "reporting": {
+        "coverage": 15,
+        "statements": 2432,
+        "status": "critical"
+      },
+      "backtesting": {
+        "coverage": 34,
+        "statements": 1082,
+        "status": "warning",
+        "components": {
+          "engine": {"coverage": 16, "statements": 218},
+          "events": {"coverage": 74, "statements": 78},
+          "order": {"coverage": 71, "statements": 70},
+          "portfolio": {"coverage": 26, "statements": 282},
+          "position": {"coverage": 34, "statements": 105},
+          "strategy": {"coverage": 50, "statements": 131},
+          "ml_integration": {"coverage": 0, "statements": 198}
+        }
+      },
+      "strategies": {
+        "coverage": 18,
+        "statements": 1824,
+        "status": "warning",
+        "components": {
+          "base": {"coverage": 67, "statements": 87},
+          "builder": {"coverage": 38, "statements": 144},
+          "monthly_contribution": {"coverage": 12, "statements": 187},
+          "confluence": {"coverage": 0, "statements": 181},
+          "ml_strategy": {"coverage": 0, "statements": 176},
+          "supertrend_ai": {"coverage": 0, "statements": 237}
+        }
+      },
+      "data_management": {
+        "coverage": 23,
+        "statements": 625,
+        "status": "warning",
+        "components": {
+          "fetcher": {"coverage": 33, "statements": 79},
+          "cache": {"coverage": 49, "statements": 63},
+          "multi_timeframe": {"coverage": 30, "statements": 121},
+          "download": {"coverage": 0, "statements": 128},
+          "spx_fetcher": {"coverage": 0, "statements": 211}
+        }
+      },
+      "indicators": {
+        "coverage": 17,
+        "statements": 1563,
+        "status": "warning",
+        "components": {
+          "base": {"coverage": 53, "statements": 43},
+          "rsi": {"coverage": 21, "statements": 57},
+          "bollinger": {"coverage": 14, "statements": 84},
+          "vwap": {"coverage": 14, "statements": 145},
+          "technical": {"coverage": 17, "statements": 224},
+          "supertrend_ai": {"coverage": 0, "statements": 214}
+        }
+      },
+      "portfolio": {
+        "coverage": 22,
+        "statements": 1322,
+        "status": "warning"
+      },
+      "optimization": {
+        "coverage": 0,
+        "statements": 680,
+        "status": "critical"
+      },
+      "monitoring": {
+        "coverage": 0,
+        "statements": 675,
+        "status": "critical"
+      },
+      "analysis": {
+        "coverage": 0,
+        "statements": 1330,
+        "status": "critical"
+      }
+    },
+    "critical_gaps": {
+      "ml_pipeline": {
+        "risk_level": "CRITICAL",
+        "impact": "Complete ML functionality untested",
+        "missing_tests": [
+          "ML model training workflows",
+          "Feature engineering pipeline",
+          "Model prediction accuracy",
+          "Regime detection logic",
+          "Neural network training",
+          "Ensemble model coordination"
+        ]
+      },
+      "advanced_strategies": {
+        "risk_level": "HIGH",
+        "impact": "Advanced trading strategies untested",
+        "missing_tests": [
+          "Confluence strategy signal generation",
+          "SuperTrend AI processing",
+          "Multi-timeframe analysis",
+          "Strategy parameter optimization",
+          "Risk-adjusted position sizing"
+        ]
+      },
+      "data_pipeline": {
+        "risk_level": "HIGH",
+        "impact": "Data quality and availability issues",
+        "missing_tests": [
+          "Data fetching and caching",
+          "Data quality validation",
+          "Multi-timeframe synchronization",
+          "Error handling and recovery",
+          "Real-time data processing"
+        ]
+      },
+      "visualization": {
+        "risk_level": "HIGH",
+        "impact": "Chart generation and dashboards untested",
+        "missing_tests": [
+          "Chart generation logic",
+          "Interactive dashboard features",
+          "Export functionality",
+          "Performance visualization",
+          "Real-time updates"
+        ]
+      }
+    },
+    "improvement_roadmap": {
+      "phase_1": {
+        "target_coverage": 40,
+        "duration_weeks": 6,
+        "priorities": [
+          "Core backtesting engine tests",
+          "Data pipeline validation",
+          "Basic strategy testing",
+          "Risk management integration"
+        ]
+      },
+      "phase_2": {
+        "target_coverage": 60,
+        "duration_weeks": 8,
+        "priorities": [
+          "ML component testing",
+          "Advanced strategy validation",
+          "Performance monitoring",
+          "Integration testing"
+        ]
+      },
+      "phase_3": {
+        "target_coverage": 80,
+        "duration_weeks": 6,
+        "priorities": [
+          "Complete visualization testing",
+          "Full reporting system validation",
+          "End-to-end integration tests",
+          "Performance benchmarking"
+        ]
+      }
+    },
+    "recommendations": {
+      "immediate": [
+        "Add comprehensive ML model tests",
+        "Implement strategy signal generation tests",
+        "Create data quality validation tests",
+        "Add performance calculation tests"
+      ],
+      "short_term": [
+        "Build integration test suite",
+        "Add visualization component tests",
+        "Create reporting system tests",
+        "Implement error handling tests"
+      ],
+      "long_term": [
+        "Achieve 80% overall coverage",
+        "Implement performance benchmarking",
+        "Add comprehensive end-to-end tests",
+        "Create automated coverage monitoring"
+      ]
+    },
+    "files_generated": [
+      "/workspaces/Backtest_Suite/coverage_analysis_detailed_report.md",
+      "/workspaces/Backtest_Suite/coverage_dashboard.html",
+      "/workspaces/Backtest_Suite/coverage_summary.json"
+    ],
+    "coordination_status": {
+      "hive_mind_integration": "active",
+      "memory_updates": "completed",
+      "swarm_notifications": "sent",
+      "analysis_duration": "3 minutes",
+      "recommendations_priority": "critical"
+    }
+  }
+}
